@@ -1,25 +1,24 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import DbFileUpload from "./DbFileUpload";
 import ResultTable from "./ResultTable";
+import {DbContext, SqlContext} from "./context/context";
 
-const SqlReply = ({db, sql}) => {
 
+const SqlReply = () => {
     const [error, setError] = useState(null);
     const [results, setResults] = useState([]);
-    const [db2, setDb] = useState(db);
+
+    const {db} = useContext(DbContext);
+    const {sql} = useContext(SqlContext);
 
     function exec(sql) {
         try {
-            setResults(db2.exec(sql));
+            setResults(db.exec(sql));
             setError(null);
         } catch (err) {
             setError(err);
             setResults([]);
         }
-    }
-
-    function createDb(newDb) {
-        setDb(newDb);
     }
 
     return (
@@ -32,7 +31,7 @@ const SqlReply = ({db, sql}) => {
                 className="error">{(error || "").toString()}
             </pre>
 
-            <DbFileUpload sql={sql} createDb={createDb}/>
+            <DbFileUpload sql={sql}/>
 
             <pre>
                 {results.map(({columns, values}, i) => (<ResultTable key={i} columns={columns} values={values}/>))}

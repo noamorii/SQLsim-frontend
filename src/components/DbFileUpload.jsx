@@ -1,6 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {DbContext, SqlContext} from "./context/context";
 
-const DbFileUpload = ({sql, createDb}) => {
+const DbFileUpload = () => {
+
+    const {setDb} = useContext(DbContext);
+    const {sql} = useContext(SqlContext);
 
     function handleFile(e) {
         const inputFile = e.target.files[0];
@@ -9,7 +13,7 @@ const DbFileUpload = ({sql, createDb}) => {
             const buffer = this.result;
             const array = new Uint8Array(buffer);
             const db = new sql.Database(array);
-            createDb(db);
+            setDb(db);
         };
         reader.readAsArrayBuffer(inputFile);
     }

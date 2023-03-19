@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import DbFileUpload from "./DbFileUpload";
 import ResultTable from "./ResultTable";
 import {DbContext, SqlContext} from "./context/context";
+import Visualisation from "./UI/Data/Visualisation";
 
 
 const SqlReply = () => {
@@ -27,15 +28,18 @@ const SqlReply = () => {
             <textarea
                 onChange={(e) => exec(e.target.value)}
                 placeholder="Enter some SQL."/>
-            <pre
-                className="error">{(error || "").toString()}
-            </pre>
+
+            <pre className="error">{(error || "").toString()}</pre>
 
             <DbFileUpload sql={sql}/>
 
             <pre>
-                {results.map(({columns, values}, i) => (<ResultTable key={i} columns={columns} values={values}/>))}
+                {results.map( ({columns, values}, i) =>
+                    <ResultTable key={i} columns={columns} values={values}/>
+                )}
             </pre>
+
+            <Visualisation/>
         </div>
     );
 };

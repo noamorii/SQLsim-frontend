@@ -25,7 +25,7 @@ const DataCircleContainer = () => {
 
     if (error) return <div> Error: {error} </div>;
     return (
-        <div id="circleContainer">{circles}</div>
+        <div id="circle-container">{circles}</div>
     );
 };
 

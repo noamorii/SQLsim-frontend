@@ -2,9 +2,11 @@ import React, {useState, useEffect, useContext, useRef} from "react";
 import {DbContext} from "../../context/context";
 import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
+import ResultTable from "../Table/Result/ResultTable";
 
 const DataCircleContainer = () => {
     const [circles, setCircles] = useState([]);
+    const [dbResult, setDbResult] = useState([]);
     const [error, setError] = useState(null);
     const {db} = useContext(DbContext);
     const dataCircleRef = useRef(null);
@@ -85,19 +87,24 @@ const DataCircleContainer = () => {
 
     useEffect(() => {
         const dbResultObject = getAllFromSelectedTable();
+        console.log(dbResultObject)
+        setDbResult(dbResultObject);
         const newCircles = dbResultObject.values.map(value => {
             const keyValueObject = createKeyValueObject(dbResultObject.columns, value);
             return <DataCircle
                 key={value[0]} text={value[0]} valueObject={keyValueObject}
                 left={getPositions()} top={getPositions()} />;
         });
-        console.log(newCircles[0].props.valueObject);
         checkCollisions(newCircles)
     }, [db]);
 
     if (error) return <div> Error: {error} </div>;
     return (
-        <div id="circleContainer" ref={dataCircleRef}>{circles}</div>
+        <div>
+            <div id="circleContainer" ref={dataCircleRef}>{circles}</div>
+            <ResultTable data={getAllFromSelectedTable()}/>
+        </div>
+
     );
 };
 

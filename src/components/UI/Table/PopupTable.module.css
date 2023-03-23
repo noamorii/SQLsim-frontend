@@ -1,0 +1,30 @@
+.popupTableContainer {
+    z-index: 9999;
+    width: 100%;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.popupTableContainer table {
+    z-index: 9999;
+    position: absolute;
+    display: block;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.popupTableContainer th,
+.popupTableContainer td {
+    padding: 8px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: min(1em, calc(100% - 8px));
+}
+
+.popupTableContainer th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}

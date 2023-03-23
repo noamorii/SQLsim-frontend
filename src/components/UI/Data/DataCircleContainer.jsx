@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 import {DbContext} from "../../context/context";
 import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
@@ -7,10 +7,19 @@ const DataCircleContainer = () => {
     const [circles, setCircles] = useState([]);
     const [error, setError] = useState(null);
     const {db} = useContext(DbContext);
+    const dataCircleRef = useRef(null);
+    const circleWidthRef = useRef(null);
+
+    const CIRCLE_BOUNDARY = getCircleWidth();
+    const CONTAINER_OFFSET = 20;
 
     const getAllFromSelectedTable = () => {
         try {
-            return db.exec("Select * from employees;")[0].values;
+            const dbResult = db.exec("Select * from employees;")[0];
+            return {
+                columns:dbResult.columns,
+                values: dbResult.values
+            }
         } catch (err) {
             setError(err.message);
             return [];
@@ -18,17 +27,33 @@ const DataCircleContainer = () => {
     }
 
     const getPositions = () => {
-        return Math.random() * (300 - 20);
+        return Math.random() * (dataCircleRef.current.offsetWidth - CIRCLE_BOUNDARY - CONTAINER_OFFSET);
+    }
+
+    function getCircleWidth() {
+        if (circleWidthRef.current) {
+            return circleWidthRef.current;
+        } else {
+            const circle = document.createElement('div');
+            circle.setAttribute('id', 'circle-');
+            document.body.appendChild(circle);
+            const computedStyle = getComputedStyle(circle);
+            const circleWidth = parseInt(computedStyle.width, 10);
+            document.body.removeChild(circle);
+            circleWidthRef.current = circleWidth;
+            return circleWidth;
+        }
     }
 
     const findCollidingCircles = (circles) => {
         let collisionObjects = [];
+        const containerWidth = dataCircleRef.current.offsetWidth;
         for (let i = 0; i < circles.length; i++) {
             for (let j = i + 1; j < circles.length; j++) {
-                if (circles[i].props.left < circles[j].props.left + 30 &&
-                    circles[i].props.left + 30 > circles[j].props.left &&
-                    300 - circles[i].props.top < 300 - circles[j].props.top + 30 &&
-                    300 - circles[i].props.top + 30 > 300 - circles[j].props.top) {
+                if (circles[i].props.left < circles[j].props.left + CIRCLE_BOUNDARY &&
+                    circles[i].props.left + CIRCLE_BOUNDARY > circles[j].props.left &&
+                    containerWidth - circles[i].props.top < containerWidth - circles[j].props.top + CIRCLE_BOUNDARY &&
+                    containerWidth - circles[i].props.top + CIRCLE_BOUNDARY > containerWidth - circles[j].props.top) {
                     collisionObjects.push(circles[i])
                 }
             }
@@ -46,30 +71,33 @@ const DataCircleContainer = () => {
 
         const newCircles = [...allCircles];
         for (let object of collisionObjects) {
-            let newLeft = getPositions(200);
-            let newTop = getPositions(200);
             const index = newCircles.findIndex(circle => circle.key === object.key);
             newCircles[index] =
-                <DataCircle key={object.key} text={"a"} left={newLeft} top={newTop}/>;
+                <DataCircle key={object.key} text={object.props.text}
+                            valueObject={object.props.valueObject}
+                            left={getPositions()} top={getPositions()}/>;
         }
-
         checkCollisions(newCircles);
     }
 
+    const createKeyValueObject = (columns, values) =>
+        columns.reduce((obj, column, i) => ({...obj, [column]: values[i]}), {});
 
     useEffect(() => {
-        const values = getAllFromSelectedTable();
-        let newCircles = values.map(
-            item => <DataCircle
-                key={item[0]} text={item[0]}
-                left={getPositions(200)} top={getPositions(200)}/>
-        );
+        const dbResultObject = getAllFromSelectedTable();
+        const newCircles = dbResultObject.values.map(value => {
+            const keyValueObject = createKeyValueObject(dbResultObject.columns, value);
+            return <DataCircle
+                key={value[0]} text={value[0]} valueObject={keyValueObject}
+                left={getPositions()} top={getPositions()} />;
+        });
+        console.log(newCircles[0].props.valueObject);
         checkCollisions(newCircles)
     }, [db]);
 
     if (error) return <div> Error: {error} </div>;
     return (
-        <div id="circle-container">{circles}</div>
+        <div id="circleContainer" ref={dataCircleRef}>{circles}</div>
     );
 };
 

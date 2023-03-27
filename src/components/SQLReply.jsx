@@ -39,7 +39,7 @@ const SqlReply = () => {
                 )}
             </pre>
 
-            <Visualisation/>
+            <Visualisation values={results}/>
         </div>
     );
 };

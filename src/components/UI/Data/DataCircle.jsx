@@ -2,13 +2,12 @@ import "./DataCircle.css"
 import {useState} from "react";
 import PopupTable from "../Table/PopupTable";
 
-const DataCircle = ({ valueObject, text, top, left }) => {
+const DataCircle = ({valueObject, text, top, left}) => {
     const [showPopup, setShowPopup] = useState(false);
     return (
-        <div>
-            {showPopup && <PopupTable data={valueObject} />}
+        <div onMouseLeave={() => setShowPopup(false)}>
+            {showPopup && <PopupTable data={valueObject} top={top} left={left}/>}
             <div onMouseEnter={() => setShowPopup(true)}
-                 onMouseLeave={() => setShowPopup(false)}
                  id={`circle-${text}`}
                  style={{top, left}}>
                 <p>{text}</p>

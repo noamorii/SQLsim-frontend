@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import DataCircleContainer from "./DataCircleContainer";
 
-const Visualisation = () => {
+const Visualisation = (values) => {
     const [isShown, setIsShown] = useState(false);
 
     const toggleIsShown = () => setIsShown(prev => !prev);
@@ -9,7 +9,7 @@ const Visualisation = () => {
     return (
         <>
             <button onClick={toggleIsShown}>Click</button>
-            {isShown && <DataCircleContainer />}
+            {isShown && <DataCircleContainer values={values}/>}
         </>
     );
 };

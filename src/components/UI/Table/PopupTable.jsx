@@ -1,11 +1,11 @@
 import style from "./PopupTable.module.css"
 
-const PopupTable = ({data}) => {
+const PopupTable = ({data, top, left}) => {
     const columnNames = Object.keys(data);
     const columnValues = Object.values(data);
 
     return (
-        <div className={style.popupTableContainer}>
+        <div className={style.popupTableContainer} style={{top: top - 50, left: left + 30}}>
             <table>
                 <thead>
                 <tr>

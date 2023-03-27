@@ -4,7 +4,7 @@ import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
 import ResultTable from "../Table/Result/ResultTable";
 
-const DataCircleContainer = () => {
+const DataCircleContainer = (values) => {
     const [circles, setCircles] = useState([]);
     const [dbResult, setDbResult] = useState([]);
     const [error, setError] = useState(null);

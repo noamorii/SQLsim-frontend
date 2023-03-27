@@ -1,17 +1,14 @@
 .popupTableContainer {
-    z-index: 9999;
-    width: 100%;
-    max-height: 150px;
+    position: absolute;
     overflow: auto;
+    z-index: 2;
 }
 
 .popupTableContainer table {
-    z-index: 9999;
-    position: absolute;
     display: block;
     border-collapse: collapse;
     width: 100%;
-    table-layout: fixed;
+    margin: 0;
 }
 
 .popupTableContainer th,

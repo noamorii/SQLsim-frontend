@@ -1,0 +1,137 @@
+.popup-container {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(23, 3, 42, 0.5);
+    z-index: 2;
+}
+
+.popup-content {
+    min-width: 300px;
+    pointer-events: auto;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgb(39, 12, 61);
+    padding: 20px;
+    position: relative;
+    max-width: 50%;
+    width: 100%;
+    height: fit-content;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-content h2 {
+    text-align: center;
+    margin-top: 0;
+}
+
+.popup-content form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.popup-content form .input-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.popup-content form .input-container p {
+    margin-top: 0;
+}
+
+.popup-content form textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    box-sizing: border-box;
+    resize: none;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: inset 0 0 2px #ccc;
+}
+
+.popup-content form .button-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.popup-content form .submit-btn,
+.popup-content form .file-upload-btn {
+    margin: 0 12px 0 12px;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    width: 50%;
+}
+.popup-content form .submit-btn {
+    background-color: #6bd06f;
+}
+.popup-content form .submit-btn:hover {
+    background-color: #3e8e41;
+}
+.popup-content form .file-upload-btn{
+    background-color: #4b70a6;
+}
+.popup-content form .file-upload-btn:hover {
+    background-color: #1c3559;
+}
+
+.popup-content form .submit-btn:active,
+.popup-content form .file-upload-btn:active {
+    background-color: #3e8e41;
+    transform: translateY(2px);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.file-upload-btn input[type="file"] {
+    display: none;
+}
+
+.errorMessage {
+    color: red;
+    padding-bottom: 10px;
+}

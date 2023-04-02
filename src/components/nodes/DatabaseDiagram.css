@@ -1,0 +1,20 @@
+.react-flow {
+    font-family: Roboto, sans-serif;
+    max-width: 100%;
+    height: border-box;
+    background-color: #a7bdcc;
+}
+
+.parent .react-flow__handle  {
+    display: none;
+}
+
+.react-flow__node.parent {
+    font-size: 16px;
+    padding-top: 6px;
+    border: 1px solid #235369;
+    border-radius: 4px;
+    color: #ffffff;
+    background-color: #346c86;
+}
+

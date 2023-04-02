@@ -1,0 +1,12 @@
+.react-flow__node-attributeNode .attribute_node {
+    width: 142px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.react-flow__node-attributeNode {
+    background-color: #79a7c2;
+    padding-left: 8px;
+    border-radius: 2px;
+}

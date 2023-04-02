@@ -1,7 +1,8 @@
 import React, {useContext, useState} from 'react';
-import DatabaseDiagram from "../components/DatabaseDiagram";
+import DatabaseDiagram from "../components/nodes/DatabaseDiagram";
 import {DbContext} from "../components/context/context";
 import PopupUpload from "../components/UI/PopupUpload";
+import {SELECT_FRN_KEYS_QRY, SELECT_TABLES_QRY} from "../components/context/DbQueryConsts";
 
 const Tables = () => {
 
@@ -10,9 +11,6 @@ const Tables = () => {
     const [nodes, setNodes] = useState([]);
 
     const {db} = useContext(DbContext);
-
-    const SELECT_TABLES_QRY = `SELECT name AS table_name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%';`;
-    const SELECT_FRN_KEYS_QRY = `SELECT m1.tbl_name AS from_table, m2.tbl_name AS to_table FROM sqlite_master m1 JOIN pragma_foreign_key_list(m1.tbl_name) fk JOIN sqlite_master m2 ON m2.tbl_name = fk."table" WHERE m1.type = 'table' AND m2.type = 'table';`;
 
     function exec(sql) {
         try {
@@ -56,7 +54,9 @@ const Tables = () => {
         <div>
             <h1>Tables</h1>
             <div style={{display: "flex", alignContent:"flex-end"}}>
-                <DatabaseDiagram inputNodes={nodes} inputEdges={edges}/>
+                <div style={{ width: '100%', height: '500px' }}>
+                    <DatabaseDiagram inputNodes={nodes} inputEdges={edges}/>
+                </div>
                 <textarea style={{width: '500px', height: '500px'}}
                           onChange={(e) => exec(e.target.value)}
                           placeholder="Enter some SQL."/>

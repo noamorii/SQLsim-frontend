@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect, useContext} from 'react';
 import './PopupUpload.css';
 import DbFileUploadButton from "./Buttons/DbFileUploadButton";
 import {DbContext} from "../context/context";
+import {ALL_TABLES_QRY} from "../context/DbQueryConsts";
 
 function PopupUpload() {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,6 @@ function PopupUpload() {
     const popupRef = useRef();
     const {db} = useContext(DbContext);
 
-    const ALL_TABLES_QRY = "SELECT name FROM sqlite_master WHERE type='table'";
 
 
     useEffect(() => {

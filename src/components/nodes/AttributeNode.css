@@ -1,13 +1,39 @@
 .react-flow__node-attributeNode .attribute_node {
-    width: 142px;
+    transition: width 0.5s ease;
+    width: 136px;
     height: 20px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
 }
 
 .react-flow__node-attributeNode {
     background-color: #79a7c2;
     padding-left: 8px;
+    padding-right: 8px;
     border-radius: 2px;
+}
+
+.react-flow__node-attributeNode .attribute_node:hover {
+    width: 200px;
+}
+
+.attribute_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attribute_name, .attribute_type {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.attribute_name {
+    width: 76%;
+}
+
+.attribute_type {
+    opacity: .5;
+    width: 22%;
+    font-size: 10px;
+    font-weight: bold;
 }

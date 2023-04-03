@@ -10,6 +10,7 @@
 }
 
 .react-flow__node.parent {
+    text-transform: capitalize;
     font-size: 16px;
     padding-top: 6px;
     border: 1px solid #235369;
@@ -18,3 +19,6 @@
     background-color: #346c86;
 }
 
+.react-flow__edge-textbg {
+    fill: #1A192B;
+}

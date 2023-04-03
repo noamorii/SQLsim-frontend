@@ -5,9 +5,12 @@ import "./AttributeNode.css";
 const AttributeNode = (data) => {
     return (
         <div className="attribute_node">
-            <Handle type="source" position={Position.Left}/>
-            <label> {data.data.label} </label>
-            <Handle type="source" position={Position.Right}/>
+            <Handle type="target" position={Position.Left} id={data.data.id}/>
+            <div className="attribute_wrapper">
+                <div className="attribute_name"> {data.data.label} </div>
+                <div className="attribute_type"> {data.data.dataType} </div>
+            </div>
+            <Handle type="source" position={Position.Right} id={data.data.id}/>
         </div>
     );
 };

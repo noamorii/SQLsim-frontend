@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { DbContext, SqlContext } from '../../context/context';
 
-const DbFileUploadButton = () => {
+const DbFileUploadButton = (props) => {
     const { setDb } = useContext(DbContext);
     const { sql } = useContext(SqlContext);
     const [fileName, setFileName] = useState('Select File');
@@ -15,6 +15,7 @@ const DbFileUploadButton = () => {
                 const buffer = this.result;
                 const array = new Uint8Array(buffer);
                 setDb(new sql.Database(array));
+                props.handleFileUpload();
             };
             reader.readAsArrayBuffer(inputFile);
         }

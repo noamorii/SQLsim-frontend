@@ -11,6 +11,7 @@ function PopupUpload() {
     const popupRef = useRef();
     const {db, setDb} = useContext(DbContext);
     const {sql} = useContext(SqlContext);
+    const [fileUploaded, setFileUploaded] = useState(false);
 
     useEffect(() => {
         const handleMouseDown = (event) => {
@@ -32,10 +33,18 @@ function PopupUpload() {
     const handleSubmit = (event) => {
         event.preventDefault();
         try {
+
             if (db.exec(ALL_TABLES_QRY).length === 0 && text.trim() === '') {
                 setError('Please upload a database file or enter table schemas.');
                 return;
             }
+
+            if (fileUploaded) {
+                setError(null);
+                setIsOpen(false);
+                return;
+            }
+
             const newDb = new sql.Database();
             setDb(newDb);
             newDb.exec(text);
@@ -63,7 +72,7 @@ function PopupUpload() {
                                 {(error || "").toString()}
                             </div>
                             <div className="button-container">
-                                <DbFileUploadButton className="upload-btn"/>
+                                <DbFileUploadButton className="upload-btn" handleFileUpload={() => setFileUploaded(true)}/>
                                 <button className="submit-btn" type="submit" onClick={handleSubmit}>
                                     Submit
                                 </button>

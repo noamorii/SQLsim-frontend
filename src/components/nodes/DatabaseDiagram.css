@@ -2,11 +2,22 @@
     font-family: Roboto, sans-serif;
     max-width: 100%;
     height: border-box;
-    background-color: #a7bdcc;
 }
 
-.parent .react-flow__handle  {
+.react-flow__minimap-mask {
+    fill: rgba(17, 43, 58, 0.6);
+}
+
+.parent .react-flow__handle, .react-flow__attribution  {
     display: none;
+}
+
+.react-flow__minimap {
+     background-color: #585e72;
+}
+
+.background {
+    background: #1A192B;
 }
 
 .react-flow__node.parent {

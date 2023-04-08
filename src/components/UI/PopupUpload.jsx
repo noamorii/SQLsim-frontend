@@ -11,8 +11,6 @@ function PopupUpload() {
     const popupRef = useRef();
     const {db} = useContext(DbContext);
 
-
-
     useEffect(() => {
         const handleMouseDown = (event) => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {

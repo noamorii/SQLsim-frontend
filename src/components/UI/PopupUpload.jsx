@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect, useContext} from 'react';
 import './PopupUpload.css';
 import DbFileUploadButton from "./Buttons/DbFileUploadButton";
-import {DbContext} from "../context/context";
+import {DbContext, SqlContext} from "../context/context";
 import {ALL_TABLES_QRY} from "../context/DbQueryConsts";
 
 function PopupUpload() {
@@ -9,7 +9,8 @@ function PopupUpload() {
     const [text, setText] = useState('');
     const [error, setError] = useState(null);
     const popupRef = useRef();
-    const {db} = useContext(DbContext);
+    const {db, setDb} = useContext(DbContext);
+    const {sql} = useContext(SqlContext);
 
     useEffect(() => {
         const handleMouseDown = (event) => {
@@ -17,9 +18,7 @@ function PopupUpload() {
                 setIsOpen(false);
             }
         };
-
         window.addEventListener('mousedown', handleMouseDown);
-
         return () => {
             window.removeEventListener('mousedown', handleMouseDown);
         };
@@ -37,7 +36,9 @@ function PopupUpload() {
                 setError('Please upload a database file or enter table schemas.');
                 return;
             }
-            db.exec(text);
+            const newDb = new sql.Database();
+            setDb(newDb);
+            newDb.exec(text);
             setError(null);
             setIsOpen(false);
         } catch (err) {

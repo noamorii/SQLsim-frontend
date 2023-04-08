@@ -71,7 +71,7 @@ const DatabaseDiagram = () => {
     useEffect(() => {
         setNodes(getNodes);
         setEdges(getEdges);
-    }, [getNodes, getEdges]);
+    }, [db]);
 
     const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
 

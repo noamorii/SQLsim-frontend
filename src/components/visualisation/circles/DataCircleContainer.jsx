@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext, useRef} from "react";
 import {DbContext} from "../../context/context";
 import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
-import ResultTable from "../Table/Result/ResultTable";
+import ResultTable from "../../UI/Table/Result/ResultTable";
 
 const DataCircleContainer = (values) => {
     const [circles, setCircles] = useState([]);

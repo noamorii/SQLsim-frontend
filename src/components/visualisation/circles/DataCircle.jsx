@@ -1,6 +1,6 @@
 import "./DataCircle.css"
 import {useState} from "react";
-import PopupTable from "../Table/Popup/PopupTable";
+import PopupTable from "../../UI/Table/Popup/PopupTable";
 
 const DataCircle = ({valueObject, text, top, left}) => {
     const [showPopup, setShowPopup] = useState(false);

@@ -2,7 +2,7 @@ import React, {useCallback, useContext, useEffect, useMemo, useState} from 'reac
 import ReactFlow, {applyNodeChanges, Background, Controls, MiniMap} from 'reactflow';
 import 'reactflow/dist/style.css';
 import "./DatabaseDiagram.css"
-import AttributeNode from "./AttributeNode";
+import AttributeNode from "./nodes/AttributeNode";
 import {DbContext} from "../context/context";
 import {GET_ALL_TABLES_DATA_QRY, SELECT_FRN_KEYS_QRY} from "../context/DbQueryConsts";
 
@@ -76,18 +76,20 @@ const DatabaseDiagram = () => {
     const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
 
     return (
-        <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            nodeTypes={nodeTypes}
-            defaultViewport={defaultViewport}
-            fitView
-            attributionPosition="bottom-right">
-            <MiniMap nodeColor="#A7ACBEFF" zoomable pannable/>
-            <Controls/>
-            <Background color="#aaa" className="background"/>
-        </ReactFlow>
+        <div className="databaseDiagram">
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                nodeTypes={nodeTypes}
+                defaultViewport={defaultViewport}
+                fitView
+                attributionPosition="bottom-right">
+                <MiniMap nodeColor="#A7ACBEFF" position="bottom-left" zoomable pannable/>
+                <Controls position="top-left"/>
+                <Background color="#aaa" className="background"/>
+            </ReactFlow>
+        </div>
     );
 };
 

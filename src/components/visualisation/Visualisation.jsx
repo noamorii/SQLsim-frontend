@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import DataCircleContainer from "./DataCircleContainer";
+import DataCircleContainer from "./circles/DataCircleContainer";
 
 const Visualisation = (values) => {
     const [isShown, setIsShown] = useState(false);

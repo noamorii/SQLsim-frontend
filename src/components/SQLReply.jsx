@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import ResultTable from "./ResultTable";
 import {DbContext} from "./context/context";
-import Visualisation from "./UI/Data/Visualisation";
+import Visualisation from "./visualisation/Visualisation";
 
 
 const SqlReply = () => {

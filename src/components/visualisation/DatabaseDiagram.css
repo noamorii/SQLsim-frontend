@@ -1,3 +1,9 @@
+.databaseDiagram {
+    width: 100vw;
+    height: calc(100vh - 60px);
+    position: absolute;
+}
+
 .react-flow {
     font-family: Roboto, sans-serif;
     max-width: 100%;

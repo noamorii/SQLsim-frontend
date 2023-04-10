@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/SQLsim-frontend/static/css/main.85d18e42.css",
+    "main.js": "/SQLsim-frontend/static/js/main.f2c213fe.js",
+    "sql-wasm.wasm": "/SQLsim-frontend/sql-wasm-057823fecaede6350cf9941c7d4c7ce3.wasm",
+    "index.html": "/SQLsim-frontend/index.html",
+    "main.85d18e42.css.map": "/SQLsim-frontend/static/css/main.85d18e42.css.map",
+    "main.f2c213fe.js.map": "/SQLsim-frontend/static/js/main.f2c213fe.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.85d18e42.css",
+    "static/js/main.f2c213fe.js"
+  ]
+}

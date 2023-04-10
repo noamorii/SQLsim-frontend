@@ -7,7 +7,7 @@
     "starter"
   ],
   "main": "src/index.js",
-  "homepage": "https://erkanercan.github.io/SQLsim-frontend",
+  "homepage": "https://noamorii.github.io/SQLsim-frontend",
   "license": "MIT",
   "dependencies": {
     "buffer": "^6.0.3",

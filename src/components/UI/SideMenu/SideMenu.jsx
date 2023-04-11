@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {Link} from "react-router-dom";
-import {AiOutlineClose} from "react-icons/all";
+import {AiOutlineClose} from "react-icons/ai";
 import './SideMenu.css';
 import {SELECT_TABLES_QRY} from "../../context/DbQueryConsts";
 import PopupUpload from "../Popup/PopupUpload";

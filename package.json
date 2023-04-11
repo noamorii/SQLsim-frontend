@@ -7,25 +7,34 @@
     "starter"
   ],
   "main": "src/index.js",
+  "homepage": "https://noamorii.github.io/SQLsim-frontend",
   "license": "MIT",
   "dependencies": {
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "path-browserify": "^1.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-flow-renderer": "^10.3.17",
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.9.0",
+    "react-scripts": "^5.0.1",
     "reactflow": "^11.7.0",
-    "sql.js": "^1.6.2"
+    "sql.js": "^1.6.2",
+    "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
     "@craco/craco": "^5.9.0",
+    "gh-pages": "^5.0.0",
     "typescript": "^4.5.5"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test --env=jsdom",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": [
     ">0.2%",

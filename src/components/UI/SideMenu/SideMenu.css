@@ -39,20 +39,34 @@
 .queryContainer {
     display: flex;
     flex-wrap: wrap;
-    max-width: 300px;
+    width: 300px;
     align-content: flex-start;
     height: 200px;
     background-color: #5d5b5b;
+    overflow: auto;
 }
 
 .element {
     margin: 4px;
     padding: 4px;
     width: fit-content;
-    height: fit-content;
+    height: 20px;
     min-width: 20px;
     background-color: #1c6ea4;
     text-align: center;
+}
+
+select.element, option {
+    height: 28px;
+    border: none;
+}
+
+textarea.element {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100px;
+    border: none;
+    resize: none;
 }
 
 .jonsMenu {

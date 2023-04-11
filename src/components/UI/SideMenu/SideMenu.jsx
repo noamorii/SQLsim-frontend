@@ -7,10 +7,10 @@ import PopupUpload from "../Popup/PopupUpload";
 import {executeQueryValues} from "../../context/commonFunctions";
 import {DbContext} from "../../context/context";
 
-const JOIN_TYPES = ["Inner Join", "Left Join", "Right Join", "Outer Join"];
+const JOIN_TYPES = ["Inner Join", "Left Join", "Right Join", "Full outer Join"];
 
 const SideMenu = () => {
-    const startElements = [<div className="start element">FROM</div>,];
+    const startElements = [<div className="start element">FROM</div>];
 
     const [sideMenu, setSideMenu] = useState(true);
     const [elements, setElements] = useState(startElements);
@@ -34,17 +34,20 @@ const SideMenu = () => {
 
     const handlePlus = () => {
         if (tables.length === 0) return;
-        let newElement;
+
         const lastElement = elements.at(-1);
-        if (lastElement && lastElement.props.className.includes('table')) {
-            newElement = <div className="placement element">Place join here</div>
-        } else {
-            newElement = createSelect();
+        if (lastElement.props.className.includes('placement')) return;
+
+        if (lastElement && /^(table|attribute)/.test(lastElement.props.className)) {
+            const newElement = <div className="placement element">Place join here</div>
+            setElements([...elements, newElement]);
+            return;
         }
+        const newElement = createSelectTable();
         setElements([...elements, newElement]);
     };
 
-    const createSelect = () => {
+    const createSelectTable = () => {
         if (tables.length === 0) return;
         return (<select onDrop={(e) => {
             dropHandler(e)
@@ -66,11 +69,25 @@ const SideMenu = () => {
         e.preventDefault();
         const lastElement = elements.at(-1);
         if (lastElement && lastElement.props.className.includes('placement')) {
-            const newElement = <div className="join element">{e.dataTransfer.getData("joinType")}</div>;
-            const updatedElements = [...elements];
-            updatedElements.splice(-1, 1, newElement);
+            const joinType = e.dataTransfer.getData("joinType")
+            const newElements = createInnerJoin(joinType);
+            const updatedElements = [
+                ...elements.slice(0, -1),
+                ...newElements
+            ];
             setElements(updatedElements);
         }
+    }
+
+    function createInnerJoin(joinType) {
+        return [
+            <div className="join element">{joinType}</div>,
+            createSelectTable(),
+            <div className="start element">ON</div>,
+            <textarea className="attribute element"/>,
+            <div className="start element">=</div>,
+            <textarea className="attribute element"/>
+        ];
     }
 
     function handleDragOver(e) {
@@ -109,6 +126,10 @@ const SideMenu = () => {
                     </div>
                 </div>
                 <PopupUpload/>
+                <button>Validate</button>
+                {/*<form>*/}
+                {/*    <input type="text"/>*/}
+                {/*</form>*/}
             </div>
         </div>
     </div>);

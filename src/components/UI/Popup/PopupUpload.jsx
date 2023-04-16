@@ -58,7 +58,7 @@ function PopupUpload({sideMenuStatus}) {
     return (
         <div>
             {!sideMenuStatus && <div className="closed overlay"/>}
-            <button disabled={!sideMenuStatus} onClick={() => setIsOpen(true)}>Open Popup</button>
+            <button disabled={!sideMenuStatus} onClick={() => setIsOpen(true)}>Export db</button>
             {isOpen && (
                 <div className="popup-container" ref={popupRef}>
                     <div className="popup-content">

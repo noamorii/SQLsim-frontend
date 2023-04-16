@@ -1,17 +1,23 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {DbContext} from "../../../context/context";
-import {executeQueryValues} from "../../../context/commonFunctions";
+import {executeQuery, executeQueryValues} from "../../../context/commonFunctions";
 import {SELECT_TABLES_QRY} from "../../../context/DbQueryConsts";
 import './FromQueryForm.css';
+import ResultTable from "../../Table/Result/ResultTable";
+import DbFileDownloadButton from "../../Buttons/DbFileDownloadButton";
 
 const startElements = [<div className="start element">FROM</div>];
+const startQuery = "SELECT * FROM";
 const FromQueryForm = () => {
+    const {db} = useContext(DbContext);
 
     const [elements, setElements] = useState(startElements);
-    const {db} = useContext(DbContext);
-    const [tables, setTables] = useState([]);
+    const [currentQuery, setCurrentQuery] = useState(startQuery)
     const [queryError, setQueryError] = useState(null);
+    const [tables, setTables] = useState([]);
+    const [showTable, setShowTable] = useState(false);
+
     const {register, handleSubmit} = useForm();
 
     const fetchTables = useMemo(() => {
@@ -35,8 +41,10 @@ const FromQueryForm = () => {
     const handleQuery = (query) => {
         try {
             db.exec(query);
+            setShowTable(true)
             setQueryError(null);
         } catch (err) {
+            setShowTable(false)
             setQueryError(err);
         }
     }
@@ -50,7 +58,9 @@ const FromQueryForm = () => {
                 }
                 return element.props.children;
             })
-        return ["SELECT *", ...queryComponents].join(" ");
+        const query = ["SELECT *", ...queryComponents].join(" ");
+        setCurrentQuery(query);
+        return query;
     };
 
     const getNewElement = (element) => {
@@ -108,24 +118,22 @@ const FromQueryForm = () => {
         ];
     };
 
-    function createJoin(joinType) {
-        return [
-            <div className="join element">{joinType}</div>,
-            ...createSelectTable(),
-            <div className="start element">ON</div>,
-            <input type="text" className="attribute element"
-                   {...register((elements.length + 4) + "_input", {
-                       required: true
-                   })}
-            />,
-            <div className="start element">=</div>,
-            <input type="text" className="attribute element"
-                   {...register((elements.length + 6) + "_input", {
-                       required: true
-                   })}
-            />
-        ];
-    }
+    const createJoin = joinType => [
+        <div className="join element">{joinType}</div>,
+        ...createSelectTable(),
+        <div className="start element">ON</div>,
+        <input type="text" className="attribute element"
+               {...register((elements.length + 4) + "_input", {
+                   required: true
+               })}
+        />,
+        <div className="start element">=</div>,
+        <input type="text" className="attribute element"
+               {...register((elements.length + 6) + "_input", {
+                   required: true
+               })}
+        />
+    ];
 
     const updateElementsWithJoin = (lastElement, joinType) => {
         if (lastElement && lastElement.props.className.includes("placement")) {
@@ -135,21 +143,28 @@ const FromQueryForm = () => {
         }
     };
 
+    const getTableData = () => executeQuery(db, currentQuery);
+
     const handleDrop = (e) => {
         dropHandler(e)
     };
 
-
-    function dropHandler(e) {
+    const dropHandler = e => {
         e.preventDefault();
         const lastElement = elements.at(-1);
         const joinType = e.dataTransfer.getData("joinType")
         updateElementsWithJoin(lastElement, joinType);
-    }
+    };
 
-    function handleDragOver(e) {
+    const handleDragOver = e => {
         e.preventDefault();
-    }
+    };
+
+    const handleClear = () => {
+        setQueryError(null);
+        setCurrentQuery(startQuery);
+        updateElementsState(startElements);
+    };
 
     return (
         <div>
@@ -163,12 +178,13 @@ const FromQueryForm = () => {
                 {elements.map((element, index) => (<div key={index}>{element}</div>))}
                 <div className="element plus_button" onClick={handlePlus}>+</div>
             </form>
-            <button onClick={handleSubmit(onSubmitFrom)}>Validate</button>
-            {queryError && (
-                <div className="error">
-                    {queryError.toString()}
-                </div>
-            )}
+            <div className="bottomPanel">
+                <button onClick={handleSubmit(onSubmitFrom)}>Run</button>
+                <button onClick={handleClear}>Clear</button>
+                {queryError && (<div className="error"> {queryError.toString()} </div>)}
+            </div>
+            {showTable && (<ResultTable data={getTableData()}/>)}
+            <DbFileDownloadButton/>
         </div>
 
     );

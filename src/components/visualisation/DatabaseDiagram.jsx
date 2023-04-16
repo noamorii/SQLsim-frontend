@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import ReactFlow, {applyNodeChanges, Background, Controls, MiniMap} from 'reactflow';
+import ReactFlow, {applyNodeChanges, Background, Controls, MarkerType, MiniMap} from 'reactflow';
 import 'reactflow/dist/style.css';
 import "./DatabaseDiagram.css"
 import AttributeNode from "./nodes/AttributeNode";
@@ -27,6 +27,15 @@ const DatabaseDiagram = () => {
                 target: `${table_to}_${attr}`,
                 label: `FK_${table_from}_${attribute}=${table_to}_${attr}`,
                 labelStyle: { fill: 'gray' },
+                markerEnd: {
+                    type: MarkerType.ArrowClosed,
+                    width: 16, height: 16,
+                    color: '#64a1a4'
+                },
+                style: {
+                    strokeWidth: 2,
+                    stroke: '#64a1a4',
+                },
             }));
         } catch (err) {
             return [];

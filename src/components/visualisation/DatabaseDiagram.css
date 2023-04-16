@@ -30,12 +30,16 @@
     text-transform: capitalize;
     font-size: 16px;
     padding-top: 6px;
-    border: 1px solid #235369;
+    border: 1px solid rgba(35, 83, 105, 0.5);
     border-radius: 4px;
     color: #ffffff;
-    background-color: #346c86;
+    background-color: rgba(52, 108, 134, 0.5);
 }
 
 .react-flow__edge-textbg {
     fill: #1A192B;
+}
+
+.react-flow__edge{
+    transform: translateX(-10px);
 }

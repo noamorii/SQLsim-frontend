@@ -61,12 +61,16 @@ select.element, option {
     border: none;
 }
 
-textarea.element {
+input.element {
     overflow: hidden;
     white-space: nowrap;
     width: 100px;
     border: none;
     resize: none;
+}
+
+input.element.as {
+    width: 50px;
 }
 
 .jonsMenu {

@@ -25,7 +25,7 @@ const SideMenu = () => {
                         <FromQueryForm/>
                         <JoinsMenu/>
                     </div>
-                    <PopupUpload/>
+                    <PopupUpload sideMenuStatus={sideMenu}/>
                 </div>
             </div>
         </div>

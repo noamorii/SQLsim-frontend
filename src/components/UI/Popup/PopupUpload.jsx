@@ -4,7 +4,7 @@ import DbFileUploadButton from "../Buttons/DbFileUploadButton";
 import {DbContext, SqlContext} from "../../context/context";
 import {ALL_TABLES_QRY} from "../../context/DbQueryConsts";
 
-function PopupUpload() {
+function PopupUpload({sideMenuStatus}) {
     const [isOpen, setIsOpen] = useState(false);
     const [text, setText] = useState('');
     const [error, setError] = useState(null);
@@ -57,7 +57,8 @@ function PopupUpload() {
 
     return (
         <div>
-            <button onClick={() => setIsOpen(true)}>Open Popup</button>
+            {!sideMenuStatus && <div className="closed overlay"/>}
+            <button disabled={!sideMenuStatus} onClick={() => setIsOpen(true)}>Open Popup</button>
             {isOpen && (
                 <div className="popup-container" ref={popupRef}>
                     <div className="popup-content">
@@ -72,7 +73,8 @@ function PopupUpload() {
                                 {(error || "").toString()}
                             </div>
                             <div className="button-container">
-                                <DbFileUploadButton className="upload-btn" handleFileUpload={() => setFileUploaded(true)}/>
+                                <DbFileUploadButton className="upload-btn" disabled={!isOpen}
+                                                    handleFileUpload={() => setFileUploaded(true)}/>
                                 <button className="submit-btn" type="submit" onClick={handleSubmit}>
                                     Submit
                                 </button>

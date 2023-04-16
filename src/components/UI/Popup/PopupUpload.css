@@ -86,15 +86,19 @@
     cursor: pointer;
     width: 50%;
 }
+
 .popup-content form .submit-btn {
     background-color: #6bd06f;
 }
+
 .popup-content form .submit-btn:hover {
     background-color: #3e8e41;
 }
-.popup-content form .file-upload-btn{
+
+.popup-content form .file-upload-btn {
     background-color: #4b70a6;
 }
+
 .popup-content form .file-upload-btn:hover {
     background-color: #1c3559;
 }
@@ -113,6 +117,22 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
+}
+
+@keyframes fadeInAndSlide {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.overlay.closed {
+    background-color: black;
+    height: 92%;
+    top: 8%;
+    animation: fadeInAndSlide 0.5s ease-out forwards;
 }
 
 .close-btn {

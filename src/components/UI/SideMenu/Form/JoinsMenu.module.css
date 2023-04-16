@@ -1,0 +1,22 @@
+.joinsMenu {
+    background-color: #524343;
+    width: 200px;
+    padding: 4px;
+}
+
+.joinsMenu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.joinsMenu li {
+    padding: 4px;
+    margin: 4px;
+    background-color: #1c6ea4;
+}
+
+.joinsMenu p {
+    margin: 0;
+}
+
+

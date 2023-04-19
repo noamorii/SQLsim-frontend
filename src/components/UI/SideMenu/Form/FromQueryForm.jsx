@@ -163,7 +163,7 @@ const FromQueryForm = () => {
     const handleClear = () => {
         setQueryError(null);
         setCurrentQuery(startQuery);
-        updateElementsState(startElements);
+        setElements(startElements);
     };
 
     return (

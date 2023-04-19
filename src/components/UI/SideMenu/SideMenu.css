@@ -1,17 +1,14 @@
-.menu-bars {
-    margin: 0;
-    font-size: 2rem;
-    background: none;
-}
-
 .sideContent {
-    padding: 12px;
-    background-color: black;
-    width: 50%;
+    font-family: Roboto, sans-serif;
+    border-radius: 4%;
+    padding: 20px;
+    min-width: 400px;
+    background-color: #16273f;
+    width: 40%;
     height: 76vh;
     position: fixed;
     top: 50%;
-    right: -40%;
+    right: -34%;
     transition: 850ms;
     transform: translateY(-50%);
     box-sizing: border-box;
@@ -23,14 +20,14 @@
 }
 
 .container {
-    position: absolute;
     top: 50px;
     left: 12px;
     right: 12px;
     bottom: 12px;
-    background-color: #3f3c3c;
+    color: #000000;
     box-sizing: border-box;
 }
+
 .sideMenu-toggle {
     width: 100%;
     height: fit-content;
@@ -38,4 +35,57 @@
 
 .editor {
     display: flex;
+    margin-bottom: 40px;
 }
+
+.menu-bars {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 2rem;
+    background: none;
+}
+.editor-label {
+    color: white;
+    font-size: 30px;
+    margin: 12px 0;
+}
+
+.menu-bars svg {
+    transition: transform 0.5s;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+@keyframes fadeInAndSlide {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutAndSlide {
+    100% {
+        opacity: 0;
+    }
+    0% {
+        opacity: 1;
+    }
+}
+
+.container {
+    animation: fadeInAndSlide 0.5s ease-in forwards;
+}
+
+.from-table {
+    background-color: #425064;
+    text-align: center;
+    overflow: auto;
+    height: 150px;
+}
+

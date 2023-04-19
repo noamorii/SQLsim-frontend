@@ -1,0 +1,41 @@
+.joinsMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    padding: 0 4px 4px 4px;
+}
+
+.joinsMenu ul {
+    margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+.joinsMenu li {
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    width: auto;
+    padding: 6px;
+    margin: 6px;
+    background-color: #1c6ea4;
+}
+
+.joinsMenu svg {
+    margin-right: 4px;
+}
+
+.joinsMenu p {
+    margin: 0;
+}
+
+.joinLabel {
+    text-align: center;
+    color: white;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+}
+
+

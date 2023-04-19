@@ -1,5 +1,7 @@
 import React, {useContext} from 'react';
 import {DbContext} from "../../context/context";
+import Button from "./Button";
+import {HiDownload} from "react-icons/hi";
 
 const DbFileDownloadButton = () => {
     const {db} = useContext(DbContext);
@@ -20,9 +22,7 @@ const DbFileDownloadButton = () => {
     }
 
     return (
-        <div>
-            <button onClick={event => downloadFile(event)}>Download</button>
-        </div>
+        <Button onClick={event => downloadFile(event)} text="Download" icon={<HiDownload/>}/>
     );
 };
 

@@ -3,8 +3,10 @@ import './PopupUpload.css';
 import DbFileUploadButton from "../Buttons/DbFileUploadButton";
 import {DbContext, SqlContext} from "../../context/context";
 import {ALL_TABLES_QRY} from "../../context/DbQueryConsts";
+import { HiUpload } from 'react-icons/hi';
+import Button from "../Buttons/Button";
 
-function PopupUpload({sideMenuStatus}) {
+function PopupUpload() {
     const [isOpen, setIsOpen] = useState(false);
     const [text, setText] = useState('');
     const [error, setError] = useState(null);
@@ -57,8 +59,7 @@ function PopupUpload({sideMenuStatus}) {
 
     return (
         <div>
-            {!sideMenuStatus && <div className="closed overlay"/>}
-            <button disabled={!sideMenuStatus} onClick={() => setIsOpen(true)}>Export db</button>
+            <Button onClick={() => setIsOpen(true)} text="Export" icon={<HiUpload/>}/>
             {isOpen && (
                 <div className="popup-container" ref={popupRef}>
                     <div className="popup-content">

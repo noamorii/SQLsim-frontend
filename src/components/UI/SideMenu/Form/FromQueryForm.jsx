@@ -1,22 +1,22 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {DbContext} from "../../../context/context";
-import {executeQuery, executeQueryValues} from "../../../context/commonFunctions";
+import {executeQueryValues} from "../../../context/commonFunctions";
 import {SELECT_TABLES_QRY} from "../../../context/DbQueryConsts";
 import './FromQueryForm.css';
-import ResultTable from "../../Table/Result/ResultTable";
+import PopupUpload from "../../Popup/PopupUpload";
 import DbFileDownloadButton from "../../Buttons/DbFileDownloadButton";
+import Button from "../../Buttons/Button";
+import {AiFillDelete} from "react-icons/ai";
+import {VscDebugStart} from "react-icons/vsc";
 
 const startElements = [<div className="start element">FROM</div>];
-const startQuery = "SELECT * FROM";
-const FromQueryForm = () => {
+const FromQueryForm = ({showResultTable, clearResultTable}) => {
     const {db} = useContext(DbContext);
 
     const [elements, setElements] = useState(startElements);
-    const [currentQuery, setCurrentQuery] = useState(startQuery)
     const [queryError, setQueryError] = useState(null);
     const [tables, setTables] = useState([]);
-    const [showTable, setShowTable] = useState(false);
 
     const {register, handleSubmit} = useForm();
 
@@ -41,10 +41,12 @@ const FromQueryForm = () => {
     const handleQuery = (query) => {
         try {
             db.exec(query);
-            setShowTable(true)
+            sessionStorage.setItem('savedFromQuery', JSON.stringify(query));
+            showResultTable();
             setQueryError(null);
         } catch (err) {
-            setShowTable(false)
+            clearResultTable();
+            sessionStorage.removeItem('savedFromQuery');
             setQueryError(err);
         }
     }
@@ -58,9 +60,7 @@ const FromQueryForm = () => {
                 }
                 return element.props.children;
             })
-        const query = ["SELECT *", ...queryComponents].join(" ");
-        setCurrentQuery(query);
-        return query;
+        return ["SELECT *", ...queryComponents].join(" ");
     };
 
     const getNewElement = (element) => {
@@ -143,8 +143,6 @@ const FromQueryForm = () => {
         }
     };
 
-    const getTableData = () => executeQuery(db, currentQuery);
-
     const handleDrop = (e) => {
         dropHandler(e)
     };
@@ -162,12 +160,13 @@ const FromQueryForm = () => {
 
     const handleClear = () => {
         setQueryError(null);
-        setCurrentQuery(startQuery);
+        clearResultTable();
+        sessionStorage.removeItem('savedFromQuery');
         setElements(startElements);
     };
 
     return (
-        <div>
+        <div className="queryFormComponent">
             <form id="form" className="queryContainer"
                   onSubmit={onSubmitFrom}
                   onDrop={handleDrop}
@@ -178,15 +177,16 @@ const FromQueryForm = () => {
                 {elements.map((element, index) => (<div key={index}>{element}</div>))}
                 <div className="element plus_button" onClick={handlePlus}>+</div>
             </form>
-            <div className="bottomPanel">
-                <button onClick={handleSubmit(onSubmitFrom)}>Run</button>
-                <button onClick={handleClear}>Clear</button>
-                {queryError && (<div className="error"> {queryError.toString()} </div>)}
+            {queryError && (<div className="query-error"> {queryError.toString()}. </div>)}
+            <div className="button-panel">
+                <PopupUpload/>
+                <DbFileDownloadButton/>
+                <Button onClick={handleClear} text="Clear" icon={<AiFillDelete/>}/>
+                <Button onClick={() => {
+                    handleSubmit(onSubmitFrom)();
+                }} text="Run" icon={<VscDebugStart/>}/>
             </div>
-            {showTable && (<ResultTable data={getTableData()}/>)}
-            <DbFileDownloadButton/>
         </div>
-
     );
 };
 

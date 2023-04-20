@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Link} from "react-router-dom";
 import {AiOutlineRight} from "react-icons/ai";
 import './SideMenu.css';
@@ -24,16 +24,11 @@ const SideMenu = () => {
         return executeQuery(db, query);
     }
 
-    useEffect(() => {
-        setShowTable(getStoredQuery() !== "");
-    }, [sessionStorage.getItem('savedFromQuery')]);
-
     const showResultTable = () => {
         setShowTable(getStoredQuery() !== "");
     };
 
     const clearResultTable = () => {
-        console.log("falseee")
         setShowTable(false);
     };
 
@@ -55,7 +50,7 @@ const SideMenu = () => {
                     <div className="from-table">
                         {showTable
                             ? (<ResultTable data={getTableData()}/>)
-                            : (<div>No data</div>)
+                            : (<div className="no-data-message">No records to display</div>)
                         }
                     </div>
                 </div>

@@ -42,6 +42,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         try {
             db.exec(query);
             sessionStorage.setItem('savedFromQuery', JSON.stringify(query));
+            clearResultTable();
             showResultTable();
             setQueryError(null);
         } catch (err) {
@@ -184,6 +185,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
                 <Button onClick={handleClear} text="Clear" icon={<AiFillDelete/>}/>
                 <Button onClick={() => {
                     handleSubmit(onSubmitFrom)();
+                    showResultTable();
                 }} text="Run" icon={<VscDebugStart/>}/>
             </div>
         </div>

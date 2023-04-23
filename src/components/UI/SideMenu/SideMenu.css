@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 .sideContent {
     font-family: Roboto, sans-serif;
     border-radius: 4%;
@@ -5,37 +9,34 @@
     min-width: 400px;
     background-color: #16273f;
     width: 40%;
-    height: 76vh;
-    position: fixed;
-    top: 50%;
-    right: -34%;
-    transition: 850ms;
-    transform: translateY(-50%);
-    box-sizing: border-box;
+    height: 70vh;
+    position: relative;
+    left: 94%;
+    top: 40px;
+    transition: 300ms;
 }
 
 .sideContent.active {
-    right: 20px;
-    transition: 350ms;
+    left: 54%;
+    padding: 20px;
 }
 
 .container {
-    top: 50px;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    display: flex;
+    flex-direction: column;
     color: #000000;
-    box-sizing: border-box;
+    height: calc(70vh - 60px);
 }
 
 .sideMenu-toggle {
     width: 100%;
+    margin-bottom: 12px;
     height: fit-content;
 }
 
 .editor {
     display: flex;
-    margin-bottom: 40px;
+    margin-bottom: 12px;
 }
 
 .menu-bars {
@@ -49,7 +50,7 @@
 .editor-label {
     color: white;
     font-size: 30px;
-    margin: 12px 0;
+    margin: 0 0 12px 0;
 }
 
 .menu-bars svg {
@@ -83,17 +84,20 @@
 }
 
 .from-table {
+    border-radius: 10px;
     background-color: #425064;
     width: 100%;
+    height: 100%;
     overflow: auto;
-    height: 150px;
+    display: flex;
+    flex-grow: 1;
     position: relative;
 }
 
 .no-data-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: inherit;
 }
 

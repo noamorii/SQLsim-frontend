@@ -3,8 +3,7 @@
 }
 
 .queryContainer {
-    height: 100%;
-    max-height: 180px;
+    height: 180px;
     background-color: #becdd5;
     overflow: auto;
     display: flex;
@@ -28,7 +27,7 @@
     width: fit-content;
     height: 20px;
     min-width: 20px;
-    background-color: #1c6ea4;
+    background-color: #ffffff;
     text-align: center;
 }
 

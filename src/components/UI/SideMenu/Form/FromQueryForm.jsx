@@ -119,22 +119,30 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         ];
     };
 
-    const createJoin = joinType => [
-        <div className="join element">{joinType}</div>,
-        ...createSelectTable(),
-        <div className="start element">ON</div>,
-        <input type="text" className="attribute element"
-               {...register((elements.length + 4) + "_input", {
-                   required: true
-               })}
-        />,
-        <div className="start element">=</div>,
-        <input type="text" className="attribute element"
-               {...register((elements.length + 6) + "_input", {
-                   required: true
-               })}
-        />
-    ];
+    const createJoin = joinType => {
+        let elements = [
+            <div className="join element">{joinType}</div>,
+            ...createSelectTable()
+        ];
+
+        if (joinType === "NATURAL JOIN") return elements;
+
+        return [
+            ...elements,
+            <div className="start element">ON</div>,
+            <input type="text" className="attribute element"
+                   {...register((elements.length + 4) + "_input", {
+                       required: true
+                   })}
+            />,
+            <div className="start element">=</div>,
+            <input type="text" className="attribute element"
+                   {...register((elements.length + 6) + "_input", {
+                       required: true
+                   })}
+            />
+        ];
+    };
 
     const updateElementsWithJoin = (lastElement, joinType) => {
         if (lastElement && lastElement.props.className.includes("placement")) {

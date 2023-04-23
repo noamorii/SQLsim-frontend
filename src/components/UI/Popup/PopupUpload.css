@@ -1,7 +1,7 @@
 .popup-container {
     border-radius: 4%;
     pointer-events: none;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     height: 100%;
@@ -20,7 +20,7 @@
     border-radius: 6px;
     box-shadow: 0 2px 6px rgb(39, 12, 61);
     padding: 20px;
-    position: relative;
+    position: absolute;
     max-width: 50%;
     width: 100%;
     height: fit-content;
@@ -112,7 +112,7 @@
 
 .overlay {
     border-radius: 4%;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;

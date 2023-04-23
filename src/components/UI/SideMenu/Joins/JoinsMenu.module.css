@@ -1,7 +1,7 @@
 .joinsMenu {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     width: 40%;
     padding: 0 4px 0 4px;

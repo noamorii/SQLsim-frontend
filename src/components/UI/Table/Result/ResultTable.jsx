@@ -4,7 +4,7 @@ import "./ResultTable.module.css";
 
 const ResultTable = (result) => {
     if (!result || !result.data ) {
-        return <div> No results available </div>;
+        return <div className="no-data-message"> No results available </div>;
     }
 
     return (

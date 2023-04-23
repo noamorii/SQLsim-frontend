@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     width: 40%;
-    padding: 0 4px 4px 4px;
+    padding: 0 4px 0 4px;
 }
 
 .joinsMenu ul {
@@ -14,17 +14,22 @@
 }
 
 .joinsMenu li {
+    font-family: 'Strait', sans-serif;
+    color: #8a398a;
     border-radius: 6px;
     display: flex;
     align-items: center;
+    font-weight: bold;
     width: auto;
     padding: 6px;
-    margin: 6px;
-    background-color: #1c6ea4;
+    margin: 4px;
+    background-color: #ffffff;
+    border: 2px solid #2672b4;
 }
 
 .joinsMenu svg {
     margin-right: 4px;
+    color: #1c3559;
 }
 
 .joinsMenu p {

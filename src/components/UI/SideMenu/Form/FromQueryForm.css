@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Strait&display=swap');
+
 .queryFormComponent {
     width: 60%;
 }
@@ -16,11 +18,16 @@
     padding: 4px;
     overflow: auto;
     white-space: nowrap;
-    background-color: #945b5b;
+    background-color: rgba(208, 46, 46, 0.5);
     color: #becdd5;
 }
 
 .element {
+    color: #8a398a;
+    border: 2px solid #2672b4;
+    cursor: pointer;
+    font-family: 'Strait', sans-serif;
+    font-weight: bold;
     border-radius: 4px;
     margin: 4px;
     padding: 4px;
@@ -28,24 +35,42 @@
     height: 20px;
     min-width: 20px;
     background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
 }
 
+
 .element.disabled {
-    opacity: 70%;
-    background-color: #4a687a;
+    opacity: 40%;
 }
 
 select.element, option {
-    height: 28px;
-    border: none;
+    height: 30px;
+    color: black;
+}
+
+.placement {
+    font-size: 14px;
+    color: black;
+    background-color: rgba(78, 126, 168, 0.45);
+}
+
+.plus_button {
+    background-color: rgba(78, 126, 168, 0.45);
+}
+
+.plus_button.disabled {
+    opacity: 100%;
+    background-color: rgba(208, 46, 46, 0.5);
 }
 
 input.element {
+    color: black;
     overflow: hidden;
     white-space: nowrap;
     width: 100px;
-    border: none;
     resize: none;
 }
 

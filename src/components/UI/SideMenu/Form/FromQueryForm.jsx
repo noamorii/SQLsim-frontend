@@ -33,6 +33,19 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         });
     }, [fetchTables]);
 
+    useEffect(() => {
+        if (queryError) {
+            const timer = setTimeout(() => {
+                setQueryError(null);
+            }, 5000); // Clear the error after 5 seconds
+
+            // Clean up the effect when the component is unmounted or the error changes
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [queryError]);
+
     const onSubmitFrom = (data) => {
         const query = buildQuery(data, elements);
         handleQuery(query);
@@ -65,19 +78,29 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
     };
 
     const getNewElement = (element) => {
-        if (/^(table|attribute)/.test(element.props.className))
+        if (/^(table|attribute)/.test(element.props.className)) {
+            const plus = document.getElementById("plus");
+            plus.classList.add("disabled");
             return [<div className="placement element">Place join here</div>];
+        }
+
         return createSelectTable();
     };
 
     const updateElements = (lastElement) => {
-        if (lastElement.props.className.includes('placement')) return;
+        if (lastElement.props.className.includes('placement')) {
+            setQueryError(new Error("please place a join"));
+            return;
+        }
         const newElement = getNewElement(lastElement);
         setElements((prevElements) => [...prevElements, ...newElement]);
     };
 
     const handlePlus = () => {
-        if (tables.length === 0) return;
+        if (tables.length === 0) {
+            setQueryError(new Error("please set the tables"))
+            return;
+        }
         const lastElement = elements.at(-1);
         updateElements(lastElement);
     };
@@ -108,7 +131,9 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
                 onDrop={handleDrop}
                 className="table element" form="form"
                 name="tables" id="tables" defaultValue=""
-                {...register(elements.length + "_tables")}
+                {...register(elements.length + "_tables", {
+                    required: true
+                })}
             >
                 {renderTableOptions()}
                 <option disabled hidden key={"choose"} value="">
@@ -138,7 +163,8 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
             <div className="start element">=</div>,
             <input type="text" className="attribute element"
                    {...register((elements.length + 6) + "_input", {
-                       required: true
+                       required: true,
+
                    })}
             />
         ];
@@ -161,6 +187,8 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         const lastElement = elements.at(-1);
         const joinType = e.dataTransfer.getData("joinType")
         updateElementsWithJoin(lastElement, joinType);
+        const element = document.getElementById("plus");
+        element.classList.remove("disabled");
     };
 
     const handleDragOver = e => {
@@ -184,9 +212,9 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
                 <div className="disabled element">SELECT</div>
                 <div className="disabled element">*</div>
                 {elements.map((element, index) => (<div key={index}>{element}</div>))}
-                <div className="element plus_button" onClick={handlePlus}>+</div>
+                <div id="plus" className="element plus_button" onClick={handlePlus}>+</div>
             </form>
-            {queryError && (<div className="query-error"> {queryError.toString()}. </div>)}
+            {queryError && (<div className="query-error"> {queryError.toString()}.</div>)}
             <div className="button-panel">
                 <PopupUpload/>
                 <DbFileDownloadButton/>

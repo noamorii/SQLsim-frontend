@@ -46,6 +46,67 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         }
     }, [queryError]);
 
+    const createElementFromData = (elementsJson) => {
+        let parsedComponents = [];
+        for (const element of elementsJson) {
+
+            if (element.type === "div") {
+                parsedComponents.push(<div className={element.props.className}>{element.props.children}</div>)
+                continue;
+            }
+
+            if (element.type === "select") {
+                const options = element.props.children.flat().map((option, index) => (
+                    <option
+                        key={option.key || index}
+                        value={option.props.value}
+                        disabled={option.props.disabled}
+                        hidden={option.props.hidden}
+                    >
+                        {option.props.children}
+                    </option>
+                ));
+
+                parsedComponents.push(
+                    <select
+                        onDrop={handleDrop}
+                        className={element.props.className}
+                        form={element.props.form}
+                        name={element.props.name}
+                        id={element.props.id}
+                        defaultValue={element.props.defaultValue}
+                        {...register(parsedComponents.length + "_tables", {
+                            required: true
+                        })}
+                    >
+                        {options}
+                    </select>
+                );
+                continue;
+            }
+
+            if (element.type === "input") {
+                parsedComponents.push(
+                    <input type={element.props.type} className={element.props.className}
+                           {...register((parsedComponents.length) + "_input", {
+                               required: true
+                           })}
+                    />
+                );
+            }
+        }
+        return parsedComponents;
+    };
+
+    useEffect(() => {
+        const savedElements = sessionStorage.getItem('savedFromElements');
+        if (savedElements) {
+            const parsedElements = JSON.parse(savedElements);
+            const reactElements = createElementFromData(parsedElements);
+            setElements(reactElements);
+        }
+    }, []);
+
     const onSubmitFrom = (data) => {
         const query = buildQuery(data, elements);
         handleQuery(query);
@@ -54,12 +115,14 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
     const handleQuery = (query) => {
         try {
             db.exec(query);
+            sessionStorage.setItem('savedFromElements', JSON.stringify(elements));
             sessionStorage.setItem('savedFromQuery', JSON.stringify(query));
             clearResultTable();
             showResultTable();
             setQueryError(null);
         } catch (err) {
             clearResultTable();
+            sessionStorage.removeItem('savedFromElements');
             sessionStorage.removeItem('savedFromQuery');
             setQueryError(err);
         }
@@ -83,7 +146,6 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
             plus.classList.add("disabled");
             return [<div className="placement element">Place join here</div>];
         }
-
         return createSelectTable();
     };
 
@@ -164,7 +226,6 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
             <input type="text" className="attribute element"
                    {...register((elements.length + 6) + "_input", {
                        required: true,
-
                    })}
             />
         ];

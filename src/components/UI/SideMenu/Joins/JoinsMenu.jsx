@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './JoinsMenu.module.css';
 import {MdDragHandle} from "react-icons/md";
+import {JOIN_TYPES} from "../../../context/DbQueryConsts";
 
-const JOIN_TYPES = ["NATURAL JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"];
 const JoinsMenu = () => {
 
     const dragStartHandler = (e, type) => { e.dataTransfer.setData("joinType", type) };

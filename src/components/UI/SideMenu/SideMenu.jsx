@@ -8,17 +8,35 @@ import ResultTable from "../Table/Result/ResultTable";
 import {executeQuery} from "../../context/commonFunctions";
 import {DbContext} from "../../context/context";
 
+/**
+ * SideMenu component serves as a side menu to create a FROM query, display join types, and show query results.
+ *
+ * @component
+ * @returns {JSX.Element} The SideMenu component.
+ */
 const SideMenu = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [showTable, setShowTable] = useState(false);
     const {db} = useContext(DbContext);
     const showSideMenu = () => setShowMenu(!showMenu);
 
+    /**
+     * Retrieves the stored query from the session storage.
+     *
+     * @function
+     * @returns {Object | string} The stored query as a JSON object or an empty string if not found.
+     */
     const getStoredQuery = () => {
         const query = sessionStorage.getItem('savedFromQuery');
         return query ? JSON.parse(query) : "";
     };
 
+    /**
+     * Executes the query and returns the table data.
+     *
+     * @function
+     * @returns {Array} The table data from the executed query.
+     */
     const getTableData = () => {
         const query = getStoredQuery();
         return executeQuery(db, query);

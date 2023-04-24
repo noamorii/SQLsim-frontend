@@ -6,6 +6,12 @@ import {ALL_TABLES_QRY} from "../../context/DbQueryConsts";
 import { HiUpload } from 'react-icons/hi';
 import Button from "../Buttons/Button";
 
+/**
+ * PopupUpload component allows the user to upload a database file or enter table schemas.
+ *
+ * @component
+ * @returns {JSX.Element} The PopupUpload component.
+ */
 function PopupUpload() {
     const [isOpen, setIsOpen] = useState(false);
     const [text, setText] = useState('');
@@ -15,6 +21,9 @@ function PopupUpload() {
     const {sql} = useContext(SqlContext);
     const [fileUploaded, setFileUploaded] = useState(false);
 
+    /**
+     * Adds an event listener to close the popup when clicking outside the component.
+     */
     useEffect(() => {
         const handleMouseDown = (event) => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -27,26 +36,35 @@ function PopupUpload() {
         };
     }, [popupRef]);
 
+    /**
+     * Handles the change event for the textarea.
+     *
+     * @function
+     * @param {Object} event - The change event.
+     */
     const handleChange = (event) => {
         setText(event.target.value);
         setError(null);
     };
 
+    /**
+     * Handles the submit event for the form.
+     *
+     * @function
+     * @param {Object} event - The submit event.
+     */
     const handleSubmit = (event) => {
         event.preventDefault();
         try {
-
             if (db.exec(ALL_TABLES_QRY).length === 0 && text.trim() === '') {
                 setError('Please upload a database file or enter table schemas.');
                 return;
             }
-
             if (fileUploaded) {
                 setError(null);
                 setIsOpen(false);
                 return;
             }
-
             const newDb = new sql.Database();
             setDb(newDb);
             newDb.exec(text);

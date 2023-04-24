@@ -3,9 +3,21 @@ import {DbContext} from "../../context/context";
 import Button from "./Button";
 import {HiDownload} from "react-icons/hi";
 
+/**
+ * DbFileDownloadButton component creates a button to download the database file.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered DbFileDownloadButton component.
+ */
 const DbFileDownloadButton = () => {
     const {db} = useContext(DbContext);
 
+    /**
+     * Handles the download process of the database file.
+     *
+     * @function
+     * @param {Object} e - The event object.
+     */
     function downloadFile(e) {
         e.preventDefault();
         const blob = new Blob([db.export()]);

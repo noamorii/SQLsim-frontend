@@ -11,6 +11,18 @@ import {AiFillDelete} from "react-icons/ai";
 import {VscDebugStart} from "react-icons/vsc";
 
 const startElements = [<div className="start element">FROM</div>];
+
+/**
+ * The FromQueryForm component builds a SQL query based on user-selected options.
+ * It allows users to create, edit, and execute SQL queries by dragging and
+ * dropping elements onto the form. Users can also upload and download database files.
+ *
+ * @component
+ * @param {Object} props - The component's props.
+ * @param {Function} props.showResultTable - Function to display the result table.
+ * @param {Function} props.clearResultTable - Function to clear the result table.
+ * @returns {JSX.Element} The rendered component.
+ */
 const FromQueryForm = ({showResultTable, clearResultTable}) => {
     const {db} = useContext(DbContext);
 
@@ -20,6 +32,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
 
     const {register, handleSubmit} = useForm();
 
+    /**
+     * Fetches the list of tables from the database.
+     *
+     * @function
+     * @returns {Function} An async function that fetches the list of tables.
+     */
     const fetchTables = useMemo(() => {
         return async () => {
             const allTables = await executeQueryValues(db, SELECT_TABLES_QRY);
@@ -33,76 +51,90 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         });
     }, [fetchTables]);
 
+    /**
+     * useEffect - Clears the query error message after 5 seconds and cleans up the timer on component unmount or error change.
+     */
     useEffect(() => {
         if (queryError) {
             const timer = setTimeout(() => {
                 setQueryError(null);
             }, 5000); // Clear the error after 5 seconds
 
-            // Clean up the effect when the component is unmounted or the error changes
             return () => {
                 clearTimeout(timer);
             };
         }
     }, [queryError]);
 
-    const createElementFromData = (elementsJson) => {
-        let parsedComponents = [];
-        for (const element of elementsJson) {
+    /**
+     * Loads an array of React elements based on an array of element JSON objects stored in session storage.
+     *
+     * @function
+     * @param {Array<Object>} elementsJson - An array of parsed JSON objects.
+     * @returns {Array<JSX.Element>} An array of React elements.
+     */
+    const loadElementFromDataFromSession = (elementsJson) => {
+        return elementsJson.map((element, index) => {
+            const { type, props } = element;
 
-            if (element.type === "div") {
-                parsedComponents.push(<div className={element.props.className}>{element.props.children}</div>)
-                continue;
+            if (type === "div") {
+                const { className, children } = props;
+                return <div className={className}>{children}</div>;
             }
 
-            if (element.type === "select") {
-                const options = element.props.children.flat().map((option, index) => (
-                    <option
-                        key={option.key || index}
-                        value={option.props.value}
-                        disabled={option.props.disabled}
-                        hidden={option.props.hidden}
-                    >
-                        {option.props.children}
-                    </option>
-                ));
+            if (type === "select") {
+                const { children, className, form, name, id, defaultValue } = props;
+                const options = children.flat().map((option, optIndex) => {
+                    const { key, props: optProps } = option;
+                    const { value, disabled, hidden, children } = optProps;
+                    return (
+                        <option
+                            key={key || optIndex} value={value}
+                            disabled={disabled} hidden={hidden}
+                        >
+                            {children}
+                        </option>
+                    );
+                });
 
-                parsedComponents.push(
+                return (
                     <select
                         onDrop={handleDrop}
-                        className={element.props.className}
-                        form={element.props.form}
-                        name={element.props.name}
-                        id={element.props.id}
-                        defaultValue={element.props.defaultValue}
-                        {...register(parsedComponents.length + "_tables", {
+                        className={className} form={form}
+                        name={name} id={id}
+                        defaultValue={defaultValue}
+                        {...register(`${index}_tables`, {
                             required: true
                         })}
                     >
                         {options}
                     </select>
                 );
-                continue;
             }
 
-            if (element.type === "input") {
-                parsedComponents.push(
-                    <input type={element.props.type} className={element.props.className}
-                           {...register((parsedComponents.length) + "_input", {
-                               required: true
-                           })}
+            if (type === "input") {
+                const { type: inputType, className } = props;
+                return (
+                    <input
+                        type={inputType}
+                        className={className}
+                        {...register(`${index}_input`, {
+                            required: true
+                        })}
                     />
                 );
             }
-        }
-        return parsedComponents;
+        });
     };
 
+    /**
+     * useEffect - Loads saved elements from sessionStorage and updates the query builder elements on component mount.
+     */
     useEffect(() => {
         const savedElements = sessionStorage.getItem('savedFromElements');
         if (savedElements) {
             const parsedElements = JSON.parse(savedElements);
-            const reactElements = createElementFromData(parsedElements);
+            const reactElements = loadElementFromDataFromSession(parsedElements);
             setElements(reactElements);
         }
     }, []);
@@ -112,6 +144,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         handleQuery(query);
     }
 
+    /**
+     * Handles the form submission and execution of the SQL query.
+     *
+     * @function
+     * @param {string} query - The SQL query to execute.
+     */
     const handleQuery = (query) => {
         try {
             db.exec(query);
@@ -128,6 +166,14 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         }
     }
 
+    /**
+     * Constructs a SQL query from the data provided by the form elements.
+     *
+     * @function
+     * @param {Object} data - The data collected from the form elements.
+     * @param {Array<JSX.Element>} elements - The array of form elements.
+     * @returns {string} The constructed SQL query.
+     */
     const buildQuery = (data, elements) => {
         const queryComponents = elements
             .map((element, i) => {
@@ -140,6 +186,13 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         return ["SELECT *", ...queryComponents].join(" ");
     };
 
+    /**
+     * Determines the new element to be added based on the last element in the query builder.
+     *
+     * @function
+     * @param {JSX.Element} element - The last element in the query builder.
+     * @returns {Array<JSX.Element>} An array containing the new element(s) to be added.
+     */
     const getNewElement = (element) => {
         if (/^(table|attribute)/.test(element.props.className)) {
             const plus = document.getElementById("plus");
@@ -149,6 +202,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         return createSelectTable();
     };
 
+    /**
+     * Updates the elements array with a new elements based on the last saved element.
+     *
+     * @function
+     * @param {JSX.Element} lastElement - The last element in the elements array.
+     */
     const updateElements = (lastElement) => {
         if (lastElement.props.className.includes('placement')) {
             setQueryError(new Error("please place a join"));
@@ -158,6 +217,11 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         setElements((prevElements) => [...prevElements, ...newElement]);
     };
 
+    /**
+     * Handles the click event for the plus button, updating the query builder elements.
+     *
+     * @function
+     */
     const handlePlus = () => {
         if (tables.length === 0) {
             setQueryError(new Error("please set the tables"))
@@ -167,6 +231,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         updateElements(lastElement);
     };
 
+    /**
+     * Renders table options for the select element.
+     *
+     * @function
+     * @returns {Array<JSX.Element>} An array of option elements for the table selector.
+     */
     const renderTableOptions = () => {
         return tables.map((table, i) => (
             <option key={i} value={table}>
@@ -175,6 +245,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         ));
     };
 
+    /**
+     * Creates an 'AS' parameter and naming text input for the query builder.
+     *
+     * @function
+     * @returns {Array<JSX.Element>} An array containing a 'AS' div element and an input element.
+     */
     const createAsParameter = () => {
         return [
             <div className="start element">AS</div>,
@@ -186,6 +262,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         ]
     }
 
+    /**
+     * Creates a table selection element and "AS" element after that for the query builder.
+     *
+     * @function
+     * @returns {Array<JSX.Element>} An array containing a select element for table selection and an 'AS' parameter.
+     */
     const createSelectTable = () => {
         if (tables.length === 0) return;
         return [
@@ -206,6 +288,13 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         ];
     };
 
+    /**
+     * Creates a join element for the query builder based on the join type.
+     *
+     * @function
+     * @param {string} joinType - The type of join to create.
+     * @returns {Array<JSX.Element>} An array containing the join elements and following divs and inputs.
+     */
     const createJoin = joinType => {
         let elements = [
             <div className="join element">{joinType}</div>,
@@ -231,6 +320,13 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         ];
     };
 
+    /**
+     * Updates the elements array with a join based on the last element and join type.
+     *
+     * @function
+     * @param {JSX.Element} lastElement - The last element in the elements array.
+     * @param {string} joinType - The type of join to add.
+     */
     const updateElementsWithJoin = (lastElement, joinType) => {
         if (lastElement && lastElement.props.className.includes("placement")) {
             const newElements = createJoin(joinType);
@@ -239,6 +335,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         }
     };
 
+    /**
+     * Handles the drop event for draggable elements.
+     *
+     * @function
+     * @param {React.DragEvent} e - The drop event.
+     */
     const handleDrop = (e) => {
         dropHandler(e)
     };
@@ -256,6 +358,11 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         e.preventDefault();
     };
 
+    /**
+     * Clears the form elements and removes the saved data from the session storage.
+     *
+     * @function
+     */
     const handleClear = () => {
         setQueryError(null);
         clearResultTable();

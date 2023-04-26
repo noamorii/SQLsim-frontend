@@ -40,7 +40,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      */
     const fetchTables = useMemo(() => {
         return async () => {
-            const allTables = await executeQueryValues(db, SELECT_TABLES_QRY);
+            const allTables = executeQueryValues(db, SELECT_TABLES_QRY);
             setTables(allTables);
         };
     }, [db]);

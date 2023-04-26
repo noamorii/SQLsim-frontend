@@ -10,7 +10,7 @@ import styles from "./Button.module.css";
  * @param {function} props.onClick - Function to be called when the button is clicked.
  * @param {string} [props.className] - CSS class name to be applied to the button.
  * @param {boolean} [props.disabled] - Flag to disable the button. Default is false.
- * @param {ReactNode} [props.icon] - Icon component to be displayed alongside the text.
+ * @param {JSX.Element} [props.icon] - Icon component to be displayed alongside the text.
  * @returns {JSX.Element} The rendered Button component.
  */
 const Button = ({text, onClick, className, disabled, icon}) => {

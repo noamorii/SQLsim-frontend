@@ -24,7 +24,7 @@ const SideMenu = () => {
      * Retrieves the stored query from the session storage.
      *
      * @function
-     * @returns {Object | string} The stored query as a JSON object or an empty string if not found.
+     * @returns {string} The stored query as a string or an empty string if not found.
      */
     const getStoredQuery = () => {
         const query = sessionStorage.getItem('savedFromQuery');

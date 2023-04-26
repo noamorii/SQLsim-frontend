@@ -32,18 +32,22 @@
     margin: 4px;
     padding: 4px;
     width: fit-content;
-    height: 20px;
+    min-height: 20px;
+    height: fit-content;
     min-width: 20px;
     background-color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    white-space: nowrap;
+    max-width: 300px;
+    overflow: auto;
 }
-
 
 .element.disabled {
     opacity: 40%;
+    justify-content: start;
 }
 
 select.element, option {
@@ -83,6 +87,18 @@ input.element.as {
     overflow: clip;
     white-space: nowrap;
     justify-content: space-between;
+}
+
+.element::-webkit-scrollbar
+{
+    height: 8px;
+    background-color: #F5F5F5;
+}
+
+.element::-webkit-scrollbar-thumb
+{
+    background-color: #393675;
+    border: 2px solid #ffffff;
 }
 
 .query-error::-webkit-scrollbar-track

@@ -1,21 +1,35 @@
 .selectQueryContainer {
     display: flex;
     margin: 16px;
-    background-color: #ffffff;
     flex: 1;
 }
-
+.formAndButtons {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 .selectQueryForm {
+    min-width: 350px;
+    flex: 1;
+    border: 2px solid #393675;
     background-color: #8796a1;
+    border-radius: 6px;
     overflow: auto;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
-    width: 100%;
-    min-width: 350px;
+}
+
+.buttonPanel {
+    display: flex;
+    background-color: #1c3559;
+    justify-content: flex-end;
+    margin-top: 6px;
 }
 
 .optionsMenu {
     min-width: 200px;
+    background-color: white;
     overflow: auto;
 }

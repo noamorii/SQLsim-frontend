@@ -35,7 +35,7 @@ const SideMenu = () => {
      * Executes the query and returns the table data.
      *
      * @function
-     * @returns {{ columns: string[], values: string[][] }} The table data from the executed query.
+     * @returns {*|{columns: [], values: []}} The table data from the executed query.
      */
     const getTableData = () => {
         const query = getStoredQuery();

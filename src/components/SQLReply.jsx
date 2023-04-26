@@ -1,40 +1,20 @@
-import React, {useContext, useState} from 'react';
-import ResultTable from "./ResultTable";
-import {DbContext} from "./context/context";
-import Visualisation from "./visualisation/Visualisation";
-
+import SelectQueryForm from "./visualisation/SelectQueryForm";
+import "./SqlReply.css"
+import ResultTable from "./UI/Table/Result/ResultTable";
 
 const SqlReply = () => {
-    const [error, setError] = useState(null);
-    const [results, setResults] = useState([]);
-    const {db} = useContext(DbContext);
-
-    function exec(sql) {
-        try {
-            setResults(db.exec(sql));
-            setError(null);
-        } catch (err) {
-            setError(err);
-            setResults([]);
-        }
-    }
 
     return (
-        <div className="App">
-            <h1 style={{textAlign: "center"}}>SQL simulator</h1>
-            <textarea
-                onChange={(e) => exec(e.target.value)}
-                placeholder="Enter some SQL."/>
-
-            <pre className="error">{(error || "").toString()}</pre>
-
-            <pre>
-                {results.map(({columns, values}, i) =>
-                    <ResultTable key={i} columns={columns} values={values}/>
-                )}
-            </pre>
-
-            <Visualisation values={results}/>
+        <div className="sqlReply">
+            <div className="queryPlayground">
+                <div className="selectForm">
+                    <SelectQueryForm/>
+                </div>
+                <div className="resultTable">
+                    <ResultTable/>
+                </div>
+            </div>
+            <div className="visualization">...</div>
         </div>
     );
 };

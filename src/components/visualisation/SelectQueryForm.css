@@ -1,0 +1,20 @@
+.selectQueryContainer {
+    display: flex;
+    margin: 16px;
+    background-color: #1c3559;
+    flex: 1;
+}
+
+.selectQueryForm {
+    background-color: #8796a1;
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    width: 100%;
+    min-width: 350px;
+}
+
+.optionsMenu {
+    min-width: 200px;
+}

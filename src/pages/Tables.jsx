@@ -1,6 +1,5 @@
 import DatabaseDiagram from "../components/visualisation/DatabaseDiagram";
 import SideMenu from "../components/UI/SideMenu/SideMenu";
-import './Tables.css'
 
 const Tables = () => {
 

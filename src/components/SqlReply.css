@@ -1,0 +1,27 @@
+.sqlReply {
+    display: flex;
+    height: 100vh;
+}
+
+.queryPlayground {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.selectForm {
+    display: flex;
+    background-color: #1c6ea4;
+    flex-basis: 50%;
+}
+
+.resultTable {
+    background-color: #1c3559;
+    flex-basis: 50%;
+}
+
+.visualization {
+    background-color: #a46464;
+    flex: 1;
+    height: 100%;
+}

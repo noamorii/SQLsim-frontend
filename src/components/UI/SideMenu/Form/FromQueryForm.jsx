@@ -269,7 +269,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @returns {Array<JSX.Element>} An array containing a select element for table selection and an 'AS' parameter.
      */
     const createSelectTable = () => {
-        if (tables.length === 0) return;
+        if (tables.length === 0) return null;
         return [
             <select
                 onDrop={handleDrop}
@@ -367,6 +367,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         setQueryError(null);
         clearResultTable();
         sessionStorage.removeItem('savedFromQuery');
+        sessionStorage.removeItem('savedFromElements');
         setElements(startElements);
     };
 

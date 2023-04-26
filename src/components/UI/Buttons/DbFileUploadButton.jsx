@@ -7,7 +7,7 @@ import { DbContext, SqlContext } from '../../context/context';
  *
  * @param {Object} props - The properties passed to the component.
  * @param {Function} props.handleFileUpload - A callback function to be called when a file is successfully uploaded.
- * @returns {React.Element} The DbFileUploadButton component.
+ * @returns {JSX.Element} The DbFileUploadButton component.
  */
 const DbFileUploadButton = (props) => {
     const { setDb } = useContext(DbContext);

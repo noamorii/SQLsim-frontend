@@ -44,3 +44,21 @@ label.options {
     padding: 0;
     margin: 0;
 }
+
+.optionsMenu::-webkit-scrollbar-track
+{
+    background-color: #d7d7d7;
+}
+
+.optionsMenu::-webkit-scrollbar
+{
+    height: 10px;
+    background-color: #F5F5F5;
+}
+
+.optionsMenu::-webkit-scrollbar-thumb
+{
+    border-radius: 8px;
+    background-color: #393675;
+    border: 4px solid #d7d7d7;
+}

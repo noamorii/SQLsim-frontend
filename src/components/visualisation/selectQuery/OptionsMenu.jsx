@@ -1,15 +1,33 @@
-import React from 'react';
 import {AGGREGATE_FUNCTIONS, BASIC_OPERATIONS, CONDITIONS, OUTPUT_MODIFICATIONS} from "../../context/DbQueryConsts";
 import {MdDragHandle} from "react-icons/md";
 import "./OptionsMenu.css";
 
-const OptionsMenu = () => {
+const OptionsMenu = ({handleDragging}) => {
+
+    const onDrag = () => {
+        handleDragging(true);
+    };
+
+    const onDragEnd = () => {
+        handleDragging(false);
+    };
+
+    const onDragStart = (e, operationType) => {
+        e.dataTransfer.setData("text", operationType);
+        onDrag()
+    };
+
     const renderOperationList = (label, operations) => (
         <div className="optionsContainer">
             <label>{label}:</label>
             <ul>
                 {operations.map((operationType, index) => (
-                    <li key={index} draggable={true}>
+                    <li
+                        key={index}
+                        draggable={true}
+                        onDragStart={(e) => onDragStart(e, operationType)}
+                        onDragEnd={onDragEnd}
+                    >
                         <MdDragHandle />
                         {operationType}
                     </li>

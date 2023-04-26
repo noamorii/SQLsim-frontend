@@ -33,3 +33,41 @@
     background-color: white;
     overflow: auto;
 }
+
+.elementContainer.from {
+    position: relative;
+}
+
+.elementContainer.from::before {
+    content: "Click on element for update";
+    position: absolute;
+    top: 42px;
+    left: 4px;
+    background-color: #393675;
+    color: white;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.3s ease;
+    z-index: 1;
+}
+
+.elementContainer.from:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+.drag-area {
+    background-color: rgb(44, 80, 138);
+    font-size: 20px;
+    border: 4px dashed rgba(4, 2, 31, 0.5);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    min-width: 350px;
+    flex: 1;
+}

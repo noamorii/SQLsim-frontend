@@ -1,4 +1,4 @@
-import SelectQueryForm from "./visualisation/SelectQueryForm";
+import SelectQueryForm from "./visualisation/selectQuery/SelectQueryForm";
 import "./SqlReply.css"
 import ResultTable from "./UI/Table/Result/ResultTable";
 

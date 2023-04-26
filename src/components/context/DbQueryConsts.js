@@ -34,3 +34,9 @@ export const SELECT_FRN_KEYS_QRY = "SELECT m.name AS table_from, f1.'from' AS at
  * @type {string[]}
  */
 export const JOIN_TYPES = ["NATURAL JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"];
+
+export const AGGREGATE_FUNCTIONS = ["SUM()", "COUNT()", "AVG()", "MIN()", "MAX()"];
+export const BASIC_OPERATIONS = ["WHERE", "ORDER BY", "GROUP BY", "HAVING"];
+export const CONDITIONS = ["AND", "OR", "ANY", "LIKE"];
+export const OUTPUT_MODIFICATIONS = ["DISTINCT", "ASC", "DESC"];
+

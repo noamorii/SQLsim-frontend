@@ -1,7 +1,7 @@
 .selectQueryContainer {
     display: flex;
     margin: 16px;
-    background-color: #1c3559;
+    background-color: #ffffff;
     flex: 1;
 }
 
@@ -17,4 +17,5 @@
 
 .optionsMenu {
     min-width: 200px;
+    overflow: auto;
 }

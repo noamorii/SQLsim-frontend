@@ -1,0 +1,46 @@
+.optionsContainer {
+    font-family: 'Strait', sans-serif;
+    border-radius: 6px;
+    border: 2px solid #ffffff;
+    background-color: #51637c;
+    color: white;
+    margin: 4px;
+    padding: 4px;
+    box-sizing: content-box;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+}
+
+label.options {
+    font-size: 20px;
+    text-align: center;
+    font-family: 'Strait', sans-serif;
+    color: #1c3559;
+}
+
+.menu li {
+    font-family: 'Strait', sans-serif;
+    color: #8a398a;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    width: auto;
+    padding: 6px;
+    margin: 4px;
+    background-color: #ffffff;
+    border: 2px solid #2672b4;
+}
+
+.menu svg {
+    margin-right: 4px;
+    color: #1c3559;
+}
+
+.menu ul {
+    padding: 0;
+    margin: 0;
+}

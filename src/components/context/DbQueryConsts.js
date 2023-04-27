@@ -37,6 +37,6 @@ export const JOIN_TYPES = ["NATURAL JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOI
 
 export const AGGREGATE_FUNCTIONS = ["SUM()", "COUNT()", "AVG()", "MIN()", "MAX()"];
 export const BASIC_OPERATIONS = ["WHERE", "ORDER BY", "GROUP BY", "HAVING"];
-export const CONDITIONS = ["AND", "OR", "ANY", "LIKE"];
+export const CONDITIONS = ["AND", "OR", "LIKE"];
 export const OUTPUT_MODIFICATIONS = ["DISTINCT", "ASC", "DESC"];
 

@@ -57,6 +57,8 @@ const SelectQueryForm = () => {
 
         if (operation === "WHERE") newElements.push(<input type='text' className='condition element'/>)
         if (operation === "ORDER BY") newElements.push(<input type='text' className='order element'/>)
+        if (operation === "GROUP BY") newElements.push(<input type='text' className='group element'/>)
+        if (operation === "HAVING") newElements.push(<input type='text' className='having element'/>)
         const updatedElements = [
             ...elements.slice(0, newElementIndex),
             ...newElements,
@@ -122,7 +124,7 @@ const SelectQueryForm = () => {
 
             if (operation === "ASC" || operation === "DESC") {
                 const fromQueryIndex = findElementIndexByClassname("order");
-                if (fromQueryIndex !== -1  && !elements.at(fromQueryIndex + 1)) {
+                if (fromQueryIndex !== -1 && !elements.at(fromQueryIndex + 1)) {
                     setElements([
                         ...elements.slice(0, fromQueryIndex + 1),
                         createPlacement(operation),
@@ -131,9 +133,32 @@ const SelectQueryForm = () => {
                 }
                 return;
             }
-            return;
-        }
-        setElements(elements.filter(element => !element.props.className.includes("placement")));
+
+            if (operation === "GROUP BY" && !containsOperation(operation)) {
+                let operationIndex = findElementIndexByClassname("order");
+                if (operationIndex === -1 ) {operationIndex = elements.length}
+                else operationIndex--;
+
+                setElements([
+                    ...elements.slice(0, operationIndex),
+                    createPlacement(operation),
+                    ...elements.slice(operationIndex)
+                ]);
+                return;
+            }
+
+            if (operation === "HAVING" && !containsOperation(operation) && containsOperation("GROUP BY")) {
+                let operationIndex = findElementIndexByClassname("group") - 1;
+                setElements([
+                    ...elements.slice(0, operationIndex),
+                    createPlacement(operation),
+                    ...elements.slice(operationIndex)
+                ]);
+                return;
+            }
+        return;
+    }
+    setElements(elements.filter(element => !element.props.className.includes("placement")));
     }
 
     return (

@@ -3,6 +3,7 @@ import {useForm} from 'react-hook-form';
 import './SelectQueryForm.css';
 import OptionsMenu from "./OptionsMenu";
 import {useNavigate} from 'react-router-dom';
+import {CONDITIONS} from "../../context/DbQueryConsts";
 
 const SelectQueryForm = () => {
     const {register, handleSubmit} = useForm();
@@ -55,10 +56,11 @@ const SelectQueryForm = () => {
         const newElements = [<div className="element">{operation}</div>];
         const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
 
-        if (operation === "WHERE") newElements.push(<input type='text' className='condition element'/>)
-        if (operation === "ORDER BY") newElements.push(<input type='text' className='order element'/>)
-        if (operation === "GROUP BY") newElements.push(<input type='text' className='group element'/>)
-        if (operation === "HAVING") newElements.push(<input type='text' className='having element'/>)
+        if (operation === "WHERE") newElements.push(<input type='text' className='condition element'/>);
+        if (operation === "ORDER BY") newElements.push(<input type='text' className='order element'/>);
+        if (operation === "GROUP BY") newElements.push(<input type='text' className='group element'/>);
+        if (operation === "HAVING") newElements.push(<input type='text' className='having element'/>);
+        if (CONDITIONS.includes(operation)) newElements.push(<input type='text' className='condition element'/>);
         const updatedElements = [
             ...elements.slice(0, newElementIndex),
             ...newElements,
@@ -156,7 +158,38 @@ const SelectQueryForm = () => {
                 ]);
                 return;
             }
-        return;
+
+            if (CONDITIONS.includes(operation)) {
+                let newElements = elements;
+                let conditionIndex = findElementIndexByClassname("condition");
+                if (conditionIndex !== -1) {
+                    if (operation !== "LIKE")
+                    while (elements.at(conditionIndex + 1) && CONDITIONS.includes(elements.at(conditionIndex + 1).props.children)) {
+                        conditionIndex += 2;
+                    }
+                    newElements = [
+                        ...newElements.slice(0, conditionIndex + 1),
+                        createPlacement(operation),
+                        ...newElements.slice(conditionIndex + 1)
+                    ];
+                }
+                if (operation !== "LIKE") {
+                    let havingIndex = findElementIndexByClassname("having");
+                    if (havingIndex !== -1) {
+                        while (elements.at(havingIndex + 1) && CONDITIONS.includes(elements.at(havingIndex + 1).props.children)) {
+                            havingIndex += 2;
+                        }
+                        newElements = [
+                            ...newElements.slice(0, havingIndex + 2),
+                            createPlacement(operation),
+                            ...newElements.slice(havingIndex + 2)
+                        ];
+                    }
+                }
+                setElements(newElements)
+            }
+
+            return;
     }
     setElements(elements.filter(element => !element.props.className.includes("placement")));
     }

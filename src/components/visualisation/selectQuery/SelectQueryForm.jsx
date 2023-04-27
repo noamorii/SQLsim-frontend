@@ -7,7 +7,6 @@ import {useNavigate} from 'react-router-dom';
 const SelectQueryForm = () => {
     const {register, handleSubmit} = useForm();
     const [queryError, setQueryError] = useState(null);
-    const [isDragging, setIsDragging] = useState(false);
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -32,17 +31,6 @@ const SelectQueryForm = () => {
     function onSubmitFrom() {
     }
 
-    const onDrop = (e) => {
-        e.preventDefault();
-        const operationType = e.dataTransfer.getData("operation");
-    };
-
-    const renderDragArea = () => (
-        <div className='drag-area' onDrop={onDrop}>
-            <p>Drag element here</p>
-        </div>
-    );
-
     const handleDragOver = e => {
         e.preventDefault();
     };
@@ -59,17 +47,18 @@ const SelectQueryForm = () => {
     };
 
     const findNewElementIndex = (target, container) => {
-        const { children } = container;
+        const {children} = container;
         return Array.prototype.indexOf.call(children, target);
     }
 
     const setupElements = (placementIndexes, elementIndex, operation) => {
-
-        const newElement = <div className="element">{operation}</div>;
+        const newElements = [<div className="element">{operation}</div>];
         const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
+
+        if (operation === "WHERE") newElements.push(<input type='text' className='condition element'/>)
         const updatedElements = [
             ...elements.slice(0, newElementIndex),
-            newElement,
+            ...newElements,
             ...elements.slice(newElementIndex)
         ].filter(element => !element.props.className.includes("placement"));
         setElements(updatedElements);
@@ -85,38 +74,63 @@ const SelectQueryForm = () => {
         setupElements(placementIndexes, newElementIndex, operation);
     }
 
+    const findElementIndexByClassname = (className) => {
+        return elements.findIndex(element => element.props.className.includes(className));
+    }
+
+    const createPlacement = (operation) => {
+        return (
+            <div onDragOver={(e) => handleDragOver(e)}
+                 onDrop={(e) => handleDrop(e, operation)}
+                 className="element placement">Place here</div>
+        );
+    }
+
+    const containsOperation = (operation) => {
+        return elements.some(element => element.props.children === operation);
+    };
+
     const handleDragging = (e, isDragging) => {
         if (isDragging) {
             const operation = e.dataTransfer.getData("operation");
-            if (operation === "DISTINCT") {
+            if (operation === "DISTINCT" && !containsOperation(operation)) {
                 setElements(elements => [
                     elements[0],
-                    <div onDragOver={(e) => handleDragOver(e)}
-                         onDrop={(e) => handleDrop(e, operation)}
-                         className="element placement">Place here</div>,
+                    createPlacement(operation),
                     ...elements.slice(1)
                 ]);
+                return;
             }
-        }
 
-        setIsDragging(false);
+            if (operation === "WHERE" && !containsOperation(operation)) {
+                const fromQueryIndex = findElementIndexByClassname("loaded")
+                if (fromQueryIndex !== -1) {
+                    setElements([
+                        ...elements.slice(0, fromQueryIndex + 1),
+                        createPlacement(operation),
+                        ...elements.slice(fromQueryIndex + 1)
+                    ]);
+                }
+                return;
+            }
+            return;
+        }
+        setElements(elements.filter(element => !element.props.className.includes("placement")));
     }
 
     return (
         <div className='selectQueryContainer'>
             <div className="formAndButtons">
-                {isDragging ? renderDragArea() : (
-                    <form id='form' className='selectQueryForm' onSubmit={onSubmitFrom}>
-                        {elements.map((element, index) => {
-                            const isLoaded = element.props.className.includes('loaded');
-                            return (
-                                <div className={`elementContainer ${isLoaded ? 'from' : ''}`} key={index}>
-                                    {element}
-                                </div>
-                            );
-                        })}
-                    </form>
-                )}
+                <form id='form' className='selectQueryForm' onSubmit={onSubmitFrom}>
+                    {elements.map((element, index) => {
+                        const isLoaded = element.props.className.includes('loaded');
+                        return (
+                            <div className={`elementContainer ${isLoaded ? 'from' : ''}`} key={index}>
+                                {element}
+                            </div>
+                        );
+                    })}
+                </form>
                 <div className="buttonPanel">
                     <button>Hello</button>
                     <button>Hello</button>

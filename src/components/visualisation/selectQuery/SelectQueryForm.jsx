@@ -34,7 +34,7 @@ const SelectQueryForm = () => {
 
     const onDrop = (e) => {
         e.preventDefault();
-        const operationType = e.dataTransfer.getData("text");
+        const operationType = e.dataTransfer.getData("operation");
     };
 
     const renderDragArea = () => (
@@ -43,8 +43,63 @@ const SelectQueryForm = () => {
         </div>
     );
 
-    const handleDragging = (boolean) => {
-        setIsDragging(boolean);
+    const handleDragOver = e => {
+        e.preventDefault();
+    };
+
+    const findAllPlacementIndexes = () => {
+        const formContainer = document.getElementById("form");
+        const directChildren = Array.from(formContainer.children);
+        return directChildren.reduce((acc, el, index) => {
+            if (el.querySelector(".placement")) {
+                acc.push(index);
+            }
+            return acc;
+        }, []);
+    };
+
+    const findNewElementIndex = (target, container) => {
+        const { children } = container;
+        return Array.prototype.indexOf.call(children, target);
+    }
+
+    const setupElements = (placementIndexes, elementIndex, operation) => {
+
+        const newElement = <div className="element">{operation}</div>;
+        const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
+        const updatedElements = [
+            ...elements.slice(0, newElementIndex),
+            newElement,
+            ...elements.slice(newElementIndex)
+        ].filter(element => !element.props.className.includes("placement"));
+        setElements(updatedElements);
+    };
+
+    function handleDrop(e, operation) {
+        e.preventDefault();
+        const formContainer = document.getElementById("form");
+        e.target.textContent = operation;
+        e.target.classList.remove("placement")
+        const placementIndexes = findAllPlacementIndexes();
+        const newElementIndex = findNewElementIndex(e.target.parentNode, formContainer);
+        setupElements(placementIndexes, newElementIndex, operation);
+    }
+
+    const handleDragging = (e, isDragging) => {
+        if (isDragging) {
+            const operation = e.dataTransfer.getData("operation");
+            if (operation === "DISTINCT") {
+                setElements(elements => [
+                    elements[0],
+                    <div onDragOver={(e) => handleDragOver(e)}
+                         onDrop={(e) => handleDrop(e, operation)}
+                         className="element placement">Place here</div>,
+                    ...elements.slice(1)
+                ]);
+            }
+        }
+
+        setIsDragging(false);
     }
 
     return (

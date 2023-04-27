@@ -47,7 +47,6 @@
 
 .element.disabled {
     opacity: 40%;
-    justify-content: start;
 }
 
 select.element, option {

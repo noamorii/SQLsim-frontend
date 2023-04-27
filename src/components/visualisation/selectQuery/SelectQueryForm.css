@@ -38,6 +38,10 @@
     position: relative;
 }
 
+.loaded {
+    justify-content: start;
+}
+
 .elementContainer.from::before {
     content: "Click on element for update";
     position: absolute;

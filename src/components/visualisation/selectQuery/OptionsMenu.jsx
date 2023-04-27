@@ -4,17 +4,17 @@ import "./OptionsMenu.css";
 
 const OptionsMenu = ({handleDragging}) => {
 
-    const onDrag = () => {
-        handleDragging(true);
+    const onDrag = (e) => {
+        handleDragging(e, true);
     };
 
-    const onDragEnd = () => {
-        handleDragging(false);
+    const onDragEnd = (e) => {
+        handleDragging(e, false);
     };
 
     const onDragStart = (e, operationType) => {
-        e.dataTransfer.setData("text", operationType);
-        onDrag()
+        e.dataTransfer.setData("operation", operationType);
+        onDrag(e)
     };
 
     const renderOperationList = (label, operations) => (
@@ -26,7 +26,7 @@ const OptionsMenu = ({handleDragging}) => {
                         key={index}
                         draggable={true}
                         onDragStart={(e) => onDragStart(e, operationType)}
-                        onDragEnd={onDragEnd}
+                        onDragEnd={(e) => onDragEnd(e)}
                     >
                         <MdDragHandle />
                         {operationType}

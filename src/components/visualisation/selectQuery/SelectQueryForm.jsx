@@ -56,6 +56,7 @@ const SelectQueryForm = () => {
         const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
 
         if (operation === "WHERE") newElements.push(<input type='text' className='condition element'/>)
+        if (operation === "ORDER BY") newElements.push(<input type='text' className='order element'/>)
         const updatedElements = [
             ...elements.slice(0, newElementIndex),
             ...newElements,
@@ -105,6 +106,23 @@ const SelectQueryForm = () => {
             if (operation === "WHERE" && !containsOperation(operation)) {
                 const fromQueryIndex = findElementIndexByClassname("loaded")
                 if (fromQueryIndex !== -1) {
+                    setElements([
+                        ...elements.slice(0, fromQueryIndex + 1),
+                        createPlacement(operation),
+                        ...elements.slice(fromQueryIndex + 1)
+                    ]);
+                }
+                return;
+            }
+
+            if (operation === "ORDER BY" && !containsOperation(operation)) {
+                setElements([...elements, createPlacement(operation)])
+                return;
+            }
+
+            if (operation === "ASC" || operation === "DESC") {
+                const fromQueryIndex = findElementIndexByClassname("order");
+                if (fromQueryIndex !== -1  && !elements.at(fromQueryIndex + 1)) {
                     setElements([
                         ...elements.slice(0, fromQueryIndex + 1),
                         createPlacement(operation),

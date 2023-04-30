@@ -29,7 +29,6 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
     const [elements, setElements] = useState(startElements);
     const [queryError, setQueryError] = useState(null);
     const [tables, setTables] = useState([]);
-
     const {register, handleSubmit} = useForm();
 
     /**
@@ -364,6 +363,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @function
      */
     const handleClear = () => {
+        console.log("de")
         setQueryError(null);
         clearResultTable();
         sessionStorage.removeItem('savedFromQuery');

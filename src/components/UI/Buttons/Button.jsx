@@ -15,7 +15,7 @@ import styles from "./Button.module.css";
  */
 const Button = ({text, onClick, className, disabled, icon}) => {
     return (
-        <div className={styles.btn} onClick={onClick}>
+        <div className={styles.btn}>
             <button className={className} onClick={onClick} disabled={disabled}>
                 {text}
             </button>

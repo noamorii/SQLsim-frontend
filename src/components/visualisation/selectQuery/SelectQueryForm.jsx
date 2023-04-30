@@ -1,14 +1,19 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import './SelectQueryForm.css';
 import OptionsMenu from "./OptionsMenu";
 import {useNavigate} from 'react-router-dom';
 import {CONDITIONS} from "../../context/DbQueryConsts";
+import Button from "../../UI/Buttons/Button";
+import {VscDebugStart} from "react-icons/vsc";
+import {DbContext} from "../../context/context";
+import {AiFillDelete} from "react-icons/ai";
 
 const SelectQueryForm = () => {
-    const {register, handleSubmit} = useForm();
+    const {register, unregister, handleSubmit} = useForm();
     const [queryError, setQueryError] = useState(null);
     const navigate = useNavigate();
+    const {db} = useContext(DbContext);
 
     const handleClick = () => {
         navigate('/tables');
@@ -24,13 +29,13 @@ const SelectQueryForm = () => {
 
     const startElements = [
         <div className='start element'>SELECT</div>,
-        <input type='text' className='columns element'/>,
+        <input type='text' className='columns element'
+            {...register((1) + "_input", {
+             required: true
+            })}/>,
         loadFromQuery()
     ];
     const [elements, setElements] = useState(startElements);
-
-    function onSubmitFrom() {
-    }
 
     const handleDragOver = e => {
         e.preventDefault();
@@ -56,11 +61,42 @@ const SelectQueryForm = () => {
         const newElements = [<div className="element">{operation}</div>];
         const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
 
-        if (operation === "WHERE") newElements.push(<input type='text' className='condition element'/>);
-        if (operation === "ORDER BY") newElements.push(<input type='text' className='order element'/>);
-        if (operation === "GROUP BY") newElements.push(<input type='text' className='group element'/>);
-        if (operation === "HAVING") newElements.push(<input type='text' className='having element'/>);
-        if (CONDITIONS.includes(operation)) newElements.push(<input type='text' className='condition element'/>);
+        if (operation === "WHERE") newElements.push(
+            <input type='text' className='condition element'
+               {...register((elementIndex + 1) + "_input", {
+                   required: true
+               })
+            }/>
+        );
+
+        if (operation === "ORDER BY") newElements.push(
+            <input type='text' className='order element'
+                {...register((elementIndex + 1) + "_input", {
+                required: true
+                })
+            }/>
+        );
+        if (operation === "GROUP BY") newElements.push(
+            <input type='text' className='group element'
+               {...register((elementIndex + 1) + "_input", {
+                required: true
+               })
+            }/>
+        );
+        if (operation === "HAVING") newElements.push(
+            <input type='text' className='having element'
+               {...register((elementIndex + 1) + "_input", {
+                required: true
+               })
+            }/>
+        );
+        if (CONDITIONS.includes(operation)) newElements.push(
+            <input type='text' className='condition element'
+               {...register((elementIndex + 1) + "_input", {
+                required: true
+                })
+            }/>
+        );
         const updatedElements = [
             ...elements.slice(0, newElementIndex),
             ...newElements,
@@ -138,8 +174,9 @@ const SelectQueryForm = () => {
 
             if (operation === "GROUP BY" && !containsOperation(operation)) {
                 let operationIndex = findElementIndexByClassname("order");
-                if (operationIndex === -1 ) {operationIndex = elements.length}
-                else operationIndex--;
+                if (operationIndex === -1) {
+                    operationIndex = elements.length
+                } else operationIndex--;
 
                 setElements([
                     ...elements.slice(0, operationIndex),
@@ -164,9 +201,9 @@ const SelectQueryForm = () => {
                 let conditionIndex = findElementIndexByClassname("condition");
                 if (conditionIndex !== -1) {
                     if (operation !== "LIKE")
-                    while (elements.at(conditionIndex + 1) && CONDITIONS.includes(elements.at(conditionIndex + 1).props.children)) {
-                        conditionIndex += 2;
-                    }
+                        while (elements.at(conditionIndex + 1) && CONDITIONS.includes(elements.at(conditionIndex + 1).props.children)) {
+                            conditionIndex += 2;
+                        }
                     newElements = [
                         ...newElements.slice(0, conditionIndex + 1),
                         createPlacement(operation),
@@ -190,8 +227,37 @@ const SelectQueryForm = () => {
             }
 
             return;
+        }
+        setElements(elements.filter(element => !element.props.className.includes("placement")));
     }
-    setElements(elements.filter(element => !element.props.className.includes("placement")));
+
+    const buildQuery = (data, elements) => {
+        console.log(data);
+        console.log(elements)
+    };
+
+    function handleQuery(query) {
+        try {
+            db.exec(query);
+            setQueryError(null);
+        } catch (err) {
+            setQueryError(err);
+        }
+    }
+
+    const onSubmitFrom = (data) => {
+        const query = buildQuery(data, elements);
+        handleQuery(query);
+    }
+
+    function cleanElements() {
+        setElements(startElements);
+        for (const element of elements) {
+            if (element.type === 'input') {
+                unregister(element.props.name)
+            }
+        }
+        setQueryError(null)
     }
 
     return (
@@ -208,12 +274,13 @@ const SelectQueryForm = () => {
                     })}
                 </form>
                 <div className="buttonPanel">
-                    <button>Hello</button>
-                    <button>Hello</button>
-                    <button>Hello</button>
+                    <Button onClick={cleanElements} text="Clear" icon={<AiFillDelete/>}/>
+                    <Button onClick={() => {
+                        handleSubmit(onSubmitFrom)();
+                    }} text="Run" icon={<VscDebugStart/>}/>
                 </div>
+                {queryError && <div className='query-error'> {queryError.toString()}.</div>}
             </div>
-            {queryError && <div className='query-error'> {queryError.toString()}.</div>}
             <div className='optionsMenu'>
                 <OptionsMenu handleDragging={handleDragging}/>
             </div>

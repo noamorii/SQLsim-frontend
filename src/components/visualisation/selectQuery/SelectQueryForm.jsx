@@ -211,7 +211,6 @@ const SelectQueryForm = ({showResultTable, clearResultTable}) => {
                 }
                 setElements(newElements);
             }
-
             return;
         }
         setElements(elements.filter(element => !element.props.className.includes("placement")));
@@ -251,7 +250,7 @@ const SelectQueryForm = ({showResultTable, clearResultTable}) => {
         }
     }
 
-    const onSubmitFrom = (data) => {
+    const onSubmitForm = (data) => {
         const query = buildQuery(data);
         handleQuery(query);
     }
@@ -263,23 +262,27 @@ const SelectQueryForm = ({showResultTable, clearResultTable}) => {
         setQueryError(null);
     }
 
+    const renderElement = (element, index) => {
+        const isLoaded = element.props.className.includes('loaded');
+        const containerClassName = `elementContainer ${isLoaded ? 'from' : ''}`;
+
+        return (
+            <div className={containerClassName} key={index}>
+                {element}
+            </div>
+        );
+    };
+
     return (
         <div className='selectQueryContainer'>
             <div className="formAndButtons">
-                <form id='form' className='selectQueryForm' onSubmit={onSubmitFrom}>
-                    {elements.map((element, index) => {
-                        const isLoaded = element.props.className.includes('loaded');
-                        return (
-                            <div className={`elementContainer ${isLoaded ? 'from' : ''}`} key={index}>
-                                {element}
-                            </div>
-                        );
-                    })}
+                <form id="form" className="selectQueryForm" onSubmit={onSubmitForm}>
+                    {elements.map(renderElement)}
                 </form>
                 <div className="buttonPanel">
                     <Button onClick={cleanElements} text="Clear" icon={<AiFillDelete/>}/>
                     <Button onClick={() => {
-                        handleSubmit(onSubmitFrom)();
+                        handleSubmit(onSubmitForm)();
                     }} text="Run" icon={<VscDebugStart/>}/>
                 </div>
                 {queryError && <div className='query-error'> {queryError.toString()}.</div>}

@@ -38,7 +38,6 @@ const OptionsMenu = ({handleDragging}) => {
 
     return (
         <div className="menu">
-            <label className="options">Options</label>
             {renderOperationList('Basic operations', BASIC_OPERATIONS)}
             {renderOperationList('Output modifications', OUTPUT_MODIFICATIONS)}
             {renderOperationList('Conditions', CONDITIONS)}

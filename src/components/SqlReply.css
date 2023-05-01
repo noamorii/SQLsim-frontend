@@ -1,6 +1,6 @@
 .sqlReply {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 60px);
 }
 
 .queryPlayground {
@@ -11,13 +11,14 @@
 
 .selectForm {
     display: flex;
-    background-color: #1c6ea4;
+    background-color: #ffffff;
     flex-basis: 50%;
     max-height: 50%;
 }
 
 .resultTable {
     background-color: #494e56;
+    padding: 16px;
     flex-basis: 50%;
 }
 

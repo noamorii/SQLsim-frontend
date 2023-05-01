@@ -265,7 +265,6 @@ const SelectQueryForm = ({showResultTable, clearResultTable}) => {
     const renderElement = (element, index) => {
         const isLoaded = element.props.className.includes('loaded');
         const containerClassName = `elementContainer ${isLoaded ? 'from' : ''}`;
-
         return (
             <div className={containerClassName} key={index}>
                 {element}
@@ -279,13 +278,11 @@ const SelectQueryForm = ({showResultTable, clearResultTable}) => {
                 <form id="form" className="selectQueryForm" onSubmit={onSubmitForm}>
                     {elements.map(renderElement)}
                 </form>
+                {queryError && <div className='query-error'> {queryError.toString()}.</div>}
                 <div className="buttonPanel">
                     <Button onClick={cleanElements} text="Clear" icon={<AiFillDelete/>}/>
-                    <Button onClick={() => {
-                        handleSubmit(onSubmitForm)();
-                    }} text="Run" icon={<VscDebugStart/>}/>
+                    <Button onClick={handleSubmit(onSubmitForm)} text="Run" icon={<VscDebugStart/>}/>
                 </div>
-                {queryError && <div className='query-error'> {queryError.toString()}.</div>}
             </div>
             <div className='optionsMenu'>
                 <OptionsMenu handleDragging={handleDragging}/>

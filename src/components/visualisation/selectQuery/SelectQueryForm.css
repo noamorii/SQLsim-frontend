@@ -21,6 +21,10 @@
     align-content: flex-start;
 }
 
+.query-error {
+    background-color: #1c3559;
+}
+
 .buttonPanel {
     display: flex;
     justify-content: flex-end;

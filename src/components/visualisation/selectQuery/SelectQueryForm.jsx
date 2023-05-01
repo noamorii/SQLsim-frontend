@@ -12,7 +12,6 @@ import {AiFillDelete} from "react-icons/ai";
 const SelectQueryForm = () => {
     const {register, unregister, handleSubmit} = useForm();
     const [queryError, setQueryError] = useState(null);
-    let inputFields = [];
     const navigate = useNavigate();
     const {db} = useContext(DbContext);
 
@@ -48,7 +47,6 @@ const SelectQueryForm = () => {
             })}/>,
         loadFromQuery()
     ];
-    inputFields.push(startElements[1]);
     const [elements, setElements] = useState(startElements);
 
     const handleDragOver = e => {
@@ -71,67 +69,46 @@ const SelectQueryForm = () => {
         return Array.prototype.indexOf.call(children, target);
     }
 
+    function createInputElement(condition) {
+        return (
+            <input
+                type="text"
+                className={`${condition} element`}
+                {...register(`${elements.length + 1}_input`, { required: true })}
+            />
+        );
+    }
+
+    const createOperationInput = (operation) => {
+        switch (operation) {
+            case "WHERE":
+                return createInputElement("condition");
+            case "ORDER BY":
+                return createInputElement("order");
+            case "GROUP BY":
+                return createInputElement("group");
+            case "HAVING":
+                return createInputElement("having");
+            case CONDITIONS.includes(operation) :
+                return createInputElement("condition");
+            default:
+                return null;
+        }
+    }
+
     const setupElements = (placementIndexes, elementIndex, operation) => {
         const newElements = [<div className="element">{operation}</div>];
         const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
 
-        if (operation === "WHERE") {
-            const newElement =
-                <input type='text' className='condition element'
-                   {...register((elements.length+1) + "_input", {
-                       required: true
-                   })}/>
-            inputFields.push(newElement);
-            console.log(inputFields);
-            newElements.push(newElement);
-        }
-
-        if (operation === "ORDER BY") {
-            const newElement =
-                <input type='text' className='order element'
-                   {...register((elements.length+1) + "_input", {
-                       required: true
-                   })}/>
-            inputFields.push(newElement);
-            newElements.push(newElement);
-        }
-
-        if (operation === "GROUP BY") {
-            const newElement =
-                <input type='text' className='group element'
-                       {...register((elements.length+1) + "_input", {
-                           required: true
-                       })}/>
-            inputFields.push(newElement);
-            newElements.push(newElement);
-        }
-
-        if (operation === "HAVING") {
-            const newElement =
-                <input type='text' className='having element'
-                       {...register((elements.length+1) + "_input", {
-                           required: true
-                       })}/>
-            inputFields.push(newElement);
-            newElements.push(newElement);
-        }
-
-        if (CONDITIONS.includes(operation)) {
-
-            const newElement =
-                <input type='text' className='condition element'
-                       {...register((elements.length+1) + "_input", {
-                           required: true
-                       })}/>
-            inputFields.push(newElement);
-            newElements.push(newElement);
-        }
+        const newInput = createOperationInput(operation);
+        if (newInput) newElements.push(newInput);
 
         const updatedElements = [
             ...elements.slice(0, newElementIndex),
             ...newElements,
             ...elements.slice(newElementIndex)
-        ].filter(element => !element.props.className.includes("placement"));
+        ].filter(element =>
+            !element.props.className.includes("placement"));
         setElements(updatedElements);
     };
 
@@ -302,7 +279,6 @@ const SelectQueryForm = () => {
                 unregister(element.props.name)
             }
         }
-        inputFields = [startElements[1]];
         setQueryError(null)
     }
 

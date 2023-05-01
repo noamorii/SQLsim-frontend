@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import './SelectQueryForm.css';
 import OptionsMenu from "./OptionsMenu";
@@ -49,9 +49,9 @@ const SelectQueryForm = () => {
     ];
     const [elements, setElements] = useState(startElements);
 
-    const handleDragOver = e => {
+    const handleDragOver = useCallback((e) => {
         e.preventDefault();
-    };
+    }, []);
 
     const findAllPlacementIndexes = () => {
         const formContainer = document.getElementById("form");
@@ -89,9 +89,9 @@ const SelectQueryForm = () => {
                 return createInputElement("group");
             case "HAVING":
                 return createInputElement("having");
-            case CONDITIONS.includes(operation) :
-                return createInputElement("condition");
             default:
+                if (CONDITIONS.includes(operation))
+                    return createInputElement("condition");
                 return null;
         }
     }
@@ -126,9 +126,9 @@ const SelectQueryForm = () => {
         return elements.findIndex(element => element.props.className.includes(className));
     }
 
-    const createPlacement = (operation) => {
+    const createPlacementDiv = (operation) => {
         return (
-            <div onDragOver={(e) => handleDragOver(e)}
+            <div onDragOver={handleDragOver}
                  onDrop={(e) => handleDrop(e, operation)}
                  className="element placement">Place here</div>
         );
@@ -138,44 +138,39 @@ const SelectQueryForm = () => {
         return elements.some(element => element.props.children === operation);
     };
 
-    const handleDragging = (e, isDragging) => {
+
+    const getElementsWithPlacement = (elements, operation, index) => {
+        return [
+            ...elements.slice(0, index),
+            createPlacementDiv(operation),
+            ...elements.slice(index)
+        ];
+    };
+
+    const handleDragging = useCallback((e, isDragging) => {
         if (isDragging) {
             const operation = e.dataTransfer.getData("operation");
             if (operation === "DISTINCT" && !containsOperation(operation)) {
-                setElements(elements => [
-                    elements[0],
-                    createPlacement(operation),
-                    ...elements.slice(1)
-                ]);
+                setElements(getElementsWithPlacement(elements, operation, 1));
                 return;
             }
 
             if (operation === "WHERE" && !containsOperation(operation)) {
                 const fromQueryIndex = findElementIndexByClassname("loaded")
-                if (fromQueryIndex !== -1) {
-                    setElements([
-                        ...elements.slice(0, fromQueryIndex + 1),
-                        createPlacement(operation),
-                        ...elements.slice(fromQueryIndex + 1)
-                    ]);
-                }
+                if (fromQueryIndex !== -1)
+                    setElements(getElementsWithPlacement(elements, operation, fromQueryIndex + 1));
                 return;
             }
 
             if (operation === "ORDER BY" && !containsOperation(operation)) {
-                setElements([...elements, createPlacement(operation)])
+                setElements(getElementsWithPlacement(elements, operation, elements.length));
                 return;
             }
 
             if (operation === "ASC" || operation === "DESC") {
                 const fromQueryIndex = findElementIndexByClassname("order");
-                if (fromQueryIndex !== -1 && !elements.at(fromQueryIndex + 1)) {
-                    setElements([
-                        ...elements.slice(0, fromQueryIndex + 1),
-                        createPlacement(operation),
-                        ...elements.slice(fromQueryIndex + 1)
-                    ]);
-                }
+                if (fromQueryIndex !== -1 && !elements.at(fromQueryIndex + 1))
+                    setElements(getElementsWithPlacement( elements, operation, fromQueryIndex + 1));
                 return;
             }
 
@@ -185,21 +180,13 @@ const SelectQueryForm = () => {
                     operationIndex = elements.length
                 } else operationIndex--;
 
-                setElements([
-                    ...elements.slice(0, operationIndex),
-                    createPlacement(operation),
-                    ...elements.slice(operationIndex)
-                ]);
+                setElements(getElementsWithPlacement(elements, operation, operationIndex));
                 return;
             }
 
             if (operation === "HAVING" && !containsOperation(operation) && containsOperation("GROUP BY")) {
-                let operationIndex = findElementIndexByClassname("group") - 1;
-                setElements([
-                    ...elements.slice(0, operationIndex),
-                    createPlacement(operation),
-                    ...elements.slice(operationIndex)
-                ]);
+                let operationIndex = findElementIndexByClassname("group") + 2;
+                setElements(getElementsWithPlacement(elements, operation, operationIndex));
                 return;
             }
 
@@ -211,11 +198,7 @@ const SelectQueryForm = () => {
                         while (elements.at(conditionIndex + 1) && CONDITIONS.includes(elements.at(conditionIndex + 1).props.children)) {
                             conditionIndex += 2;
                         }
-                    newElements = [
-                        ...newElements.slice(0, conditionIndex + 1),
-                        createPlacement(operation),
-                        ...newElements.slice(conditionIndex + 1)
-                    ];
+                    newElements = getElementsWithPlacement(elements, operation, conditionIndex + 1);
                 }
                 if (operation !== "LIKE") {
                     let havingIndex = findElementIndexByClassname("having");
@@ -223,20 +206,16 @@ const SelectQueryForm = () => {
                         while (elements.at(havingIndex + 1) && CONDITIONS.includes(elements.at(havingIndex + 1).props.children)) {
                             havingIndex += 2;
                         }
-                        newElements = [
-                            ...newElements.slice(0, havingIndex + 2),
-                            createPlacement(operation),
-                            ...newElements.slice(havingIndex + 2)
-                        ];
+                        newElements = [...getElementsWithPlacement(newElements, operation, havingIndex + 2)];
                     }
                 }
-                setElements(newElements)
+                setElements(newElements);
             }
 
             return;
         }
         setElements(elements.filter(element => !element.props.className.includes("placement")));
-    }
+        }, [elements]);
 
     const buildQuery = (data) => {
         let newQuery = ["SELECT"];

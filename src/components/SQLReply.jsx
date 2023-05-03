@@ -34,7 +34,7 @@ const SqlReply = () => {
                     <div className="from-table">
                         {resultState
                             ? (<ResultTable data={getTableData()}/>)
-                            : (<FakeTable message={"No records to display"}/>)
+                            : (<FakeTable message={"Create and run SELECT query"}/>)
                         }
                     </div>
                 </div>
@@ -42,7 +42,7 @@ const SqlReply = () => {
             <div className="visualization">
                 {resultState
                     ? (<Visualisation/>)
-                    : (<div className="no-data-message">No records to display</div>)
+                    : (<div className="no-data">Create and run SELECT query</div>)
                 }
             </div>
         </div>

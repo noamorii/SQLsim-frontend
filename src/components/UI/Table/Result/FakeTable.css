@@ -1,0 +1,22 @@
+.no-result-container {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+}
+.no-result-table {
+    height: 100%;
+    filter: blur(3px);
+    opacity: 0.5;
+}
+
+.table-message {
+    background-color: rgba(28, 53, 89, 0.5);
+    color: #cac9d7;
+    padding: 6px 10px;
+    border-radius: 6px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}

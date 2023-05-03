@@ -7,6 +7,7 @@ import JoinsMenu from "./Joins/JoinsMenu";
 import ResultTable from "../Table/Result/ResultTable";
 import {executeQuery} from "../../context/commonFunctions";
 import {DbContext} from "../../context/context";
+import FakeTable from "../Table/Result/FakeTable";
 
 /**
  * SideMenu component serves as a side menu to create a FROM query, display join types, and show query results.
@@ -68,7 +69,7 @@ const SideMenu = () => {
                     <div className="from-table">
                         {showTable
                             ? (<ResultTable data={getTableData()}/>)
-                            : (<div className="no-data-message">No records to display</div>)
+                            : (<FakeTable message={"Create and run your query"}/>)
                         }
                     </div>
                 </div>

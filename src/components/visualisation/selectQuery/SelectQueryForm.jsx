@@ -9,7 +9,7 @@ import {VscDebugStart} from "react-icons/vsc";
 import {DbContext} from "../../context/context";
 import {AiFillDelete} from "react-icons/ai";
 
-const SelectQueryForm = ({showResultTable, clearResultTable, showVisualisation, clearVisualisation}) => {
+const SelectQueryForm = ({showResult, clearResult}) => {
     const {register, unregister, handleSubmit} = useForm();
     const [queryError, setQueryError] = useState(null);
     const navigate = useNavigate();
@@ -236,31 +236,29 @@ const SelectQueryForm = ({showResultTable, clearResultTable, showVisualisation, 
     };
 
     function handleQuery(query) {
-        console.log(query)
         try {
             db.exec(query);
             sessionStorage.setItem('savedSelectQuery', JSON.stringify(query));
-            clearResultTable();
-            showResultTable();
-            showVisualisation();
+            clearResult();
+            showResult();
             setQueryError(null);
         } catch (err) {
-            clearResultTable();
-            clearVisualisation();
+            clearResult();
             sessionStorage.removeItem('savedSelectQuery');
             setQueryError(err);
         }
     }
 
     const onSubmitForm = (data) => {
-        const query = buildQuery(data);
-        handleQuery(query);
+        handleQuery(buildQuery(data));
     }
 
     function cleanElements() {
         setElements(startElements);
         elements.filter(element => element.type === 'input')
                 .forEach(element => unregister(element.props.name));
+        clearResult();
+        sessionStorage.removeItem('savedSelectQuery');
         setQueryError(null);
     }
 
@@ -274,14 +272,20 @@ const SelectQueryForm = ({showResultTable, clearResultTable, showVisualisation, 
         );
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') event.preventDefault();
+    };
+
     return (
         <div className='selectQueryContainer'>
             <div className="formAndButtons">
-                <form id="form" className="selectQueryForm" onSubmit={onSubmitForm}>
+                <form id="form" className="selectQueryForm" onKeyDown={() => {}}
+                      onSubmit={onSubmitForm} onKeyPress={handleKeyPress}>
                     {elements.map(renderElement)}
                 </form>
                 {queryError && <div className='query-error'> {queryError.toString()}.</div>}
                 <div className="buttonPanel">
+                    <Button onClick={cleanElements} text="Show All" icon={<AiFillDelete/>}/>
                     <Button onClick={cleanElements} text="Clear" icon={<AiFillDelete/>}/>
                     <Button onClick={handleSubmit(onSubmitForm)} text="Run" icon={<VscDebugStart/>}/>
                 </div>

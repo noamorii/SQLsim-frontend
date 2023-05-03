@@ -17,6 +17,8 @@ const ResultTable = (result) => {
         return <div className="no-data-message"> No results available </div>;
     }
 
+    console.log(result)
+
     return (
         <div className={style.tableContainer}>
             <table>

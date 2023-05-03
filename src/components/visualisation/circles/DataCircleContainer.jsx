@@ -2,30 +2,24 @@ import React, {useState, useEffect, useContext, useRef} from "react";
 import {DbContext} from "../../context/context";
 import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
-import {executeQueryValues, getStoredQuery} from "../../context/commonFunctions";
+import {executeQuery, getStoredQuery} from "../../context/commonFunctions";
 
 const DataCircleContainer = () => {
     const [circles, setCircles] = useState([]);
-    const [dbResult, setDbResult] = useState([]);
     const [error, setError] = useState(null);
+
     const {db} = useContext(DbContext);
+
     const dataCircleRef = useRef(null);
     const circleWidthRef = useRef(null);
 
     const CIRCLE_BOUNDARY = getCircleWidth();
-    const CONTAINER_OFFSET = 20;
-
-    const getValues = () => {
-        const query = getStoredQuery('savedSelectQuery');
-        const result =  executeQueryValues(db, query);
-        console.log(result)
-        return result;
-    }
+    const CONTAINER_OFFSET = 50;
 
     const getAllFromSelectedTable = () => {
         try {
             const query = getStoredQuery('savedSelectQuery');
-            const dbResult = db.exec(query)[0];
+            const dbResult = executeQuery(db, query);
             return {
                 columns:dbResult.columns,
                 values: dbResult.values
@@ -96,20 +90,19 @@ const DataCircleContainer = () => {
     useEffect(() => {
         const dbResultObject = getAllFromSelectedTable();
         if (dbResultObject.length === 0) return;
-        console.log(dbResultObject)
-        setDbResult(dbResultObject);
         const newCircles = dbResultObject.values.map(value => {
             const keyValueObject = createKeyValueObject(dbResultObject.columns, value);
-            return <DataCircle
-                key={value[0]} text={value[0]} valueObject={keyValueObject}
-                left={getPositions()} top={getPositions()} />;
+            return (
+                <DataCircle key={value[0]} text={value[0]} valueObject={keyValueObject}
+                left={getPositions()} top={getPositions()} />
+            );
         });
         checkCollisions(newCircles)
     }, [db]);
 
-    if (error) return <div> Erroring: {error} </div>;
+    if (error) return <div> Error: {error} </div>;
     return (
-            <div id="circleContainer" ref={dataCircleRef}>{circles}</div>
+        <div id="circleContainer" ref={dataCircleRef}>{circles}</div>
     );
 };
 

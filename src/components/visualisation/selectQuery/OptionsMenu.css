@@ -9,6 +9,10 @@
     box-sizing: content-box;
 }
 
+.optionsContainer label {
+    padding-left: 4px;
+}
+
 .menu {
     display: flex;
     flex-direction: column;

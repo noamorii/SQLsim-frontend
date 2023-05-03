@@ -5,11 +5,11 @@ import {executeQuery} from "./context/commonFunctions";
 import React, {useContext, useState} from "react";
 import {DbContext} from "./context/context";
 import Visualisation from "./visualisation/Visualisation";
+import FakeTable from "./UI/Table/Result/FakeTable";
 
 const SqlReply = () => {
     const {db} = useContext(DbContext);
-    const [showTable, setShowTable] = useState(false);
-    const [visualisation, setShowVisualisation] = useState(false)
+    const [resultState, setResultState] = useState(false);
 
     const getTableData = () => {
         const query = getStoredQuery();
@@ -21,31 +21,29 @@ const SqlReply = () => {
         return query ? JSON.parse(query) : "";
     };
 
-    const showResultTable = () => setShowTable(getStoredQuery() !== "");
-    const clearResultTable = () => setShowTable(false);
-
-    const showVisualisation = () => setShowVisualisation(getStoredQuery() !== "");
-    const clearVisualisation = () => setShowVisualisation(false);
+    const showResult = () => setResultState(getStoredQuery() !== "");
+    const clearResult = () => setResultState(false);
 
     return (
         <div className="sqlReply">
             <div className="queryPlayground">
                 <div className="selectForm">
-                    <SelectQueryForm showResultTable={showResultTable} clearResultTable={clearResultTable}
-                                     showVisualisation={showVisualisation} clearVisualisation={clearVisualisation}
-                    />
+                    <SelectQueryForm showResult={showResult} clearResult={clearResult}/>
                 </div>
                 <div className="resultTable">
                     <div className="from-table">
-                        {showTable
+                        {resultState
                             ? (<ResultTable data={getTableData()}/>)
-                            : (<div className="no-data-message">No records to display</div>)
+                            : (<FakeTable message={"No records to display"}/>)
                         }
                     </div>
                 </div>
             </div>
             <div className="visualization">
-                <Visualisation isShowed={visualisation}/>
+                {resultState
+                    ? (<Visualisation/>)
+                    : (<div className="no-data-message">No records to display</div>)
+                }
             </div>
         </div>
     );

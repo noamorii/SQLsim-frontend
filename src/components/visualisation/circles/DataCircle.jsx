@@ -13,7 +13,6 @@ const DataCircle = ({valueObject, text, top, left}) => {
                 <p>{text}</p>
             </div>
         </div>
-
     );
 };
 

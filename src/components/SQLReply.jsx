@@ -4,7 +4,7 @@ import ResultTable from "./UI/Table/Result/ResultTable";
 import {executeQuery, getStoredQuery} from "./context/commonFunctions";
 import React, {useContext, useState} from "react";
 import {DbContext} from "./context/context";
-import Visualisation from "./visualisation/Visualisation";
+import Visualization from "./visualisation/Visualization";
 import FakeTable from "./UI/Table/Result/FakeTable";
 
 const SqlReply = () => {
@@ -40,7 +40,7 @@ const SqlReply = () => {
             </div>
             <div className="visualization">
                 {resultState
-                    ? (<Visualisation query={currentTable}/>)
+                    ? (<Visualization query={currentTable}/>)
                     : (<div className="no-data">Create and run SELECT query</div>)
                 }
             </div>

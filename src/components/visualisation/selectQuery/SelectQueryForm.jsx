@@ -8,10 +8,13 @@ import Button from "../../UI/Buttons/Button";
 import {VscDebugStart} from "react-icons/vsc";
 import {DbContext} from "../../context/context";
 import {AiFillDelete} from "react-icons/ai";
+import {MdDone} from "react-icons/md";
 
 const SelectQueryForm = ({showResult, clearResult}) => {
-    const {register, unregister, handleSubmit} = useForm();
     const [queryError, setQueryError] = useState(null);
+    const [copied, setCopied] = useState(false);
+
+    const {register, unregister, handleSubmit} = useForm();
     const navigate = useNavigate();
     const {db} = useContext(DbContext);
 
@@ -276,6 +279,24 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         if (event.key === 'Enter') event.preventDefault();
     };
 
+    async function copyElements(data) {
+        const toCopy = buildQuery(data);
+        try {
+            await navigator.clipboard.writeText(toCopy);
+            setCopied(true);
+            resetCopiedState();
+        } catch (err) {
+            console.error('Failed to copy text: ' + err);
+        }
+    }
+
+    const resetCopiedState = () => {
+        setTimeout(() => {
+            setCopied(false);
+        }, 1000);
+    };
+
+
     return (
         <div className='selectQueryContainer'>
             <div className="formAndButtons">
@@ -287,7 +308,11 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                 <div className="buttonPanel">
                     <Button onClick={cleanElements} text="Show All" icon={<AiFillDelete/>}/>
                     <Button onClick={cleanElements} text="Clear" icon={<AiFillDelete/>}/>
-                    <Button onClick={cleanElements} text="Copy" icon={<AiFillDelete/>}/>
+                    <Button
+                        onClick={handleSubmit(copyElements)}
+                        text={copied ? "Copied!" : "Copy"}
+                        icon={copied ? <MdDone /> : <AiFillDelete />}
+                    />
                     <Button onClick={handleSubmit(onSubmitForm)} text="Run" icon={<VscDebugStart/>}/>
                 </div>
             </div>

@@ -363,7 +363,6 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @function
      */
     const handleClear = () => {
-        console.log("de")
         setQueryError(null);
         clearResultTable();
         sessionStorage.removeItem('savedFromQuery');

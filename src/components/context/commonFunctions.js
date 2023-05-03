@@ -32,3 +32,8 @@ export const executeQuery = (db, sql) => {
     }
 }
 
+export const getStoredQuery = (key) => {
+    const query = sessionStorage.getItem(key);
+    return query ? JSON.parse(query) : "";
+};
+

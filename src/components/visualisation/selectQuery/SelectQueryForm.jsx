@@ -9,7 +9,7 @@ import {VscDebugStart} from "react-icons/vsc";
 import {DbContext} from "../../context/context";
 import {AiFillDelete} from "react-icons/ai";
 
-const SelectQueryForm = ({showResultTable, clearResultTable}) => {
+const SelectQueryForm = ({showResultTable, clearResultTable, showVisualisation, clearVisualisation}) => {
     const {register, unregister, handleSubmit} = useForm();
     const [queryError, setQueryError] = useState(null);
     const navigate = useNavigate();
@@ -242,9 +242,11 @@ const SelectQueryForm = ({showResultTable, clearResultTable}) => {
             sessionStorage.setItem('savedSelectQuery', JSON.stringify(query));
             clearResultTable();
             showResultTable();
+            showVisualisation();
             setQueryError(null);
         } catch (err) {
             clearResultTable();
+            clearVisualisation();
             sessionStorage.removeItem('savedSelectQuery');
             setQueryError(err);
         }

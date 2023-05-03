@@ -2,9 +2,9 @@ import React, {useState, useEffect, useContext, useRef} from "react";
 import {DbContext} from "../../context/context";
 import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
-import ResultTable from "../../UI/Table/Result/ResultTable";
+import {executeQueryValues, getStoredQuery} from "../../context/commonFunctions";
 
-const DataCircleContainer = (values) => {
+const DataCircleContainer = () => {
     const [circles, setCircles] = useState([]);
     const [dbResult, setDbResult] = useState([]);
     const [error, setError] = useState(null);
@@ -15,9 +15,17 @@ const DataCircleContainer = (values) => {
     const CIRCLE_BOUNDARY = getCircleWidth();
     const CONTAINER_OFFSET = 20;
 
+    const getValues = () => {
+        const query = getStoredQuery('savedSelectQuery');
+        const result =  executeQueryValues(db, query);
+        console.log(result)
+        return result;
+    }
+
     const getAllFromSelectedTable = () => {
         try {
-            const dbResult = db.exec("Select * from employees;")[0];
+            const query = getStoredQuery('savedSelectQuery');
+            const dbResult = db.exec(query)[0];
             return {
                 columns:dbResult.columns,
                 values: dbResult.values
@@ -87,6 +95,7 @@ const DataCircleContainer = (values) => {
 
     useEffect(() => {
         const dbResultObject = getAllFromSelectedTable();
+        if (dbResultObject.length === 0) return;
         console.log(dbResultObject)
         setDbResult(dbResultObject);
         const newCircles = dbResultObject.values.map(value => {
@@ -98,13 +107,9 @@ const DataCircleContainer = (values) => {
         checkCollisions(newCircles)
     }, [db]);
 
-    if (error) return <div> Error: {error} </div>;
+    if (error) return <div> Erroring: {error} </div>;
     return (
-        <div>
             <div id="circleContainer" ref={dataCircleRef}>{circles}</div>
-            <ResultTable data={getAllFromSelectedTable()}/>
-        </div>
-
     );
 };
 

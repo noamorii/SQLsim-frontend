@@ -1,7 +1,7 @@
 import SelectQueryForm from "./visualisation/selectQuery/SelectQueryForm";
 import "./SqlReply.css"
 import ResultTable from "./UI/Table/Result/ResultTable";
-import {executeQuery} from "./context/commonFunctions";
+import {executeQuery, getStoredQuery} from "./context/commonFunctions";
 import React, {useContext, useState} from "react";
 import {DbContext} from "./context/context";
 import Visualisation from "./visualisation/Visualisation";
@@ -10,18 +10,17 @@ import FakeTable from "./UI/Table/Result/FakeTable";
 const SqlReply = () => {
     const {db} = useContext(DbContext);
     const [resultState, setResultState] = useState(false);
+    const [currentTable, setCurrentTable] = useState("savedSelectQuery");
 
-    const getTableData = () => {
-        const query = getStoredQuery();
+    const getTableData = (key) => {
+        const query = getStoredQuery(key);
         return executeQuery(db, query);
     }
 
-    const getStoredQuery = () => {
-        const query = sessionStorage.getItem('savedSelectQuery');
-        return query ? JSON.parse(query) : "";
-    };
-
-    const showResult = () => setResultState(getStoredQuery() !== "");
+    const showResult = (key) => {
+        setCurrentTable(key);
+        setResultState(getStoredQuery(key) !== "");
+    }
     const clearResult = () => setResultState(false);
 
     return (
@@ -33,7 +32,7 @@ const SqlReply = () => {
                 <div className="resultTable">
                     <div className="from-table">
                         {resultState
-                            ? (<ResultTable data={getTableData()}/>)
+                            ? (<ResultTable data={getTableData(currentTable)}/>)
                             : (<FakeTable message={"Create and run SELECT query"}/>)
                         }
                     </div>
@@ -41,7 +40,7 @@ const SqlReply = () => {
             </div>
             <div className="visualization">
                 {resultState
-                    ? (<Visualisation/>)
+                    ? (<Visualisation query={currentTable}/>)
                     : (<div className="no-data">Create and run SELECT query</div>)
                 }
             </div>

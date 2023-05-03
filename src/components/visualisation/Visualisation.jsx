@@ -1,10 +1,11 @@
 import React from 'react';
 import DataCircleContainer from "./circles/DataCircleContainer";
 
-const Visualisation = () => {
+const Visualisation = ({query}) => {
+    console.log(query)
     return (
         <div className="visualization">
-            <DataCircleContainer/>
+            <DataCircleContainer queryKey={query}/>
         </div>
     );
 };

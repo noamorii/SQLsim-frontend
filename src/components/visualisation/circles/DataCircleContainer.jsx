@@ -4,7 +4,8 @@ import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
 import {executeQuery, getStoredQuery} from "../../context/commonFunctions";
 
-const DataCircleContainer = () => {
+const DataCircleContainer = ({queryKey}) => {
+    console.log(queryKey)
     const [circles, setCircles] = useState([]);
     const [error, setError] = useState(null);
 
@@ -18,7 +19,7 @@ const DataCircleContainer = () => {
 
     const getAllFromSelectedTable = () => {
         try {
-            const query = getStoredQuery('savedSelectQuery');
+            const query = getStoredQuery(queryKey);
             const dbResult = executeQuery(db, query);
             return {
                 columns:dbResult.columns,
@@ -98,7 +99,7 @@ const DataCircleContainer = () => {
             );
         });
         checkCollisions(newCircles)
-    }, [db]);
+    }, [db, queryKey]);
 
     if (error) return <div> Error: {error} </div>;
     return (

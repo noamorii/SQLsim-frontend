@@ -7,8 +7,9 @@ import {CONDITIONS} from "../../context/DbQueryConsts";
 import Button from "../../UI/Buttons/Button";
 import {VscDebugStart} from "react-icons/vsc";
 import {DbContext} from "../../context/context";
-import {AiFillDelete} from "react-icons/ai";
-import {MdDone} from "react-icons/md";
+import {AiFillCopy, AiFillDelete, AiOutlineCopy} from "react-icons/ai";
+import {BiShow} from "react-icons/bi";
+import {getStoredQuery} from "../../context/commonFunctions";
 
 const SelectQueryForm = ({showResult, clearResult}) => {
     const [queryError, setQueryError] = useState(null);
@@ -238,12 +239,12 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         return newQuery.join(" ");
     };
 
-    function handleQuery(query) {
+    function handleQuery(key, query) {
         try {
             db.exec(query);
             sessionStorage.setItem('savedSelectQuery', JSON.stringify(query));
             clearResult();
-            showResult();
+            showResult(key);
             setQueryError(null);
         } catch (err) {
             clearResult();
@@ -253,7 +254,11 @@ const SelectQueryForm = ({showResult, clearResult}) => {
     }
 
     const onSubmitForm = (data) => {
-        handleQuery(buildQuery(data));
+        handleQuery("savedSelectQuery", buildQuery(data));
+    }
+
+    const showAllElements = () => {
+        handleQuery("savedFromQuery", getStoredQuery("savedFromQuery"))
     }
 
     function cleanElements() {
@@ -306,12 +311,12 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                 </form>
                 {queryError && <div className='query-error'> {queryError.toString()}.</div>}
                 <div className="buttonPanel">
-                    <Button onClick={cleanElements} text="Show All" icon={<AiFillDelete/>}/>
+                    <Button onClick={showAllElements} text="Show All" icon={<BiShow/>}/>
                     <Button onClick={cleanElements} text="Clear" icon={<AiFillDelete/>}/>
                     <Button
                         onClick={handleSubmit(copyElements)}
                         text={copied ? "Copied!" : "Copy"}
-                        icon={copied ? <MdDone /> : <AiFillDelete />}
+                        icon={copied ? <AiFillCopy /> : <AiOutlineCopy />}
                     />
                     <Button onClick={handleSubmit(onSubmitForm)} text="Run" icon={<VscDebugStart/>}/>
                 </div>

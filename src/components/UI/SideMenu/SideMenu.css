@@ -36,7 +36,7 @@ body {
 
 .editor {
     display: flex;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .menu-bars {
@@ -106,8 +106,23 @@ body {
 }
 
 .current-query  {
-    width: 70%;
+    white-space: nowrap;
+    overflow: auto;
+    width: 80%;
     color: white;
+}
+
+.current-query::-webkit-scrollbar {
+    height: 8px;
+    background-color: #F5F5F5;
+    border-radius: 6px;
+}
+
+.current-query::-webkit-scrollbar-thumb {
+    padding: 5px;
+    background-color: #393675;
+    border: 2px solid #ffffff;
+    border-radius: 6px;
 }
 
 .query-panel {

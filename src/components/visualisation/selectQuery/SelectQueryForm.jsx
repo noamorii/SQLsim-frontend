@@ -224,7 +224,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
             newQuery.push("DISTINCT");
         }
         newQuery.push(data.select_input);
-        newQuery.push(savedQuery.split(" ").slice(2).join(" ").slice(0, -1)); //todo
+        newQuery.push(savedQuery.split(" ").slice(2).join(" ").slice(0, -1));
         for (let i = newQuery.length; i < elements.length; i++) {
             if (elements[i].type === 'input') {
                 newQuery.push(data[elements[i].props.name])

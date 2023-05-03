@@ -20,7 +20,7 @@ import {VscDebugStart} from "react-icons/vsc";
 const SideMenu = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [showTable, setShowTable] = useState(false);
-    const [currentQuery, setCurrentQuery] = useState("");
+    const [currentQuery, setCurrentQuery] = useState("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     const navigate = useNavigate();
     const {db} = useContext(DbContext);
 

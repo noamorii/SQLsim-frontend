@@ -1,5 +1,6 @@
 .no-result-container {
     width: 100%;
+    user-select: none;
     position: relative;
     display: inline-block;
 }

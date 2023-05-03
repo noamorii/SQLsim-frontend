@@ -14,7 +14,7 @@ const DataCircleContainer = () => {
     const circleWidthRef = useRef(null);
 
     const CIRCLE_BOUNDARY = getCircleWidth();
-    const CONTAINER_OFFSET = 50;
+    const CONTAINER_OFFSET = 100;
 
     const getAllFromSelectedTable = () => {
         try {

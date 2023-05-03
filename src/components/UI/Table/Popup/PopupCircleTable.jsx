@@ -1,6 +1,6 @@
 import style from "./PopupTable.module.css"
 
-const PopupTable = ({data, top, left}) => {
+const PopupCircleTable = ({data, top, left}) => {
     const columnNames = Object.keys(data);
     const columnValues = Object.values(data);
 
@@ -25,4 +25,4 @@ const PopupTable = ({data, top, left}) => {
         </div>);
 };
 
-export default PopupTable;
+export default PopupCircleTable;

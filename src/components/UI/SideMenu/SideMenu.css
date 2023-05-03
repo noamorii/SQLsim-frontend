@@ -25,12 +25,12 @@ body {
     display: flex;
     flex-direction: column;
     color: #000000;
-    height: calc(70vh - 60px);
+    height: calc(70vh - 50px);
 }
 
 .sideMenu-toggle {
     width: 100%;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     height: fit-content;
 }
 
@@ -42,11 +42,15 @@ body {
 .menu-bars {
     margin: 0;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     font-size: 2rem;
     background: none;
 }
+
+.menu-bars label {
+    margin-left: 8px;
+}
+
 .editor-label {
     color: white;
     font-size: 30px;
@@ -99,5 +103,17 @@ body {
     align-items: center;
     justify-content: center;
     flex-grow: inherit;
+}
+
+.current-query  {
+    width: 70%;
+    color: white;
+}
+
+.query-panel {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 14px;
+    display: flex;
 }
 

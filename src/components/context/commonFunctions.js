@@ -32,6 +32,12 @@ export const executeQuery = (db, sql) => {
     }
 }
 
+/**
+ * Retrieves the stored query from the session storage.
+ *
+ * @function
+ * @returns {string} The stored query as a string or an empty string if not found.
+ */
 export const getStoredQuery = (key) => {
     const query = sessionStorage.getItem(key);
     return query ? JSON.parse(query) : "";

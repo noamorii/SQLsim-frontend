@@ -1,6 +1,7 @@
 import React from 'react';
 import style from "./ResultTable.module.css";
 import "./ResultTable.module.css";
+import FakeTable from "./FakeTable";
 
 /**
  * ResultTable component displays the query execution results in a tabular format.
@@ -13,20 +14,16 @@ import "./ResultTable.module.css";
  * @returns {JSX.Element} The rendered ResultTable component.
  */
 const ResultTable = (result) => {
-    if (!result || !result.data ) {
-        return <div className="no-data-message"> No results available </div>;
-    }
+    if (!result || !result.data )
+        return <FakeTable message={"No results available"}/>;
 
-    console.log(result)
-
-    return (
-        <div className={style.tableContainer}>
+    return (<div className={style.tableContainer}>
             <table>
                 <thead>
                 <tr>
-                    {result.data && result.data.columns.map(column => (
-                        <th key={column}>{column}</th>
-                    ))}
+                    {result.data && result.data.columns.map(
+                        column => (<th key={column}>{column}</th>)
+                    )}
                 </tr>
                 </thead>
                 <tbody>

@@ -1,13 +1,15 @@
-import React, {useContext, useState} from 'react';
-import {Link} from "react-router-dom";
+import React, {useContext, useEffect, useState} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 import {AiOutlineRight} from "react-icons/ai";
 import './SideMenu.css';
 import FromQueryForm from "./Form/FromQueryForm";
 import JoinsMenu from "./Joins/JoinsMenu";
 import ResultTable from "../Table/Result/ResultTable";
-import {executeQuery} from "../../context/commonFunctions";
+import {executeQuery, getStoredQuery} from "../../context/commonFunctions";
 import {DbContext} from "../../context/context";
 import FakeTable from "../Table/Result/FakeTable";
+import Button from "../Buttons/Button";
+import {VscDebugStart} from "react-icons/vsc";
 
 /**
  * SideMenu component serves as a side menu to create a FROM query, display join types, and show query results.
@@ -18,19 +20,16 @@ import FakeTable from "../Table/Result/FakeTable";
 const SideMenu = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [showTable, setShowTable] = useState(false);
+    const [currentQuery, setCurrentQuery] = useState("");
+    const navigate = useNavigate();
     const {db} = useContext(DbContext);
+
     const showSideMenu = () => setShowMenu(!showMenu);
 
-    /**
-     * Retrieves the stored query from the session storage.
-     *
-     * @function
-     * @returns {string} The stored query as a string or an empty string if not found.
-     */
-    const getStoredQuery = () => {
-        const query = sessionStorage.getItem('savedFromQuery');
-        return query ? JSON.parse(query) : "";
-    };
+    useEffect(() => {
+        const storedQuery = getStoredQuery("savedFromQuery");
+        setCurrentQuery(storedQuery);
+    }, []);
 
     /**
      * Executes the query and returns the table data.
@@ -39,29 +38,35 @@ const SideMenu = () => {
      * @returns {*|{columns: [], values: []}} The table data from the executed query.
      */
     const getTableData = () => {
-        const query = getStoredQuery();
+        const query = getStoredQuery("savedFromQuery");
         return executeQuery(db, query);
     }
 
     const showResultTable = () => {
-        setShowTable(getStoredQuery() !== "");
+        const query = getStoredQuery("savedFromQuery");
+        setCurrentQuery(query);
+        setShowTable(query !== "");
     };
 
     const clearResultTable = () => {
         setShowTable(false);
+        setCurrentQuery("")
     };
+
+    const redirectToEditor = () => {
+        navigate('/editor');
+    }
 
     return (
         <div className={showMenu ? "sideContent active" : "sideContent"}>
             <div className="sideMenu-toggle" onClick={showSideMenu}>
                 <Link to='#' className="menu-bars">
                     <AiOutlineRight className={showMenu ? '' : 'rotate'}/>
-                    <label>FROM clause</label>
+                    <label>Create a FROM query</label>
                 </Link>
             </div>
             {showMenu && (
                 <div className="container">
-                    <p className="editor-label">Create a FROM query:</p>
                     <div className="editor">
                         <FromQueryForm showResultTable={showResultTable} clearResultTable={clearResultTable}/>
                         <JoinsMenu/>
@@ -72,6 +77,14 @@ const SideMenu = () => {
                             : (<FakeTable message={"Create and run your query"}/>)
                         }
                     </div>
+                    {currentQuery
+                        ? (
+                            <div className="query-panel">
+                                <div className="current-query">Current query: {currentQuery}</div>
+                                <Button text="Continue" onClick={redirectToEditor} icon={<VscDebugStart/>}/>
+                            </div>)
+                        : null
+                    }
                 </div>
             )}
         </div>

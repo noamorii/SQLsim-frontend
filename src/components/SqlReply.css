@@ -23,7 +23,9 @@
 }
 
 .visualization {
-    background-color: #a46464;
+    margin: 16px;
+    border-radius: 16px;
+    border: 2px solid #1c6ea4;;
+    background-color: #393675;
     flex: 1;
-    height: 100%;
 }

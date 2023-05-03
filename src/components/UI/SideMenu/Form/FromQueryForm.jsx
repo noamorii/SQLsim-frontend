@@ -368,6 +368,8 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         clearResultTable();
         sessionStorage.removeItem('savedFromQuery');
         sessionStorage.removeItem('savedFromElements');
+        const element = document.getElementById("plus");
+        element.classList.remove("disabled");
         setElements(startElements);
     };
 

@@ -287,6 +287,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                 <div className="buttonPanel">
                     <Button onClick={cleanElements} text="Show All" icon={<AiFillDelete/>}/>
                     <Button onClick={cleanElements} text="Clear" icon={<AiFillDelete/>}/>
+                    <Button onClick={cleanElements} text="Copy" icon={<AiFillDelete/>}/>
                     <Button onClick={handleSubmit(onSubmitForm)} text="Run" icon={<VscDebugStart/>}/>
                 </div>
             </div>

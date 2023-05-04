@@ -5,6 +5,12 @@ import Tables from "../pages/Tables";
 import SQLEditor from "../pages/SQLEditor";
 import NotFound from "../pages/NotFound";
 
+/**
+ * AppRouter component defines the routing configuration using react-router-dom.
+ * It sets up the routes for different pages of the application.
+ *
+ * @returns {JSX.Element} - The rendered AppRouter component.
+ */
 const AppRouter = () => {
     return (
         <Routes>

@@ -9,15 +9,30 @@ import {GET_ALL_TABLES_DATA_QRY, SELECT_FRN_KEYS_QRY} from "../context/DbQueryCo
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 const nodeTypes = {attributeNode: AttributeNode};
 
+/**
+ * DatabaseDiagram component displays an interactive database diagram using ReactFlow.
+ * The diagram includes nodes representing tables and their attributes, and edges representing foreign key relationships.
+ * The component also provides zoom and pan controls for easy navigation.
+ */
 const DatabaseDiagram = () => {
     const {db} = useContext(DbContext);
 
+    /**
+     * Generates a random position for the nodes within the specified area.
+     *
+     * @param {number} areaWidth - The width of the area where the nodes will be positioned. Default is 800.
+     * @param {number} areaHeight - The height of the area where the nodes will be positioned. Default is 800.
+     * @returns {{x: number, y: number}} - An object containing x and y coordinates.
+     */
     const randomPosition = (areaWidth = 800, areaHeight = 800) => {
         const x = Math.random() * areaWidth;
         const y = Math.random() * areaHeight;
         return {x, y};
     }
 
+    /**
+     * useMemo hook: Generates the edges based on foreign key relationships.
+     */
     const getEdges = useMemo(() => {
         try {
             const keyData = db.exec(SELECT_FRN_KEYS_QRY)[0].values;
@@ -42,7 +57,9 @@ const DatabaseDiagram = () => {
         }
     }, [db]);
 
-
+    /**
+     * useMemo hook: Generates the nodes based on the tables and their attributes.
+     */
     const getNodes = useMemo(() => {
         try {
             const tablesData = db.exec(GET_ALL_TABLES_DATA_QRY)[0].values;
@@ -77,11 +94,17 @@ const DatabaseDiagram = () => {
     const [nodes, setNodes] = useState(getNodes);
     const [edges, setEdges] = useState(getEdges);
 
+    /**
+     * useEffect hook: Updates the nodes and edges when the 'db' dependency changes.
+     */
     useEffect(() => {
         setNodes(getNodes);
         setEdges(getEdges);
     }, [db]);
 
+    /**
+     * useCallback hook: Updates the nodes based on the changes.
+     */
     const onNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
 
     return (

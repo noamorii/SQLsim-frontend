@@ -35,8 +35,27 @@ export const SELECT_FRN_KEYS_QRY = "SELECT m.name AS table_from, f1.'from' AS at
  */
 export const JOIN_TYPES = ["NATURAL JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"];
 
+/**
+ * A constant array containing the aggregate functions used in SQL queries.
+ * @type {string[]}
+ */
 export const AGGREGATE_FUNCTIONS = ["SUM()", "COUNT()", "AVG()", "MIN()", "MAX()"];
+
+/**
+ * A constant array containing the basic operations used in SQL queries.
+ * @type {string[]}
+ */
 export const BASIC_OPERATIONS = ["WHERE", "ORDER BY", "GROUP BY", "HAVING"];
+
+/**
+ * A constant array containing the conditions used in SQL queries.
+ * @type {string[]}
+ */
 export const CONDITIONS = ["AND", "OR", "LIKE"];
+
+/**
+ * A constant array containing the output modifications used in SQL queries.
+ * @type {string[]}
+ */
 export const OUTPUT_MODIFICATIONS = ["DISTINCT", "ASC", "DESC"];
 

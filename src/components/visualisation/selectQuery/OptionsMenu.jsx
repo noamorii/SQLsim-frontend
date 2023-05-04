@@ -2,6 +2,14 @@ import {AGGREGATE_FUNCTIONS, BASIC_OPERATIONS, CONDITIONS, OUTPUT_MODIFICATIONS}
 import {MdDragHandle} from "react-icons/md";
 import "./OptionsMenu.css";
 
+/**
+ * OptionsMenu component displays a menu of operations and allows dragging and dropping them to create SELECT query.
+ * It provides options for basic operations, output modifications, conditions, and aggregation functions.
+ *
+ * @param {Object} props - The props passed to the component.
+ * @param {function} props.handleDragging - The function to handle the dragging and dropping of operations.
+ * @returns {JSX.Element} - The rendered OptionsMenu component.
+ */
 const OptionsMenu = ({handleDragging}) => {
 
     const onDrag = (e) => {

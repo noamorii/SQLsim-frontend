@@ -2,6 +2,12 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import style from "./Navbar.module.css"
 
+/**
+ * Navbar is a component that renders the navigation bar with links to different routes.
+ *
+ * @component
+ * @returns {JSX.Element} A JSX element representing the navigation bar.
+ */
 const Navbar = () => {
     return (
         <div className={style.navbar}>

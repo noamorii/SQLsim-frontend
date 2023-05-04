@@ -8,16 +8,14 @@ import FakeTable from "./FakeTable";
  *
  * @component
  * @param {object} result - The result object after db execution containing data to display.
- * @param {object} result.data - The data object containing columns and values.
- * @param {string[]} result.data.columns - The array of column names.
- * @param {string[][]} result.data.values - The 2D array of values, each row is an array of cells.
  * @returns {JSX.Element} The rendered ResultTable component.
  */
 const ResultTable = (result) => {
     if (!result || !result.data )
         return <FakeTable message={"No results available"}/>;
 
-    return (<div className={style.tableContainer}>
+    return (
+        <div className={style.tableContainer}>
             <table>
                 <thead>
                 <tr>

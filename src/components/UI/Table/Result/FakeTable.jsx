@@ -2,6 +2,13 @@ import React from 'react';
 import ResultTable from "./ResultTable";
 import "./FakeTable.css"
 
+/**
+ * FakeTable is a React component that renders a blur table with predefined data and a custom message.
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.message - The custom message to be displayed above the fake table.
+ * @returns {JSX.Element} A JSX element representing the fake table with a custom message.
+ */
 const FakeTable = ({message}) => {
     const prepareFakeResult = () => {
         return {

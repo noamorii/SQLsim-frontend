@@ -12,7 +12,9 @@ import Button from "../Buttons/Button";
 import {VscDebugStart} from "react-icons/vsc";
 
 /**
- * SideMenu component serves as a side menu to create a FROM query, display join types, and show query results.
+ * SideMenu is a functional component that renders the side menu for creating and managing FROM queries.
+ * It handles the state and logic for showing and hiding the side menu, displaying the result table,
+ * clearing the result table, and redirecting to the query editor.
  *
  * @component
  * @returns {JSX.Element} The SideMenu component.
@@ -20,7 +22,7 @@ import {VscDebugStart} from "react-icons/vsc";
 const SideMenu = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [showTable, setShowTable] = useState(false);
-    const [currentQuery, setCurrentQuery] = useState("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    const [currentQuery, setCurrentQuery] = useState("");
     const navigate = useNavigate();
     const {db} = useContext(DbContext);
 
@@ -53,6 +55,10 @@ const SideMenu = () => {
         setCurrentQuery("")
     };
 
+    /**
+     * redirectToEditor is a function that navigates to the '/editor' route.
+     * It is used to redirect the user to the query editor page.
+     */
     const redirectToEditor = () => {
         navigate('/editor');
     }

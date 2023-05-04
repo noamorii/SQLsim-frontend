@@ -7,6 +7,13 @@ import {DbContext} from "./context/context";
 import Visualization from "./visualisation/Visualization";
 import FakeTable from "./UI/Table/Result/FakeTable";
 
+/**
+ * SqlReply component represents the SQL query playground and visualization section.
+ * It allows users to enter and execute SQL queries, view query results in a table,
+ * and visualize the data using interactive circles.
+ *
+ * @returns {JSX.Element} - The rendered SqlReply component.
+ */
 const SqlReply = () => {
     const {db} = useContext(DbContext);
     const [resultState, setResultState] = useState(false);

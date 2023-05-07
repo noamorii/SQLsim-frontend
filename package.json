@@ -21,7 +21,7 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "^5.0.1",
     "reactflow": "^11.7.0",
-    "sql.js": "^1.6.2",
+    "sql.js": "^1.8.0",
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {

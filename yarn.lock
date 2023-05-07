@@ -8608,8 +8608,10 @@
   "resolved" "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
   "version" "1.0.3"
 
-"sql.js@^1.6.2":
-  "version" "1.6.2"
+"sql.js@^1.8.0":
+  "integrity" "sha512-3HD8pSkZL+5YvYUI8nlvNILs61ALqq34xgmF+BHpqxe68yZIJ1H+sIVIODvni25+CcxHUxDyrTJUL0lE/m7afw=="
+  "resolved" "https://registry.npmjs.org/sql.js/-/sql.js-1.8.0.tgz"
+  "version" "1.8.0"
 
 "stable@^0.1.8":
   "integrity" "sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w=="

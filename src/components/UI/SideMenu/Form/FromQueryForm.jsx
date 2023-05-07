@@ -140,9 +140,15 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
 
     const onSubmitFrom = (data) => {
         const query = buildQuery(data, elements);
-        console.log(query);
-        console.log(elements)
         handleQuery(query);
+    }
+
+    function polyfillRightJoin(query) {
+        
+    }
+
+    function polyfillOuterJoin(query) {
+        
     }
 
     /**
@@ -152,6 +158,8 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @param {string} query - The SQL query to execute.
      */
     const handleQuery = (query) => {
+        if (query.includes("RIGHT JOIN")) polyfillRightJoin(query);
+        if (query.includes("FULL OUTHER JOIN")) polyfillOuterJoin(query);
         try {
             db.exec(query);
             sessionStorage.setItem('savedFromElements', JSON.stringify(elements));
@@ -176,12 +184,10 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @returns {string} The constructed SQL query.
      */
     const buildQuery = (data, elements) => {
-        console.log(data)
         const queryComponents = elements
             .map((element, i) => {
                 if (i % 2 !== 0) {
                     const key = `${i}_tables` in data ? `${i}_tables` : `${i}_input`;
-                    console.log(i, key, data[key])
                     return data[key];
                 }
                 return element.props.children;

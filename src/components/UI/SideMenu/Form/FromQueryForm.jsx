@@ -29,7 +29,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
     const [elements, setElements] = useState(startElements);
     const [queryError, setQueryError] = useState(null);
     const [tables, setTables] = useState([]);
-    const {register, handleSubmit} = useForm();
+    const {register, unregister, handleSubmit} = useForm();
 
     /**
      * Fetches the list of tables from the database.
@@ -140,6 +140,8 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
 
     const onSubmitFrom = (data) => {
         const query = buildQuery(data, elements);
+        console.log(query);
+        console.log(elements)
         handleQuery(query);
     }
 
@@ -174,10 +176,12 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @returns {string} The constructed SQL query.
      */
     const buildQuery = (data, elements) => {
+        console.log(data)
         const queryComponents = elements
             .map((element, i) => {
                 if (i % 2 !== 0) {
                     const key = `${i}_tables` in data ? `${i}_tables` : `${i}_input`;
+                    console.log(i, key, data[key])
                     return data[key];
                 }
                 return element.props.children;
@@ -306,13 +310,13 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
             ...elements,
             <div className="start element">ON</div>,
             <input type="text" className="attribute element"
-                   {...register((elements.length + 4) + "_input", {
+                   {...register((elements.length + 5) + "_input", {
                        required: true
                    })}
             />,
             <div className="start element">=</div>,
             <input type="text" className="attribute element"
-                   {...register((elements.length + 6) + "_input", {
+                   {...register((elements.length + 7) + "_input", {
                        required: true,
                    })}
             />
@@ -364,6 +368,8 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      */
     const handleClear = () => {
         setQueryError(null);
+        elements.filter(element => element.type === 'input' || element.type === 'select')
+            .forEach(element => unregister(element.props.name));
         clearResultTable();
         sessionStorage.removeItem('savedFromQuery');
         sessionStorage.removeItem('savedFromElements');

@@ -1,4 +1,9 @@
-import {AGGREGATE_FUNCTIONS, BASIC_OPERATIONS, CONDITIONS, OUTPUT_MODIFICATIONS} from "../../context/DbQueryConsts";
+import {
+    AGGREGATE_FUNCTIONS,
+    BASIC_OPERATIONS,
+    CONDITIONS,
+    OUTPUT_MODIFICATIONS
+} from "../../context/DbQueryConsts";
 import {MdDragHandle} from "react-icons/md";
 import "./OptionsMenu.css";
 

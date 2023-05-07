@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 import './SelectQueryForm.css';
 import OptionsMenu from "./OptionsMenu";
 import {useNavigate} from 'react-router-dom';
-import {CONDITIONS} from "../../context/DbQueryConsts";
+import {AGGREGATE_FUNCTIONS, CONDITIONS} from "../../context/DbQueryConsts";
 import Button from "../../UI/Buttons/Button";
 import {VscDebugStart} from "react-icons/vsc";
 import {DbContext} from "../../context/context";
@@ -110,22 +110,31 @@ const SelectQueryForm = ({showResult, clearResult}) => {
     /**
      * createInputElement creates an input element based on the given condition.
      * @param {string} condition - The condition string for the input element.
-     * @returns {JSX.Element} - The input element JSX.
+     * @returns {JSX.Element[]} - The input element JSX.
      */
-    function createInputElement(condition) {
-        return (
+    const createInputElement = condition => ([
+        <input
+            type="text"
+            className={`${condition} element`}
+            {...register(`${elements.length + 1}_input`, {required: true})}
+        />
+    ]);
+
+    const createCountInput = () => {
+        return [
             <input
                 type="text"
-                className={`${condition} element`}
-                {...register(`${elements.length + 1}_input`, { required: true })}
-            />
-        );
+                className="count element"
+                {...register(`${elements.length + 1}_input`, {required: true})}
+            />,
+            <div className="element">)</div>
+        ]
     }
 
     /**
      * createOperationInput chooses the case for creation of an input element based on the given operation.
      * @param {string} operation - The operation string for the input element.
-     * @returns {JSX.Element|null} - The input element JSX or null if not applicable.
+     * @returns {JSX.Element[]} - The input element JSX or null if not applicable.
      */
     const createOperationInput = (operation) => {
         switch (operation) {
@@ -137,6 +146,8 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                 return createInputElement("group");
             case "HAVING":
                 return createInputElement("having");
+            case "COUNT(":
+                return createCountInput();
             default:
                 if (CONDITIONS.includes(operation))
                     return createInputElement("condition");
@@ -152,11 +163,16 @@ const SelectQueryForm = ({showResult, clearResult}) => {
      * @param {string} operation - The operation type of the new element.
      */
     const setupElements = (placementIndexes, elementIndex, operation) => {
-        const newElements = [<div className="element">{operation}</div>];
         const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
+        let divChildren = operation;
+        if (operation === "COUNT(" && newElementIndex !== 1) divChildren = ", " + operation;
+        let newElement = <div className="element">{divChildren}</div>;
 
         const newInput = createOperationInput(operation);
-        if (newInput) newElements.push(newInput);
+        if (operation === "COUNT(" && newElementIndex === 1) setElements(elements.splice(1, 1));
+
+        const newElements = [newElement];
+        if (newInput) newElements.push(...newInput);
 
         const updatedElements = [
             ...elements.slice(0, newElementIndex),
@@ -172,19 +188,28 @@ const SelectQueryForm = ({showResult, clearResult}) => {
      * @param {Event} e - The event object.
      * @param {string} operation - The operation type of the new element.
      */
-    function handleDrop(e, operation) {
+    const handleDrop = (e, operation) => {
+        if (AGGREGATE_FUNCTIONS.includes(operation)) operation = operation.slice(0, -1);
         e.preventDefault();
         const formContainer = document.getElementById("form");
-        e.target.textContent = operation;
-        e.target.classList.remove("placement")
+
         const placementIndexes = findAllPlacementIndexes();
         const newElementIndex = findNewElementIndex(e.target.parentNode, formContainer);
         setupElements(placementIndexes, newElementIndex, operation);
-    }
+    };
 
     const findElementIndexByClassname = (className) => {
         return elements.findIndex(element => element.props.className.includes(className));
     }
+
+    const findLastElementIndexByClassName = (className) => {
+        return elements.reduce((lastIndex, element, index) => {
+            if (element.props.className.includes(className)) {
+                return index;
+            }
+            return lastIndex;
+        }, -1);
+    };
 
     /**
      * createPlacementDiv creates a div element for placing and dropping operations.
@@ -235,6 +260,18 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         if (isDragging) {
             const operation = e.dataTransfer.getData("operation");
             if (operation === "DISTINCT" && !containsOperation(operation)) {
+                if (findLastElementIndexByClassName("count") !== -1 ) {
+                    let newElements = elements;
+                    let counterNew = 0;
+                    for (let i = 0; i < elements.length; i++) {
+                        if (elements[i].type === "div" && elements[i].props.children.endsWith("COUNT(")) {
+                            newElements = getElementsWithPlacement(newElements, operation, i + 1 + counterNew)
+                            counterNew++;
+                        }
+                    }
+                    setElements(newElements);
+                    return;
+                }
                 setElements(getElementsWithPlacement(elements, operation, 1));
                 return;
             }
@@ -294,7 +331,23 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                     }
                 }
                 setElements(newElements);
+                return;
             }
+
+            if (AGGREGATE_FUNCTIONS.includes(operation)) {
+                let newElements = elements;
+                if (operation === "COUNT()" && elements[1].props.children !== "DISTINCT") {
+                    const lastIndex = findLastElementIndexByClassName("count");
+                    if (lastIndex !== -1) {
+                        newElements = getElementsWithPlacement(elements, operation,   lastIndex + 2)
+                    } else {
+                        newElements = getElementsWithPlacement(
+                            getElementsWithPlacement(elements, operation,   1), operation, 3);
+                    }
+                }
+                setElements(newElements)
+            }
+
             return;
         }
         setElements(elements.filter(element => !element.props.className.includes("placement")));
@@ -328,7 +381,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
      * @param {string} key - The sessionStorage key for showing result table and visualization.
      * @param {string} query - The SQL query string to execute.
      */
-    function handleQuery(key, query) {
+    const handleQuery = (key, query) => {
         try {
             db.exec(query);
             sessionStorage.setItem('savedSelectQuery', JSON.stringify(query));
@@ -340,7 +393,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
             sessionStorage.removeItem('savedSelectQuery');
             setQueryError(err);
         }
-    }
+    };
 
     /**
      * onSubmitForm handles the form submission, calling handleQuery with the built query string.
@@ -365,14 +418,14 @@ const SelectQueryForm = ({showResult, clearResult}) => {
     /**
      * cleanElements resets the elements state, clears the results, and removes the saved query from sessionStorage.
      */
-    function cleanElements() {
+    const cleanElements = () => {
         setElements(startElements);
         elements.filter(element => element.type === 'input')
                 .forEach(element => unregister(element.props.name));
         clearResult();
         sessionStorage.removeItem('savedSelectQuery');
         setQueryError(null);
-    }
+    };
 
     /**
      * renderElement wraps the given element in a div with the appropriate className.
@@ -409,7 +462,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
      * The function handles the following error:
      * @throws {Error} Will throw an error if copying to the clipboard fails.
      */
-    async function copyElements(data) {
+    const copyElements = async data => {
         const toCopy = buildQuery(data);
         try {
             await navigator.clipboard.writeText(toCopy);
@@ -418,7 +471,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         } catch (err) {
             console.error('Failed to copy text: ' + err);
         }
-    }
+    };
 
     const resetCopiedState = () => {
         setTimeout(() => {

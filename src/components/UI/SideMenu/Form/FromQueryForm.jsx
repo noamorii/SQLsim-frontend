@@ -389,10 +389,7 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
                 <PopupUpload/>
                 <DbFileDownloadButton/>
                 <Button onClick={handleClear} text="Clear" icon={<AiFillDelete/>}/>
-                <Button onClick={() => {
-                    handleSubmit(onSubmitFrom)();
-                    showResultTable();
-                }} text="Run" icon={<VscDebugStart/>}/>
+                <Button onClick={() => handleSubmit(onSubmitFrom)()} text="Run" icon={<VscDebugStart/>}/>
             </div>
         </div>
     );

@@ -77,7 +77,7 @@ function PopupUpload() {
 
     return (
         <div>
-            <Button onClick={() => setIsOpen(true)} text="Export" icon={<HiUpload/>}/>
+            <Button onClick={() => setIsOpen(true)} text="Import" icon={<HiUpload/>}/>
             {isOpen && (
                 <div className="popup-container" ref={popupRef}>
                     <div className="popup-content">

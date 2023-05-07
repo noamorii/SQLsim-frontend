@@ -143,14 +143,6 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
         handleQuery(query);
     }
 
-    function polyfillRightJoin(query) {
-        
-    }
-
-    function polyfillOuterJoin(query) {
-        
-    }
-
     /**
      * Handles the form submission and execution of the SQL query.
      *
@@ -158,8 +150,6 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @param {string} query - The SQL query to execute.
      */
     const handleQuery = (query) => {
-        if (query.includes("RIGHT JOIN")) polyfillRightJoin(query);
-        if (query.includes("FULL OUTHER JOIN")) polyfillOuterJoin(query);
         try {
             db.exec(query);
             sessionStorage.setItem('savedFromElements', JSON.stringify(elements));

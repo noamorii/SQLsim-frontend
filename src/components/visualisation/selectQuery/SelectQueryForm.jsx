@@ -125,10 +125,14 @@ const SelectQueryForm = ({showResult, clearResult}) => {
             <input
                 type="text"
                 className="count element"
-                {...register(`${elements.length + 1}_input`, {required: true})}
+                {...register(`${elements.length - 1}_input`, {required: true})}
             />,
             <div className="element">)</div>
         ]
+    }
+
+    const createFirstCountInput = () => {
+        elements.splice(2, 0, <div className="element">)</div>);
     }
 
     /**
@@ -168,8 +172,9 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         if (operation === "COUNT(" && newElementIndex !== 1) divChildren = ", " + operation;
         let newElement = <div className="element">{divChildren}</div>;
 
-        const newInput = createOperationInput(operation);
-        if (operation === "COUNT(" && newElementIndex === 1) setElements(elements.splice(1, 1));
+        let newInput;
+        if (operation === "COUNT(" && newElementIndex === 1) createFirstCountInput();
+        else newInput = createOperationInput(operation);
 
         const newElements = [newElement];
         if (newInput) newElements.push(...newInput);
@@ -185,14 +190,13 @@ const SelectQueryForm = ({showResult, clearResult}) => {
 
     /**
      * handleDrop handles the drop event and updates the elements state with the dropped operation.
-     * @param {Event} e - The event object.
+     * @param e - The event object.
      * @param {string} operation - The operation type of the new element.
      */
     const handleDrop = (e, operation) => {
-        if (AGGREGATE_FUNCTIONS.includes(operation)) operation = operation.slice(0, -1);
         e.preventDefault();
+        if (AGGREGATE_FUNCTIONS.includes(operation)) operation = operation.slice(0, -1);
         const formContainer = document.getElementById("form");
-
         const placementIndexes = findAllPlacementIndexes();
         const newElementIndex = findNewElementIndex(e.target.parentNode, formContainer);
         setupElements(placementIndexes, newElementIndex, operation);
@@ -205,6 +209,15 @@ const SelectQueryForm = ({showResult, clearResult}) => {
     const findLastElementIndexByClassName = (className) => {
         return elements.reduce((lastIndex, element, index) => {
             if (element.props.className.includes(className)) {
+                return index;
+            }
+            return lastIndex;
+        }, -1);
+    };
+
+    const findLastDivWithChild = (child) => {
+        return elements.reduce((lastIndex, element, index) => {
+            if (element.type === 'div' && element.props.children === child) {
                 return index;
             }
             return lastIndex;
@@ -337,17 +350,18 @@ const SelectQueryForm = ({showResult, clearResult}) => {
             if (AGGREGATE_FUNCTIONS.includes(operation)) {
                 let newElements = elements;
                 if (operation === "COUNT()" && elements[1].props.children !== "DISTINCT") {
-                    const lastIndex = findLastElementIndexByClassName("count");
+                    const lastIndex = findLastDivWithChild(")");
+                    console.log(lastIndex)
                     if (lastIndex !== -1) {
-                        newElements = getElementsWithPlacement(elements, operation,   lastIndex + 2)
+                        newElements = getElementsWithPlacement(elements, operation,   lastIndex + 1)
                     } else {
                         newElements = getElementsWithPlacement(
                             getElementsWithPlacement(elements, operation,   1), operation, 3);
                     }
                 }
                 setElements(newElements)
+                return;
             }
-
             return;
         }
         setElements(elements.filter(element => !element.props.className.includes("placement")));
@@ -356,17 +370,12 @@ const SelectQueryForm = ({showResult, clearResult}) => {
     /**
      * buildQuery constructs the final SQL query string based on the form data and elements state.
      * @param {Object} data - The form data object.
+     * @param {string} data.select_input - The value of selected columns form select input.
      * @returns {string} - The SQL query string.
      */
     const buildQuery = (data) => {
-        let newQuery = ["SELECT"];
-        if (elements.some((element) => element.type === 'div' && element.props.children === 'DISTINCT')) {
-            newQuery.push("DISTINCT");
-        }
-        newQuery.push(data.select_input);
-        if (!savedQuery) return newQuery.join(" ");
-        newQuery.push(savedQuery.split(" ").slice(2).join(" ").slice(0, -1));
-        for (let i = newQuery.length; i < elements.length; i++) {
+        let newQuery = [];
+        for (let i = 0; i < elements.length; i++) {
             if (elements[i].type === 'input') {
                 newQuery.push(data[elements[i].props.name])
                 continue;
@@ -400,7 +409,9 @@ const SelectQueryForm = ({showResult, clearResult}) => {
      * @param {Object} data - The form data object.
      */
     const onSubmitForm = (data) => {
-        handleQuery("savedSelectQuery", buildQuery(data));
+        const query = buildQuery(data);
+        console.log(query)
+        handleQuery("savedSelectQuery", query);
     }
 
     /**

@@ -152,7 +152,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                 return createInputElement("having");
             default:
                 if (AGGREGATE_FUNCTIONS.includes(operation + ")")) return createAggregationInput();
-                if (CONDITIONS.includes(operation)) return createInputElement("condition");
+                if (CONDITIONS.includes(operation)) return createInputElement("new_condition");
                 return null;
         }
     }
@@ -318,7 +318,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
             }
 
             if (operation === "HAVING" && !containsOperation(operation) && containsOperation("GROUP BY")) {
-                let operationIndex = findElementIndexByClassname("group") + 2;
+                let operationIndex = findElementIndexByClassname("group") + 1;
                 setElements(getElementsWithPlacement(elements, operation, operationIndex));
                 return;
             }
@@ -339,7 +339,8 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                         while (elements.at(havingIndex + 1) && CONDITIONS.includes(elements.at(havingIndex + 1).props.children)) {
                             havingIndex += 2;
                         }
-                        newElements = [...getElementsWithPlacement(newElements, operation, havingIndex + 2)];
+                        if (newElements.length > elements.length) havingIndex++;
+                        newElements = [...getElementsWithPlacement(newElements, operation, havingIndex + 1)];
                     }
                 }
                 setElements(newElements);

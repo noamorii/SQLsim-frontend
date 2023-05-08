@@ -43,6 +43,8 @@
     white-space: nowrap;
     max-width: 300px;
     overflow: auto;
+
+    transition: all 0.2s linear;
 }
 
 .element.disabled {
@@ -56,8 +58,12 @@ select.element, option {
 
 .placement {
     font-size: 14px;
-    color: black;
+    color: #051d2a;
     background-color: rgba(78, 126, 168, 0.45);
+
+    border-style: dotted;
+    border-width: 2px;
+    border-color: #051d2a;
 }
 
 .plus_button {

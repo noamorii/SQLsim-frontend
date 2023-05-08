@@ -39,6 +39,15 @@ label.options {
     border: 2px solid #2672b4;
 }
 
+.menu li:hover {
+    background-color: #b9c3c5;
+    transition: 0.3s;
+}
+
+.menu li:active {
+    background-color: #9bc4ce;
+}
+
 .menu svg {
     margin-right: 4px;
     color: #1c3559;

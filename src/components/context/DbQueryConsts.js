@@ -40,7 +40,6 @@ export const JOIN_TYPES = ["NATURAL JOIN", "INNER JOIN", "LEFT JOIN", "RIGHT JOI
  * @type {string[]}
  */
 export const AGGREGATE_FUNCTIONS = ["SUM()", "COUNT()", "AVG()", "MIN()", "MAX()"];
-
 /**
  * A constant array containing the basic operations used in SQL queries.
  * @type {string[]}

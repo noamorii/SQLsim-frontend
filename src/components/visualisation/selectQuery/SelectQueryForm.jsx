@@ -120,7 +120,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         />
     ]);
 
-    const createCountInput = () => {
+    const createAggregationInput = () => {
         return [
             <input
                 type="text"
@@ -131,7 +131,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         ]
     }
 
-    const createFirstCountInput = () => {
+    const createFirstAggregationInput = () => {
         elements.splice(2, 0, <div className="element">)</div>);
     }
 
@@ -150,11 +150,9 @@ const SelectQueryForm = ({showResult, clearResult}) => {
                 return createInputElement("group");
             case "HAVING":
                 return createInputElement("having");
-            case "COUNT(":
-                return createCountInput();
             default:
-                if (CONDITIONS.includes(operation))
-                    return createInputElement("condition");
+                if (AGGREGATE_FUNCTIONS.includes(operation + ")")) return createAggregationInput();
+                if (CONDITIONS.includes(operation)) return createInputElement("condition");
                 return null;
         }
     }
@@ -169,11 +167,12 @@ const SelectQueryForm = ({showResult, clearResult}) => {
     const setupElements = (placementIndexes, elementIndex, operation) => {
         const newElementIndex = elementIndex - placementIndexes.filter(index => index < elementIndex).length;
         let divChildren = operation;
-        if (operation === "COUNT(" && newElementIndex !== 1) divChildren = ", " + operation;
+
+        if (AGGREGATE_FUNCTIONS.includes(operation + ")") && newElementIndex !== 1) divChildren = ", " + operation;
         let newElement = <div className="element">{divChildren}</div>;
 
         let newInput;
-        if (operation === "COUNT(" && newElementIndex === 1) createFirstCountInput();
+        if (AGGREGATE_FUNCTIONS.includes(operation + ")") && newElementIndex === 1) createFirstAggregationInput();
         else newInput = createOperationInput(operation);
 
         const newElements = [newElement];
@@ -209,6 +208,15 @@ const SelectQueryForm = ({showResult, clearResult}) => {
     const findLastDivWithChildIndex = (child) => {
         return elements.reduce((lastIndex, element, index) => {
             if (element.type === 'div' && element.props.children === child) {
+                return index;
+            }
+            return lastIndex;
+        }, -1);
+    };
+
+    const findLastAggregationDivIndex = () => {
+        return elements.reduce((lastIndex, element, index) => {
+            if (element.type === 'div' && AGGREGATE_FUNCTIONS.includes(element.props.children + ")")) {
                 return index;
             }
             return lastIndex;
@@ -264,11 +272,11 @@ const SelectQueryForm = ({showResult, clearResult}) => {
         if (isDragging) {
             const operation = e.dataTransfer.getData("operation");
             if (operation === "DISTINCT" && elements[1].props.children !== "DISTINCT") {
-                if (findLastDivWithChildIndex("COUNT(") !== -1 ) {
+                if (findLastAggregationDivIndex() !== -1 ) {
                     let newElements = elements;
                     let counterNew = 0;
                     for (let i = 0; i < elements.length; i++) {
-                        if (elements[i].type === "div" && elements[i].props.children.endsWith("COUNT(") && elements[i+1].props.children !== "DISTINCT") {
+                        if (elements[i].type === "div" && elements[i].props.children.endsWith("(") && elements[i+1].props.children !== "DISTINCT") {
                             newElements = getElementsWithPlacement(newElements, operation, i + 1 + counterNew)
                             counterNew++;
                         }
@@ -340,7 +348,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
 
             if (AGGREGATE_FUNCTIONS.includes(operation)) {
                 let newElements = elements;
-                if (operation === "COUNT()" && elements[1].props.children !== "DISTINCT") {
+                if (elements[1].props.children !== "DISTINCT") {
                     const lastIndex = findLastDivWithChildIndex(")");
                     if (lastIndex !== -1) {
                         newElements = getElementsWithPlacement(elements, operation,   lastIndex + 1)

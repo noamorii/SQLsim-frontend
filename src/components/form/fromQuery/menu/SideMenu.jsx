@@ -65,19 +65,19 @@ const SideMenu = () => {
 
     return (
         <div className={showMenu ? "sideContent active" : "sideContent"}>
-            <div className="sideMenu-toggle" onClick={showSideMenu}>
+            <div className="sideMenu-toggle">
                 <Link to='#' className="menu-bars">
-                    <AiOutlineRight className={showMenu ? '' : 'rotate'}/>
-                    <label>Create a FROM query</label>
+                    <AiOutlineRight data-testid="sideMenuToggle" onClick={showSideMenu} className={showMenu ? '' : 'rotate'}/>
+                    <span>Create a FROM query</span>
                 </Link>
             </div>
             {showMenu && (
                 <div className="container">
-                    <div className="editor">
+                    <div className="editor" data-testid="editor">
                         <FromQueryForm showResultTable={showResultTable} clearResultTable={clearResultTable}/>
                         <JoinsMenu/>
                     </div>
-                    <div className="from-table">
+                    <div className="from-table" data-testid="from-table">
                         {showTable
                             ? (<ResultTable data={getTableData()}/>)
                             : (<FakeTable message={"Create and run your query"}/>)
@@ -85,7 +85,7 @@ const SideMenu = () => {
                     </div>
                     {currentQuery
                         ? (
-                            <div className="query-panel">
+                            <div className="query-panel" data-testid="query-panel">
                                 <div className="current-query">Current query: {currentQuery}</div>
                                 <Button text="Continue" onClick={redirectToEditor} icon={<VscDebugStart/>}/>
                             </div>)

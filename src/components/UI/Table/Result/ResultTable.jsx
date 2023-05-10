@@ -1,7 +1,7 @@
 import React from 'react';
 import style from "./ResultTable.module.css";
 import "./ResultTable.module.css";
-import FakeTable from "./FakeTable";
+import FakeTable from "./fakeResult/FakeTable";
 
 /**
  * ResultTable component displays the query execution results in a tabular format.

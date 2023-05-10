@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './JoinsMenu.module.css';
 import {MdDragHandle} from "react-icons/md";
-import {JOIN_TYPES} from "../../../context/DbQueryConsts";
+import {JOIN_TYPES} from "../../../../../context/DbQueryConsts";
 
 /**
  * JoinsMenu component displays a list of join types that can be dragged onto the query builder.

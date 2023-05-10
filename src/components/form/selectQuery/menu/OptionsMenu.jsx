@@ -3,7 +3,7 @@ import {
     BASIC_OPERATIONS,
     CONDITIONS,
     OUTPUT_MODIFICATIONS
-} from "../../context/DbQueryConsts";
+} from "../../../../context/DbQueryConsts";
 import {MdDragHandle} from "react-icons/md";
 import "./OptionsMenu.css";
 

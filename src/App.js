@@ -1,10 +1,7 @@
 import { HashRouter } from "react-router-dom";
 import Navbar from "./components/UI/Navbar/Navbar";
-import AppRouter from "./components/AppRouter";
-import {
-  DbContext,
-  SqlContext,
-} from "./components/context/context";
+import AppRouter from "./AppRouter";
+import { DbContext, SqlContext } from "./context/context";
 import { useEffect, useState } from "react";
 import initSqlJs from "sql.js";
 import sqlWasm from "!!file-loader?name=sql-wasm-[contenthash].wasm!sql.js/dist/sql-wasm.wasm";

@@ -1,15 +1,15 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import './SelectQueryForm.css';
-import OptionsMenu from "./OptionsMenu";
+import OptionsMenu from "./menu/OptionsMenu";
 import {useNavigate} from 'react-router-dom';
-import {AGGREGATE_FUNCTIONS, CONDITIONS} from "../../context/DbQueryConsts";
+import {AGGREGATE_FUNCTIONS, CONDITIONS} from "../../../context/DbQueryConsts";
 import Button from "../../UI/Buttons/Button";
 import {VscDebugStart} from "react-icons/vsc";
-import {DbContext} from "../../context/context";
+import {DbContext} from "../../../context/context";
 import {AiFillCopy, AiFillDelete, AiOutlineCopy} from "react-icons/ai";
 import {BiShow} from "react-icons/bi";
-import {getStoredQuery} from "../../context/commonFunctions";
+import {getStoredQuery} from "../../../context/commonFunctions";
 
 /**
  * SelectQueryForm is a React component that provides a form for building and executing SQL SELECT queries

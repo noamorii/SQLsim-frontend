@@ -1,11 +1,11 @@
-import SelectQueryForm from "./visualisation/selectQuery/SelectQueryForm";
+import SelectQueryForm from "../SelectQueryForm";
 import "./SqlReply.css"
-import ResultTable from "./UI/Table/Result/ResultTable";
-import {executeQuery, getStoredQuery} from "./context/commonFunctions";
+import ResultTable from "../../../UI/Table/Result/ResultTable";
+import {executeQuery, getStoredQuery} from "../../../../context/commonFunctions";
 import React, {useContext, useState} from "react";
-import {DbContext} from "./context/context";
-import Visualization from "./visualisation/Visualization";
-import FakeTable from "./UI/Table/Result/FakeTable";
+import {DbContext} from "../../../../context/context";
+import Visualization from "../../../visualisation/Visualization";
+import FakeTable from "../../../UI/Table/Result/fakeResult/FakeTable";
 
 /**
  * SqlReply component represents the SQL query playground and visualization section.

@@ -4,9 +4,9 @@ import {DbContext} from "../../../context/context";
 import {executeQueryValues} from "../../../context/commonFunctions";
 import {SELECT_TABLES_QRY} from "../../../context/DbQueryConsts";
 import './FromQueryForm.css';
-import PopupUpload from "../../Popup/PopupUpload";
-import DbFileDownloadButton from "../../Buttons/DbFileDownloadButton";
-import Button from "../../Buttons/Button";
+import PopupUpload from "../../UI/Popup/PopupUpload";
+import DbFileDownloadButton from "../../UI/Buttons/DbFileDownloadButton";
+import Button from "../../UI/Buttons/Button";
 import {AiFillDelete} from "react-icons/ai";
 import {VscDebugStart} from "react-icons/vsc";
 

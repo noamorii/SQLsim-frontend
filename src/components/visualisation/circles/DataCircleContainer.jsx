@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useContext, useRef} from "react";
-import {DbContext} from "../../context/context";
+import {DbContext} from "../../../context/context";
 import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
-import {executeQuery, getStoredQuery} from "../../context/commonFunctions";
+import {executeQuery, getStoredQuery} from "../../../context/commonFunctions";
 
 /**
  * DataCircleContainer is a React component that renders DataCircle components in a container with calculated positions.

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { DbContext, SqlContext } from '../../context/context';
+import { DbContext, SqlContext } from '../../../context/context';
 
 /**
  * DbFileUploadButton is a React component that renders an input element for uploading a SQLite database file.

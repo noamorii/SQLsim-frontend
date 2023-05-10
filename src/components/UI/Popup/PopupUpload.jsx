@@ -1,8 +1,8 @@
 import React, {useState, useRef, useEffect, useContext} from 'react';
 import './PopupUpload.css';
 import DbFileUploadButton from "../Buttons/DbFileUploadButton";
-import {DbContext, SqlContext} from "../../context/context";
-import {ALL_TABLES_QRY} from "../../context/DbQueryConsts";
+import {DbContext, SqlContext} from "../../../context/context";
+import {ALL_TABLES_QRY} from "../../../context/DbQueryConsts";
 import { HiUpload } from 'react-icons/hi';
 import Button from "../Buttons/Button";
 

@@ -2,13 +2,13 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {AiOutlineRight} from "react-icons/ai";
 import './SideMenu.css';
-import FromQueryForm from "./Form/FromQueryForm";
+import FromQueryForm from "../FromQueryForm";
 import JoinsMenu from "./Joins/JoinsMenu";
-import ResultTable from "../Table/Result/ResultTable";
-import {executeQuery, getStoredQuery} from "../../context/commonFunctions";
-import {DbContext} from "../../context/context";
-import FakeTable from "../Table/Result/FakeTable";
-import Button from "../Buttons/Button";
+import ResultTable from "../../../UI/Table/Result/ResultTable";
+import {executeQuery, getStoredQuery} from "../../../../context/commonFunctions";
+import {DbContext} from "../../../../context/context";
+import FakeTable from "../../../UI/Table/Result/fakeResult/FakeTable";
+import Button from "../../../UI/Buttons/Button";
 import {VscDebugStart} from "react-icons/vsc";
 
 /**

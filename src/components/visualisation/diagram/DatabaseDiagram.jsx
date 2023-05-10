@@ -2,9 +2,9 @@ import React, {useCallback, useContext, useEffect, useMemo, useState} from 'reac
 import ReactFlow, {applyNodeChanges, Background, Controls, MarkerType, MiniMap} from 'reactflow';
 import 'reactflow/dist/style.css';
 import "./DatabaseDiagram.css"
-import AttributeNode from "./nodes/AttributeNode";
-import {DbContext} from "../context/context";
-import {GET_ALL_TABLES_DATA_QRY, SELECT_FRN_KEYS_QRY} from "../context/DbQueryConsts";
+import AttributeNode from "../nodes/AttributeNode";
+import {DbContext} from "../../../context/context";
+import {GET_ALL_TABLES_DATA_QRY, SELECT_FRN_KEYS_QRY} from "../../../context/DbQueryConsts";
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 const nodeTypes = {attributeNode: AttributeNode};

@@ -1,5 +1,5 @@
-import DatabaseDiagram from "../components/visualisation/DatabaseDiagram";
-import SideMenu from "../components/UI/SideMenu/SideMenu";
+import DatabaseDiagram from "../components/visualisation/diagram/DatabaseDiagram";
+import SideMenu from "../components/form/fromQuery/menu/SideMenu";
 
 const Tables = () => {
 

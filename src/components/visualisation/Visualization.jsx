@@ -11,6 +11,8 @@ import "./Visualization.css"
  */
 const Visualization = () => {
     const conditions = ["SELECT", "WHERE", "ALL"];
+    const conditions_text = ["All elements", "WHERE condition-matching elements", "All conditions-satisfying elements"];
+
     const [currentConditionIndex, setCurrentConditionIndex] = useState(0);
 
     const lowerIndex = () => {
@@ -29,7 +31,7 @@ const Visualization = () => {
             <div className="queryControls">
                 <Button text="Back" onClick={lowerIndex} disabled={currentConditionIndex === 0}/>
                 <Button text="Next" onClick={increaseIndex} disabled={currentConditionIndex === conditions.length - 1}/>
-                <span className="condition">{conditions[currentConditionIndex]}</span>
+                <span className="condition">{conditions_text[currentConditionIndex]}</span>
             </div>
             <div className="visualization">
                 <DataCircleContainer condition={conditions[currentConditionIndex]}/>

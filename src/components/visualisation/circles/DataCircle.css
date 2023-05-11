@@ -1,7 +1,9 @@
 [id^="circle-"] {
     position: absolute;
     background-color: #768d9a;
-    color: white;
+    font-family: 'Strait', sans-serif;
+    font-weight: bold;
+    color: #3c4d83;
     border-radius: 50%;
     margin: 5px;
     width: 40px;
@@ -17,7 +19,7 @@
 
 [id^="circle-"]:hover {
     background-color: #5ea3cc;
-    border: 2px solid #3c6983;
+    border: 2px solid #3c4d83;
 }
 
 [id^="circle-"] p {

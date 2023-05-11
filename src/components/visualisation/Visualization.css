@@ -1,0 +1,16 @@
+.condition {
+    display: flex;
+   align-items: center;
+    margin-left: 6px;
+    font-family: 'Strait', sans-serif;
+    font-weight: bold;
+    color: #8a398a;
+}
+
+.queryControls {
+    display: flex;
+    justify-content: flex-start;
+    gap: 4px;
+    margin: 10px;
+}
+

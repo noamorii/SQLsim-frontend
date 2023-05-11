@@ -47,7 +47,7 @@ const SqlReply = () => {
             </div>
             <div className="visualization">
                 {resultState
-                    ? (<Visualization query={currentTable}/>)
+                    ? (<Visualization/>)
                     : (<div className="no-data">Create and run SELECT query</div>)
                 }
             </div>

@@ -12,14 +12,14 @@ import PopupCircleTable from "../../UI/Table/Popup/PopupCircleTable";
  * @param {number} props.left - The left position of the circle in pixels.
  * @returns {JSX.Element} A JSX element representing the circle with text and a popup table.
  */
-const DataCircle = ({valueObject, text, top, left}) => {
+const DataCircle = ({valueObject, text, top, left, backgroundColor}) => {
     const [showPopup, setShowPopup] = useState(false);
     return (
         <div onMouseLeave={() => setShowPopup(false)}>
             {showPopup && <PopupCircleTable data={valueObject} top={top} left={left}/>}
             <div onMouseEnter={() => setShowPopup(true)}
                  id={`circle-${text}`}
-                 style={{top, left}}>
+                 style={{top, left, backgroundColor}}>
                 <p>{text}</p>
             </div>
         </div>

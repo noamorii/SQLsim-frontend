@@ -409,7 +409,6 @@ const SelectQueryForm = ({showResult, clearResult}) => {
      */
     const onSubmitForm = (data) => {
         const query = buildQuery(data);
-        console.log(query)
         handleQuery("savedSelectQuery", query);
     }
 

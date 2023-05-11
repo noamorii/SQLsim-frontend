@@ -1,17 +1,39 @@
-import React from 'react';
+import React, {useState} from 'react';
 import DataCircleContainer from "./circles/DataCircleContainer";
+import Button from "../UI/Buttons/Button";
+import "./Visualization.css"
 
 /**
  * Visualization component displays the visualization of data using DataCircleContainer.
  * It receives a query as a prop and passes it to the DataCircleContainer component to fetch and visualize the data.
  *
- * @param {string} query - The query used to fetch the data for visualization.
  * @returns {JSX.Element} - The rendered Visualization component.
  */
-const Visualization = ({query}) => {
+const Visualization = () => {
+    const conditions = ["SELECT", "WHERE", "ALL"];
+    const [currentConditionIndex, setCurrentConditionIndex] = useState(0);
+
+    const lowerIndex = () => {
+        const newIndex = currentConditionIndex - 1;
+        if (newIndex >= 0) setCurrentConditionIndex(newIndex);
+    };
+
+    const increaseIndex = () => {
+        const newIndex = currentConditionIndex + 1;
+        if (newIndex < conditions.length) setCurrentConditionIndex(newIndex);
+    };
+
+
     return (
-        <div className="visualization">
-            <DataCircleContainer queryKey={query}/>
+        <div>
+            <div className="queryControls">
+                <Button text="Back" onClick={lowerIndex} disabled={currentConditionIndex === 0}/>
+                <Button text="Next" onClick={increaseIndex} disabled={currentConditionIndex === conditions.length - 1}/>
+                <span className="condition">{conditions[currentConditionIndex]}</span>
+            </div>
+            <div className="visualization">
+                <DataCircleContainer condition={conditions[currentConditionIndex]}/>
+            </div>
         </div>
     );
 };

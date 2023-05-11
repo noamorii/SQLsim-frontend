@@ -23,6 +23,10 @@
     cursor: pointer;
 }
 
+.btn:has( > button:disabled) {
+    background-color: rgba(28, 110, 164, 0.5);
+}
+
 .btn:hover,
 .btn:focus {
     transition: 0.2s;

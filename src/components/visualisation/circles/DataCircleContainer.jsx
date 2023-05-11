@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, useRef} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {DbContext} from "../../../context/context";
 import DataCircle from "./DataCircle";
 import './DataCircleContainer.css';
@@ -8,11 +8,9 @@ import {executeQuery, getStoredQuery} from "../../../context/commonFunctions";
  * DataCircleContainer is a React component that renders DataCircle components in a container with calculated positions.
  * @component
  * @param {Object} props - The properties passed to the component.
- * @param {string} props.queryKey - The key used to fetch the query from session storage.
  * @returns {JSX.Element} A JSX element representing the container with DataCircles.
  */
-const DataCircleContainer = ({queryKey}) => {
-    console.log(queryKey)
+const DataCircleContainer = ({condition}) => {
     const [circles, setCircles] = useState([]);
     const [error, setError] = useState(null);
 
@@ -22,7 +20,7 @@ const DataCircleContainer = ({queryKey}) => {
     const circleWidthRef = useRef(null);
 
     const CIRCLE_BOUNDARY = getCircleWidth();
-    const CONTAINER_OFFSET = 100;
+    const CONTAINER_OFFSET = 125;
 
     /**
      * getAllFromSelectedTable retrieves data from the selected key stored in session storage
@@ -32,16 +30,93 @@ const DataCircleContainer = ({queryKey}) => {
      */
     const getAllFromSelectedTable = () => {
         try {
-            const query = getStoredQuery(queryKey);
-            const dbResult = executeQuery(db, query);
+            const selectAll = getStoredQuery("savedFromQuery");
+            const dbResult = executeQuery(db, selectAll);
             return {
-                columns:dbResult.columns,
+                columns: dbResult.columns,
                 values: dbResult.values
             }
         } catch (err) {
             setError(err.message);
             return [];
         }
+    }
+
+    const getQueryResult = () => {
+        try {
+            const query = getStoredQuery("savedSelectQuery");
+            const dbResult = executeQuery(db, query);
+            if (dbResult.length === 0) return;
+            const newCircles = dbResult.values.map(value => {
+                const keyValueObject = createKeyValueObject(dbResult.columns, value);
+                return (
+                    <DataCircle key={value[0]} text={value[0]} valueObject={keyValueObject}
+                                left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
+                );
+            });
+            return checkCollisions(newCircles);
+        } catch (err) {
+            setError(err.message);
+            return [];
+        }
+    }
+
+    const getWhereClause = (query) => {
+        let start = query.indexOf("WHERE");
+        let end = query.indexOf("ORDER BY") !== -1 ? query.indexOf("ORDER BY") : query.indexOf("GROUP BY");
+        if (start !== -1)
+            return query.substring(start, end !== -1 ? end : undefined);
+        return "";
+    }
+
+    const getWhereConditionElements = () => {
+        const fromQuery = getStoredQuery("savedFromQuery");
+        const wholeQuery = getStoredQuery("savedSelectQuery")
+        const query = fromQuery + " " + getWhereClause(wholeQuery);
+        if (query.includes("WHERE")) {
+            try {
+                const dbResult = executeQuery(db, query);
+                return {
+                    columns: dbResult.columns,
+                    values: dbResult.values
+                }
+            } catch (err) {
+                setError(err.message);
+                return [];
+            }
+        }
+        return [];
+    }
+
+    const getFilteredCircles = () => {
+        let objects = [];
+        let conditionElements = getWhereConditionElements();
+        if (conditionElements.length === 0) return;
+        conditionElements.values.map(value => {
+            objects.push(createKeyValueObject(conditionElements.columns, value))
+        });
+
+        if (objects.length === 0) return;
+
+        return circles.map((circle) => {
+            const isValueObjectInObjects = objects.some(
+                (object) => JSON.stringify(object) === JSON.stringify(circle.props.valueObject)
+            );
+
+            if (isValueObjectInObjects) {
+                return (
+                    <DataCircle
+                        key={circle.props.key}
+                        text={circle.props.text}
+                        valueObject={circle.props.valueObject}
+                        left={circle.props.left}
+                        top={circle.props.top}
+                        backgroundColor="red"
+                    />
+                );
+            }
+            return circle;
+        });
     }
 
     /**
@@ -100,22 +175,20 @@ const DataCircleContainer = ({queryKey}) => {
      * @param {Array} allCircles - An array of all DataCircle components.
      */
     const checkCollisions = (allCircles) => {
+
         const collisionObjects = findCollidingCircles(allCircles);
 
-        if (collisionObjects.length === 0) {
-            setCircles(allCircles);
-            return;
-        }
+        if (collisionObjects.length === 0)
+            return allCircles
 
         const newCircles = [...allCircles];
         for (let object of collisionObjects) {
             const index = newCircles.findIndex(circle => circle.key === object.key);
             newCircles[index] =
-                <DataCircle key={object.key} text={object.props.text}
-                            valueObject={object.props.valueObject}
-                            left={getPositions()} top={getPositions()}/>;
+                <DataCircle key={object.key} text={object.props.text} valueObject={object.props.valueObject}
+                            left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>;
         }
-        checkCollisions(newCircles);
+        return checkCollisions(newCircles);
     }
 
     /**
@@ -131,7 +204,6 @@ const DataCircleContainer = ({queryKey}) => {
     /**
      * useEffect hook: Fetches data from the selected query stored in session storage,
      * creates new DataCircle components, and checks for collisions.
-     * It runs when the 'db' or 'queryKey' dependencies change.
      */
     useEffect(() => {
         const dbResultObject = getAllFromSelectedTable();
@@ -140,15 +212,26 @@ const DataCircleContainer = ({queryKey}) => {
             const keyValueObject = createKeyValueObject(dbResultObject.columns, value);
             return (
                 <DataCircle key={value[0]} text={value[0]} valueObject={keyValueObject}
-                left={getPositions()} top={getPositions()} />
+                            left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
             );
         });
-        checkCollisions(newCircles)
-    }, [db, queryKey]);
+        const circles = checkCollisions(newCircles);
+        setCircles(circles);
+    }, [db]);
+
+    const renderCircles = () => {
+        if (condition === "ALL")
+            return getQueryResult();
+        if (condition === "WHERE")
+            return getFilteredCircles();
+        return circles;
+    }
 
     if (error) return <div> Error: {error} </div>;
     return (
-        <div id="circleContainer" ref={dataCircleRef}>{circles}</div>
+        <div id="circleContainer" ref={dataCircleRef}>
+            {renderCircles()}
+        </div>
     );
 };
 

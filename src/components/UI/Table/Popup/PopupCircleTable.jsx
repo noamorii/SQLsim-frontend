@@ -1,4 +1,4 @@
-import style from "./PopupTable.module.css"
+import style from "./PopupTable.module.css";
 
 /**
  * PopupCircleTable is a React functional component that renders a small popup table with a single row of data next to DataCircle.

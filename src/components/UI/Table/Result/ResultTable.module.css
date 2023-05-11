@@ -6,13 +6,14 @@
     font-size: 24px;
     font-family: Arial, sans-serif;
     background-color: #fff;
-    color: #333;
+    color: #041025;
     outline: none;
+    border: 6px solid #195379;
 }
 
 .tableContainer th,
 .tableContainer td {
-    border: 1px solid #142349;
+    border: 2px solid #195379;
     padding: 8px;
     text-align: center;
     white-space: nowrap;
@@ -38,3 +39,17 @@
     top: 0;
     left: 0;
 }
+
+.tableContainer::-webkit-scrollbar
+{
+    height: 14px;
+    background-color: #F5F5F5;
+}
+
+.tableContainer::-webkit-scrollbar-thumb
+{
+    border-radius: 8px;
+    background-color: #393675;
+    border: 4px solid #F5F5F5;
+}
+

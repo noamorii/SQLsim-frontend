@@ -45,7 +45,7 @@ const SqlReply = () => {
                     </div>
                 </div>
             </div>
-            <div className="visualization">
+            <div className="circleVisualization">
                 {resultState
                     ? (<Visualization/>)
                     : (<div className="no-data">Create and run SELECT query</div>)

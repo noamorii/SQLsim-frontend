@@ -24,11 +24,11 @@
     flex-basis: 50%;
 }
 
-.visualization {
+.circleVisualization {
+    display: flex;
     min-width: 600px;
     margin: 16px;
     border-radius: 10px;
-    border: 2px solid #ffffff;
     background-color: white;
     flex: 1;
 }

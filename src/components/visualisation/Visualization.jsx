@@ -27,15 +27,13 @@ const Visualization = () => {
 
 
     return (
-        <div>
+        <div className="visualization">
             <div className="queryControls">
                 <Button text="Back" onClick={lowerIndex} disabled={currentConditionIndex === 0}/>
                 <Button text="Next" onClick={increaseIndex} disabled={currentConditionIndex === conditions.length - 1}/>
                 <span className="condition">{conditions_text[currentConditionIndex]}</span>
             </div>
-            <div className="visualization">
-                <DataCircleContainer condition={conditions[currentConditionIndex]}/>
-            </div>
+            <DataCircleContainer condition={conditions[currentConditionIndex]}/>
         </div>
     );
 };

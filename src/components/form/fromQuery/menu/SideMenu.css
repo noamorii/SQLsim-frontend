@@ -96,6 +96,8 @@ body {
     display: flex;
     flex-grow: 1;
     position: relative;
+    border: 4px solid #195379;
+    box-sizing: border-box;
 }
 
 .no-data-message {

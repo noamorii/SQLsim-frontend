@@ -8,9 +8,26 @@
 }
 
 .queryControls {
+    background-color: white;
+    padding: 10px;
     display: flex;
     justify-content: flex-start;
     gap: 4px;
-    margin: 10px;
+    height: fit-content;
+}
+
+.visualization {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    background-color: #e9ecef;
+    /*min-width: 400px;*/
+    /*max-width: 80%;*/
+    /*margin: 16px;*/
+    /*border-radius: 10px;*/
+    /*border: 2px solid #ffffff;*/
+    /*background-color: white;*/
+    /*flex: 1;*/
+    /*flex-grow: 1;*/
 }
 

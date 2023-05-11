@@ -140,6 +140,8 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
 
     const onSubmitFrom = (data) => {
         const query = buildQuery(data, elements);
+        console.log(elements)
+        console.log(query)
         handleQuery(query);
     }
 
@@ -295,24 +297,24 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
      * @returns {Array<JSX.Element>} An array containing the join elements and following divs and inputs.
      */
     const createJoin = joinType => {
-        let elements = [
+        let preparedElements = [
             <div className="join element">{joinType}</div>,
             ...createSelectTable()
         ];
 
-        if (joinType === "NATURAL JOIN") return elements;
+        if (joinType === "NATURAL JOIN") return preparedElements;
 
         return [
-            ...elements,
+            ...preparedElements,
             <div className="start element">ON</div>,
             <input type="text" className="attribute element"
-                   {...register((elements.length + 5) + "_input", {
+                   {...register((elements.length + 4) + "_input", {
                        required: true
                    })}
             />,
             <div className="start element">=</div>,
             <input type="text" className="attribute element"
-                   {...register((elements.length + 7) + "_input", {
+                   {...register((elements.length + 6) + "_input", {
                        required: true,
                    })}
             />

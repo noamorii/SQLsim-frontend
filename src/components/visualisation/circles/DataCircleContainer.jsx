@@ -111,7 +111,7 @@ const DataCircleContainer = ({condition}) => {
                         valueObject={circle.props.valueObject}
                         left={circle.props.left}
                         top={circle.props.top}
-                        backgroundColor="#325669"
+                        backgroundColor="rgb(184 160 189)"
                     />
                 );
             }

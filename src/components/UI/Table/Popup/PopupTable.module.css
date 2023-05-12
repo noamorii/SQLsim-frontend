@@ -18,7 +18,6 @@
     background-color: #fff;
     color: #041025;
     outline: none;
-
 }
 
 .popupTableContainer th,
@@ -29,7 +28,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: min(1em, calc(100% - 8px));
+    font-size: 14px;
 }
 
 .popupTableContainer th {

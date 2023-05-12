@@ -421,7 +421,7 @@ const SelectQueryForm = ({showResult, clearResult}) => {
             setQueryError("Please create a from query");
             return;
         }
-        handleQuery("savedFromQuery", getStoredQuery("savedFromQuery"))
+        handleQuery("savedFromQuery", query)
     }
 
     /**

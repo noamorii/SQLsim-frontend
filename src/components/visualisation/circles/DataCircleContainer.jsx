@@ -47,10 +47,10 @@ const DataCircleContainer = ({condition}) => {
             const query = getStoredQuery("savedSelectQuery");
             const dbResult = executeQuery(db, query);
             if (dbResult.length === 0) return;
-            const newCircles = dbResult.values.map(value => {
+            const newCircles = dbResult.values.map((value, index) => {
                 const keyValueObject = createKeyValueObject(dbResult.columns, value);
                 return (
-                    <DataCircle key={value[0]} text={value[0]} valueObject={keyValueObject}
+                    <DataCircle key={value[0]} text={index+1} valueObject={keyValueObject}
                                 left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
                 );
             });
@@ -208,10 +208,10 @@ const DataCircleContainer = ({condition}) => {
     useEffect(() => {
         const dbResultObject = getAllFromSelectedTable();
         if (dbResultObject.length === 0) return;
-        const newCircles = dbResultObject.values.map(value => {
+        const newCircles = dbResultObject.values.map((value, index) => {
             const keyValueObject = createKeyValueObject(dbResultObject.columns, value);
             return (
-                <DataCircle key={value[0]} text={value[0]} valueObject={keyValueObject}
+                <DataCircle key={value[0]} text={index+1} valueObject={keyValueObject}
                             left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
             );
         });

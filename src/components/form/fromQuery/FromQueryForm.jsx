@@ -140,8 +140,6 @@ const FromQueryForm = ({showResultTable, clearResultTable}) => {
 
     const onSubmitFrom = (data) => {
         const query = buildQuery(data, elements);
-        console.log(elements)
-        console.log(query)
         handleQuery(query);
     }
 

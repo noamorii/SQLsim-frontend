@@ -27,12 +27,15 @@ export default function App() {
    * @returns {Promise<void>} A promise that resolves when the SQL.js library is initialized and the database is set up.
    * The promise resolves without a value.
    */
-  useEffect(async () => {
-    try {
-      const SQL = await initSqlJs({ locateFile: () => sqlWasm });
-      setSql(SQL);
-      setDb(new SQL.Database());
-    } catch (ignore) {}
+  useEffect(() => {
+    async function initializeDatabase() {
+      try {
+        const SQL = await initSqlJs({ locateFile: () => sqlWasm });
+        setSql(SQL);
+        setDb(new SQL.Database());
+      } catch (ignore) {}
+    }
+    void initializeDatabase();
   }, []);
 
   return (

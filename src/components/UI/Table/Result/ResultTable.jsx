@@ -19,16 +19,16 @@ const ResultTable = (result) => {
             <table>
                 <thead>
                 <tr>
-                    {result.data && result.data.columns.map(
-                        column => (<th key={column}>{column}</th>)
-                    )}
+                    {result.data.columns.map((column, idx) => (
+                        <th key={`${column}-${idx}`}>{column}</th>
+                    ))}
                 </tr>
                 </thead>
                 <tbody>
-                {result.data && result.data.values.map(row => (
-                    <tr key={row[0]}>
-                        {row.map(cell => (
-                            <td key={cell}>{cell}</td>
+                {result.data.values.map((row, rowIndex) => (
+                    <tr key={`${row[0]}-${rowIndex}`}>
+                        {row.map((cell, cellIndex) => (
+                            <td key={`${cell}-${cellIndex}`}>{cell}</td>
                         ))}
                     </tr>
                 ))}

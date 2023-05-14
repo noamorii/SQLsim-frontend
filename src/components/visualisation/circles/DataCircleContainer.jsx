@@ -42,6 +42,15 @@ const DataCircleContainer = ({condition}) => {
         }
     }
 
+    function getRandomColor() {
+        let color = [];
+        for(let i = 0; i < 3; i++) {
+            let component = Math.floor(Math.random() * 128) + 128;
+            color.push(component.toString(16).padStart(2, '0'));
+        }
+        return '#' + color.join('');
+    }
+
     const getQueryResult = () => {
         try {
             const query = getStoredQuery("savedSelectQuery");
@@ -50,7 +59,7 @@ const DataCircleContainer = ({condition}) => {
             const newCircles = dbResult.values.map((value, index) => {
                 const keyValueObject = createKeyValueObject(dbResult.columns, value);
                 return (
-                    <DataCircle key={value[0]} text={index+1} valueObject={keyValueObject}
+                    <DataCircle key={value[0] + index} text={index+1} valueObject={keyValueObject}
                                 left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
                 );
             });
@@ -63,7 +72,18 @@ const DataCircleContainer = ({condition}) => {
 
     const getWhereClause = (query) => {
         let start = query.indexOf("WHERE");
-        let end = query.indexOf("ORDER BY") !== -1 ? query.indexOf("ORDER BY") : query.indexOf("GROUP BY");
+        let end = query.indexOf("GROUP BY") !== -1 ? query.indexOf("GROUP BY") : query.indexOf("ORDER BY");
+        if (start !== -1) {
+            console.log(query.substring(start, end !== -1 ? end : undefined))
+            return query.substring(start, end !== -1 ? end : undefined);
+        }
+
+        return "";
+    }
+
+    const getGroupByParams = (query) => {
+        let start = query.indexOf("GROUP BY") + 9;
+        let end = query.indexOf("ORDER BY") !== -1 ? query.indexOf("ORDER BY") : query.indexOf("HAVING");
         if (start !== -1)
             return query.substring(start, end !== -1 ? end : undefined);
         return "";
@@ -211,7 +231,7 @@ const DataCircleContainer = ({condition}) => {
         const newCircles = dbResultObject.values.map((value, index) => {
             const keyValueObject = createKeyValueObject(dbResultObject.columns, value);
             return (
-                <DataCircle key={value[0]} text={index+1} valueObject={keyValueObject}
+                <DataCircle key={value[0] + index} text={index+1} valueObject={keyValueObject}
                             left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
             );
         });
@@ -219,11 +239,58 @@ const DataCircleContainer = ({condition}) => {
         setCircles(circles);
     }, [db]);
 
+    function getCircleParamValues(circle, params) {
+        return params.reduce((acc, param) => `${acc},${circle.props.valueObject[param.trim()]}`, "");
+    }
+
+    function getGroupedCircles() {
+        const query = getStoredQuery("savedSelectQuery");
+        const params = getGroupByParams(query).split(",");
+        if (!params.length) return;
+
+        let duplicates = circles.reduce((acc, circle1, index1) => {
+            const isDuplicate = circles.some((circle2, index2) =>
+                index1 !== index2 &&
+                params.some(param =>
+                    circle1.props.valueObject[param.trim()] === circle2.props.valueObject[param.trim()]
+                )
+            );
+            if (isDuplicate) acc.push(circle1);
+            return acc;
+        }, []);
+
+        let colorMap = duplicates.reduce((acc, circle) => {
+            const value = getCircleParamValues(circle, params);
+            if(!acc[value]) {
+                acc[value] = getRandomColor();
+            }
+            return acc;
+        }, {});
+
+        return circles.map(circle => {
+            if (duplicates.includes(circle)) {
+                const newBackground = colorMap[getCircleParamValues(circle, params)];
+                return (
+                    <DataCircle
+                        {...circle.props}
+                        key={circle.props.key}
+                        backgroundColor={newBackground}
+                    />
+                );
+            } else {
+                return circle;
+            }
+        });
+    }
+
+
     const renderCircles = () => {
         if (condition === "FROM")
             return getQueryResult();
         if (condition === "WHERE")
             return getFilteredCircles();
+        if (condition === "GROUP BY")
+            return getGroupedCircles();
         return circles;
     }
 

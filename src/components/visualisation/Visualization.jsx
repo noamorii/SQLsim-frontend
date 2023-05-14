@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import DataCircleContainer from "./circles/DataCircleContainer";
 import Button from "../UI/Buttons/Button";
 import "./Visualization.css"
@@ -15,13 +15,9 @@ const Visualization = () => {
     const conditions_text = ["All elements", "WHERE satisfying elements", "Grouped objects", "Result elements"];
 
     const [currentConditionIndex, setCurrentConditionIndex] = useState(0);
-    let storedQuery = "";
-
-    useEffect(() => {
-        storedQuery = getStoredQuery("savedFromQuery");
-    }, []);
 
     const lowerIndex = () => {
+        const storedQuery = getStoredQuery("savedSelectQuery");
         let newIndex = currentConditionIndex - 1;
         while (!storedQuery.includes(conditions[newIndex]) && newIndex >= 0) {
             newIndex--;
@@ -30,6 +26,7 @@ const Visualization = () => {
     };
 
     const increaseIndex = () => {
+        const storedQuery = getStoredQuery("savedSelectQuery");
         let newIndex = currentConditionIndex + 1;
         while (!storedQuery.includes(conditions[newIndex]) && newIndex < conditions.length) {
             newIndex++;

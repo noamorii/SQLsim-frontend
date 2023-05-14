@@ -220,7 +220,7 @@ const DataCircleContainer = ({condition}) => {
     }, [db]);
 
     const renderCircles = () => {
-        if (condition === "ALL")
+        if (condition === "FROM")
             return getQueryResult();
         if (condition === "WHERE")
             return getFilteredCircles();

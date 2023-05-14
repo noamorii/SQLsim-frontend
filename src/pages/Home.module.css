@@ -49,6 +49,7 @@ body {
 
 .homeSectionLeft h2, .homeSectionRight h2 {
     font-size: 3em;
+    text-shadow: 0 0 30px rgba(151, 65, 252, 0.8);
 }
 
 .homeSectionLeft, .homeSectionRight {
@@ -76,7 +77,7 @@ body {
 .homeSectionRight {
     margin-right: 200px;
     align-items: end;
-    color: #b963b9;
+    color: #e598e5;
 }
 
 .homeButton {

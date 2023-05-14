@@ -11,6 +11,9 @@ import style from "./Navbar.module.css"
 const Navbar = () => {
     return (
         <div className={style.navbar}>
+            <div className={style.logo}>
+                <Link to="/">SQL Simulator</Link>
+            </div>
             <div className={style.navbar_links}>
                 <Link to="/">Home</Link>
                 <Link to="/tables">Tables</Link>

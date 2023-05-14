@@ -1,50 +1,60 @@
 import style from "./Home.module.css";
 import {Fade, Slide} from 'react-awesome-reveal';
+import from from '../images/from.svg';
+import visualization from '../images/visualization.svg';
+import diagram from '../images/diagram.svg';
+import {useNavigate} from "react-router-dom";
 
 const Home = () => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/tables');
+    }
+
     return (
         <div className={style.homePage}>
-            {/*<h1 className={style.mainLabel}>SQL simulator</h1>*/}
-            <Fade duration={5000}>
-                <header className={style.AppHeader}>
-                    <h1>SQL Simulator</h1>
-                    <p>Discover the power of SQL. Create, explore, combine and visualize your own queries!</p>
+            <Fade duration={3000}>
+                <header className={style.homeHeader}>
+                    <h1><span className={style.sqlHeader}>SQL</span> Simulator</h1>
+                    <p>Discover the power of SQL</p>
+                    <p>Create, explore, combine and visualize your own queries!</p>
                 </header>
             </Fade>
 
-            <Slide>
-                <section className={style.AppSection}>
-                    <h2>Create Database Operations</h2>
-                    <p>Begin your journey into SQL. Create tables, insert data, and more!</p>
+            <Slide direction={"right"} duration={2000}>
+                <section className={style.homeSectionRight}>
+                    <h2>Visualize Your Tables</h2>
+                    <p>Upload your own database and visualize all tables and their attributes</p>
+                    <p>Play with interactive visualization and explore your relation database</p>
+                    <object data={diagram} type="image/svg+xml" style={{width: "800px"}}/>
                 </section>
             </Slide>
 
-            <Slide>
-                <section className={style.AppSection}>
-                    <h2>Explore Select Operations</h2>
-                    <p>Dive into the heart of SQL with select operations. Learn how to query your data effectively and
-                        efficiently.</p>
+            <Slide direction={"left"}>
+                <section className={style.homeSectionLeft}>
+                    <h2>Explore SELECT Operations</h2>
+                    <p>Dive into the heart of SQL with select operations</p>
+                    <p>Master data exploration and precise querying with our interactive playground</p>
+                    <object data={from} type="image/svg+xml" style={{width: "600px"}}/>
                 </section>
             </Slide>
 
-            <Slide>
-                <section className={style.AppSection}>
-                    <h2>Combine Tables</h2>
-                    <p>Master the art of joining tables. Uncover the hidden relationships in your data.</p>
+            <Slide direction={"right"}>
+                <section className={style.homeSectionRight}>
+                    <h2>Visualize Your Queries</h2>
+                    <p>Experience the power of data at your fingertips</p>
+                    <p>Construct queries, visualize results, and delve into your data</p>
+                    <object data={visualization} type="image/svg+xml" style={{width: "600px"}}/>
                 </section>
             </Slide>
 
-            <Slide>
-                <section className={style.AppSection}>
-                    <h2>Build and Visualize Your Query</h2>
-                    <p>Bring your data to life. Build complex queries and see the results in real time.</p>
+            <Slide direction={"left"}>
+                <section className={style.homeSectionLeft}>
+                    <h2>Start your SQL journey now!</h2>
+                    <button onClick={handleClick} className={style.homeButton} role="button">Get Started</button>
                 </section>
             </Slide>
-
-            <footer className={style.AppFooter}>
-                <p>Start your SQL journey today!</p>
-                <button>Get Started</button>
-            </footer>
         </div>
     );
 };

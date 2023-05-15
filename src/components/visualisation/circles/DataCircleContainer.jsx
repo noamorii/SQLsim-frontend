@@ -239,11 +239,9 @@ const DataCircleContainer = ({condition}) => {
         setCircles(circles);
     }, [db]);
 
-    function getCircleParamValues(circle, params) {
-        return params.reduce((acc, param) => `${acc},${circle.props.valueObject[param.trim()]}`, "");
-    }
+    const getCircleParamValues = (circle, params) => params.reduce((acc, param) => `${acc},${circle.props.valueObject[param.trim()]}`, "");
 
-    function getGroupedCircles() {
+    const getGroupedCircles = () => {
         const query = getStoredQuery("savedSelectQuery");
         const params = getGroupByParams(query).split(",");
         if (!params.length) return;
@@ -281,7 +279,7 @@ const DataCircleContainer = ({condition}) => {
                 return circle;
             }
         });
-    }
+    };
 
 
     const renderCircles = () => {

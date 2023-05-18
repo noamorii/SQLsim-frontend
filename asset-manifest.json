@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/SQLsim-frontend/static/css/main.1012f561.css",
-    "main.js": "/SQLsim-frontend/static/js/main.a67b2e39.js",
+    "main.css": "/SQLsim-frontend/static/css/main.57b09d16.css",
+    "main.js": "/SQLsim-frontend/static/js/main.72b8d797.js",
     "static/media/back.png": "/SQLsim-frontend/static/media/back.6e0589fec1a4e5dbe531.png",
     "sql-wasm.wasm": "/SQLsim-frontend/sql-wasm-057823fecaede6350cf9941c7d4c7ce3.wasm",
     "static/media/diagram.svg": "/SQLsim-frontend/static/media/diagram.57e7a3ef1b6ff1593bf4a1bdc9e1d682.svg",
     "static/media/from.svg": "/SQLsim-frontend/static/media/from.93849cb010da67ee4aba6280c37c6f09.svg",
     "static/media/visualization.svg": "/SQLsim-frontend/static/media/visualization.3f63f7e23da3c60c6c9023b5af05dc85.svg",
     "index.html": "/SQLsim-frontend/index.html",
-    "main.1012f561.css.map": "/SQLsim-frontend/static/css/main.1012f561.css.map",
-    "main.a67b2e39.js.map": "/SQLsim-frontend/static/js/main.a67b2e39.js.map"
+    "main.57b09d16.css.map": "/SQLsim-frontend/static/css/main.57b09d16.css.map",
+    "main.72b8d797.js.map": "/SQLsim-frontend/static/js/main.72b8d797.js.map"
   },
   "entrypoints": [
-    "static/css/main.1012f561.css",
-    "static/js/main.a67b2e39.js"
+    "static/css/main.57b09d16.css",
+    "static/js/main.72b8d797.js"
   ]
 }

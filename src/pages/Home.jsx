@@ -1,8 +1,8 @@
 import style from "./Home.module.css";
 import {Fade, Slide} from 'react-awesome-reveal';
-import from from '../images/from.svg';
-import visualization from '../images/visualization.svg';
-import diagram from '../images/diagram.svg';
+import from from '../utils/images/from.svg';
+import visualization from '../utils/images/visualization.svg';
+import diagram from '../utils/images/diagram.svg';
 import {useNavigate} from "react-router-dom";
 
 const Home = () => {

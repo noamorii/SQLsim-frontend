@@ -1,6 +1,6 @@
 import { HashRouter } from "react-router-dom";
 import Navbar from "./components/UI/Navbar/Navbar";
-import AppRouter from "./AppRouter";
+import AppRouter from "./pages/AppRouter";
 import { DbContext, SqlContext } from "./context/context";
 import { useEffect, useState } from "react";
 import initSqlJs from "sql.js";

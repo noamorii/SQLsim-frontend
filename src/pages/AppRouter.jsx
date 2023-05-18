@@ -1,9 +1,9 @@
 import React from 'react';
 import {Route, Routes} from "react-router-dom";
-import Home from "./pages/Home";
-import Tables from "./pages/Tables";
-import SQLEditor from "./pages/SQLEditor";
-import NotFound from "./pages/NotFound";
+import Home from "./Home";
+import Tables from "./Tables";
+import SQLEditor from "./SQLEditor";
+import NotFound from "./NotFound";
 
 /**
  * AppRouter component defines the routing configuration using react-router-dom.

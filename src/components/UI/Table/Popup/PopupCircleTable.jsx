@@ -14,7 +14,7 @@ const PopupCircleTable = ({data, top, left}) => {
     const columnValues = Object.values(data);
 
     return (
-        <div className={style.popupTableContainer} style={{top: top - 50, left: left + 30}}>
+        <div className={style.popupTableContainer} style={{top: top - 50, left: left + 30}} data-testid="popup-table-container">
             <table>
                 <thead>
                 <tr>

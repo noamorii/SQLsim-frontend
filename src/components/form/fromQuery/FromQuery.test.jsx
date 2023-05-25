@@ -37,6 +37,48 @@ describe('FromQueryForm Component', () => {
         expect(screen.getByText('+')).toBeInTheDocument();
     });
 
+
+    it('should save the query to sessionStorage', async () => {
+        // Set up mock functions and data
+        const mockQuery = "SELECT * FROM test AS t";
+
+        const mockResult = {
+            columns: ['test'],
+            values: [['test']]
+        };
+        mockDb.exec.mockReturnValue([mockResult]);
+
+        // Spy on sessionStorage.setItem
+        const sessionStorageSpy = jest.spyOn(Storage.prototype, 'setItem');
+
+        // Render the component
+        render(
+            <SqlContext.Provider value={{ sql: mockSql, setSql: jest.fn() }}>
+                <DbContext.Provider value={{ db: mockDb }}>
+                    <FromQueryForm
+                        showResultTable={mockShowResultTable}
+                        clearResultTable={mockClearResultTable}
+                    />
+                </DbContext.Provider>
+            </SqlContext.Provider>
+        );
+
+        const plusButton = screen.getByText('+');
+        await userEvent.click(plusButton);
+
+        const selectElement = screen.getByRole('combobox');
+        await userEvent.selectOptions(selectElement, 'test');
+
+        const inputField = screen.getByRole('textbox');
+        await userEvent.type(inputField, 't');
+
+        const submitButton = screen.getByText('Run');
+        await userEvent.click(submitButton);
+
+        expect(sessionStorageSpy).toHaveBeenCalledWith('savedFromQuery', JSON.stringify(mockQuery));
+        sessionStorageSpy.mockRestore();
+    });
+
     it('should display an error when the "+" button is clicked without any table', async () => {
         render(
             <SqlContext.Provider value={{ sql: mockSql, setSql: jest.fn() }}>
@@ -71,44 +113,6 @@ describe('FromQueryForm Component', () => {
         );
 
         await waitFor(() => expect(fetchTablesMock).toHaveBeenCalled());
-    });
-
-    it('should execute a query successfully when submit button is clicked', async () => {
-        const mockQuery = "SELECT * FROM test AS t";
-
-        const mockResult = {
-            columns: ['test'],
-            values: [['test']]
-        };
-        mockDb.exec.mockReturnValue([mockResult]);
-
-        // Mock executeQueryValues function
-        const executeQueryValuesMock = jest.spyOn(commonFunctions, 'executeQueryValues');
-        executeQueryValuesMock.mockReturnValue(['test']);
-
-        render(
-            <SqlContext.Provider value={{ sql: mockSql, setSql: jest.fn() }}>
-                <DbContext.Provider value={{ db: mockDb}}>
-                    <FromQueryForm showResultTable={mockShowResultTable} clearResultTable={mockClearResultTable} />
-                </DbContext.Provider>
-            </SqlContext.Provider>
-        );
-
-        const plusButton = screen.getByText('+');
-        await userEvent.click(plusButton);
-
-        const selectElement = screen.getByRole('combobox');
-        await userEvent.selectOptions(selectElement, 'test');
-
-        const inputField = screen.getByRole('textbox');
-        await userEvent.type(inputField, 't');
-
-        const submitButton = screen.getByText('Run');
-        await userEvent.click(submitButton);
-
-        expect(mockDb.exec).toHaveBeenCalledWith(mockQuery);
-        expect(executeQueryValuesMock).toHaveBeenCalled();
-        expect(mockShowResultTable).toHaveBeenCalled();
     });
 
     it('should display an error when database throws an error', async () => {
@@ -166,8 +170,7 @@ describe('FromQueryForm Component', () => {
         expect(screen.queryByRole('combobox')).toBeNull();
     });
 
-    it('should save the query to sessionStorage', async () => {
-        // Set up mock functions and data
+    it('should execute a query successfully when submit button is clicked', async () => {
         const mockQuery = "SELECT * FROM test AS t";
 
         const mockResult = {
@@ -176,17 +179,14 @@ describe('FromQueryForm Component', () => {
         };
         mockDb.exec.mockReturnValue([mockResult]);
 
-        // Spy on sessionStorage.setItem
-        const sessionStorageSpy = jest.spyOn(Storage.prototype, 'setItem');
+        // Mock executeQueryValues function
+        const executeQueryValuesMock = jest.spyOn(commonFunctions, 'executeQueryValues');
+        executeQueryValuesMock.mockReturnValue(['test']);
 
-        // Render the component
         render(
             <SqlContext.Provider value={{ sql: mockSql, setSql: jest.fn() }}>
-                <DbContext.Provider value={{ db: mockDb }}>
-                    <FromQueryForm
-                        showResultTable={mockShowResultTable}
-                        clearResultTable={mockClearResultTable}
-                    />
+                <DbContext.Provider value={{ db: mockDb}}>
+                    <FromQueryForm showResultTable={mockShowResultTable} clearResultTable={mockClearResultTable} />
                 </DbContext.Provider>
             </SqlContext.Provider>
         );
@@ -203,8 +203,8 @@ describe('FromQueryForm Component', () => {
         const submitButton = screen.getByText('Run');
         await userEvent.click(submitButton);
 
-        // Verify sessionStorage.setItem was called with the expected arguments
-        expect(sessionStorageSpy).toHaveBeenCalledWith('savedFromQuery', JSON.stringify(mockQuery));
-        sessionStorageSpy.mockRestore();
+        expect(mockDb.exec).toHaveBeenCalledWith(mockQuery);
+        expect(executeQueryValuesMock).toHaveBeenCalled();
+        expect(mockShowResultTable).toHaveBeenCalled();
     });
 });

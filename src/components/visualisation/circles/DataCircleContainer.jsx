@@ -294,7 +294,7 @@ const DataCircleContainer = ({condition}) => {
 
     if (error) return <div> Error: {error} </div>;
     return (
-        <div id="circleContainer" ref={dataCircleRef}>
+        <div id="circleContainer" data-testid="circleContainer" ref={dataCircleRef}>
             {renderCircles()}
         </div>
     );

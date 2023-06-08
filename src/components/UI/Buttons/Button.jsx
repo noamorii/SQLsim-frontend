@@ -14,8 +14,15 @@ import styles from "./Button.module.css";
  * @returns {JSX.Element} The rendered Button component.
  */
 const Button = ({text, onClick, className, disabled, icon}) => {
+
+    const handleClick = (event) => {
+        if (!disabled) {
+            onClick(event);
+        }
+    }
+
     return (
-        <div className={styles.btn} onClick={onClick}>
+        <div className={styles.btn} onClick={handleClick}>
             <button className={className} disabled={disabled}>
                 {text}
             </button>

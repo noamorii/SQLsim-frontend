@@ -59,7 +59,7 @@ const DataCircleContainer = ({condition}) => {
             const newCircles = dbResult.values.map((value, index) => {
                 const keyValueObject = createKeyValueObject(dbResult.columns, value);
                 return (
-                    <DataCircle key={value[0] + index} text={index+1} valueObject={keyValueObject}
+                    <DataCircle key={"value_" + value[0] + "index_" + index} text={index+1} valueObject={keyValueObject}
                                 left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
                 );
             });
@@ -231,7 +231,7 @@ const DataCircleContainer = ({condition}) => {
         const newCircles = dbResultObject.values.map((value, index) => {
             const keyValueObject = createKeyValueObject(dbResultObject.columns, value);
             return (
-                <DataCircle key={value[0] + index} text={index+1} valueObject={keyValueObject}
+                <DataCircle key={"value_" + value[0] + "index_" + index} text={index+1} valueObject={keyValueObject}
                             left={getPositions()} top={getPositions()} backgroundColor="#a0b3bd"/>
             );
         });
